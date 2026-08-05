@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boğaziçi University - Program Tracker</title>
+  <style>
+    :root {
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --accent-color: #003366;
+      --text-color: #333;
+      --border-color: #e0e0e0;
+      --success-color: #2e7d32;
+      --success-bg: #e8f5e9;
+      --failed-color: #c62828;
+      --failed-bg: #ffebee;
+      --info-color: #0288d1;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .top-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--accent-color);
+      font-size: 1.8rem;
+    }
+
+    .dept-select-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .dept-select-container label {
+      font-weight: 600;
+      color: var(--accent-color);
+    }
+
+    select.dept-select {
+      padding: 6px 12px;
+      font-size: 0.95rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+      background-color: #fff;
+    }
+
+    .reset-btn {
+      padding: 6px 12px;
+      background-color: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .reset-btn:hover {
+      background-color: #b71c1c;
+    }
+
+    .container {
+      display: flex;
+      gap: 20px;
+      max-width: 1700px;
+      margin: 0 auto;
+    }
+
+    /* Sol Panel - Ders Listesi */
+    .sidebar {
+      flex: 0 0 320px;
+      background: var(--card-bg);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-height: 90vh;
+      overflow-y: auto;
+      position: sticky;
+      top: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 1.1rem;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 8px;
+      margin-top: 0;
+    }
+
+    /* Kalan Ders Sayacı Kartı */
+    .counter-card {
+      background: #e3f2fd;
+      border: 1px solid #90caf9;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .counter-number {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-top: 4px;
+    }
+
+    /* Sağ Panel - Dönem Satırları */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .year-row {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .year-row.extended {
+      background: #fffde7;
+      border: 1px dashed #fbc02d;
+    }
+
+    .year-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .year-title .limit-tag {
+      font-size: 0.75rem;
+      background: #fff3e0;
+      color: #e65100;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #ffe0b2;
+    }
+
+    .semesters-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .semester-box {
+      background: #fafafa;
+      border: 2px dashed #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .semester-box.drag-over {
+      background-color: #e8f4fd;
+      border-color: #2196f3;
+    }
+
+    .semester-header {
+      font-weight: 600;
+      color: #555;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Info (i) Butonu & Tooltip */
+    .info-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background-color: var(--info-color);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: bold;
+      font-style: italic;
+      cursor: help;
+    }
+
+    .info-btn .tooltip {
+      visibility: hidden;
+      width: 230px;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 6px;
+      padding: 8px 10px;
+      position: absolute;
+      z-index: 10;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.2s;
+      font-size: 0.75rem;
+      font-weight: normal;
+      font-style: normal;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      pointer-events: none;
+      line-height: 1.4;
+    }
+
+    .info-btn .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #333 transparent transparent transparent;
+    }
+
+    .info-btn:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Ders Kartları */
+    .course-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-color);
+      padding: 8px 10px;
+      border-radius: 4px;
+      cursor: grab;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .course-card:active {
+      cursor: grabbing;
+    }
+
+    .course-card.status-passed {
+      border-left-color: var(--success-color);
+      background-color: var(--success-bg);
+    }
+
+    .course-card.status-failed {
+      border-left-color: var(--failed-color);
+      background-color: var(--failed-bg);
+    }
+
+    .course-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .course-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .course-credits {
+      font-size: 0.75rem;
+      background: #e0e0e0;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    .course-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 2px;
+      font-size: 0.8rem;
+    }
+
+    .custom-input {
+      width: 100%;
+      padding: 4px 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.78rem;
+    }
+
+    .status-badge {
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+    .status-badge.passed { color: var(--success-color); }
+    .status-badge.failed { color: var(--failed-color); }
+    .status-badge.pending { color: #888; }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #999;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 0 4px;
+    }
+    .delete-btn:hover { color: #d32f2f; }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <h1>Boğaziçi University - Program Tracker</h1>
+    
+    <div class="dept-select-container">
+      <label for="deptSelect">Bölüm Seçiniz:</label>
+      <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
+        <option value="math">Matematik (MATH)</option>
+        <option value="chem_ed">Kimya Öğretmenliği (SCED)</option>
+      </select>
+      <button class="reset-btn" onclick="resetCurrentDept()">Bu Bölümü Sıfırla</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- SOL: Nihai Durum & Ders Havuzu -->
+    <div class="sidebar">
+      <div class="counter-card">
+        <div style="font-size: 0.85rem; color: #555; font-weight: 600;">Kalan Ders Sayısı</div>
+        <div id="remaining-count" class="counter-number">0</div>
+      </div>
+
+      <h2>Nihai Ders Durumları</h2>
+      <div id="course-pool" class="pool-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+
+    <!-- SAĞ: Yıl Yıl Dönemler -->
+    <div class="main-content" id="years-grid"></div>
+  </div>
+
+  <script>
+    const departmentsData = {
+      math: {
+        name: 'Matematik',
+        courses: [
+          { id: 'math111', code: 'MATH 111', name: 'Intro. to Math. Structures', crd: 4, isElective: false },
+          { id: 'math131', code: 'MATH 131', name: 'Calculus of a Single Var.', crd: 4, isElective: false },
+          { id: 'phys101', code: 'PHYS 101', name: 'Physics I', crd: 4, isElective: false },
+          { id: 'ae101', code: 'AE 101/111/HSS/MLE', name: 'English/HSS/MLE', crd: 3, isElective: true },
+          { id: 'unrest1', code: 'Unrest. Elective 1', name: 'Serbest Seçmeli', crd: 3, isElective: true },
+          { id: 'math132', code: 'MATH 132', name: 'Calculus of Several Var.', crd: 4, isElective: false },
+          { id: 'math162', code: 'MATH 162', name: 'Discrete Mathematics', crd: 4, isElective: false },
+          { id: 'phys102', code: 'PHYS 102', name: 'Physics II', crd: 4, isElective: false },
+          { id: 'ae102', code: 'AE 102/112/HSS/MLE', name: 'English/HSS/MLE', crd: 3, isElective: true },
+          { id: 'unrest2', code: 'Unrest. Elective 2', name: 'Serbest Seçmeli', crd: 3, isElective: true },
+          { id: 'math231', code: 'MATH 231', name: 'Advanced Calculus I', crd: 4, isElective: false },
+          { id: 'math221', code: 'MATH 221', name: 'Linear Algebra', crd: 4, isElective: false },
+          { id: 'phys201', code: 'PHYS 201', name: 'Physics III', crd: 4, isElective: false },
+          { id: 'cmpe150', code: 'CMPE 150', name: 'Intro to Computing', crd: 3, isElective: false },
+          { id: 'tk221', code: 'TK 221', name: 'Turkish I', crd: 2, isElective: false },
+          { id: 'math222', code: 'MATH 222', name: 'Group Theory', crd: 4, isElective: false },
+          { id: 'math234', code: 'MATH 234', name: 'Advanced Calculus II', crd: 4, isElective: false },
+          { id: 'math202', code: 'MATH 202', name: 'Differential Equations', crd: 4, isElective: false },
+          { id: 'hss_mle', code: 'HSS / MLE', name: 'HSS or MLE Elective', crd: 3, isElective: true },
+          { id: 'tk222', code: 'TK 222', name: 'Turkish II', crd: 2, isElective: false },
+          { id: 'math323', code: 'MATH 323', name: 'Rings, Fields & Galois', crd: 4, isElective: false },
+          { id: 'math331', code: 'MATH 331', name: 'Metric Spaces', crd: 4, isElective: false },
+          { id: 'htr331', code: 'HTR 331', name: 'Hist. of Turk. Rep. I', crd: 2, isElective: false },
+          { id: 'hss1', code: 'HSS Elective 1', name: 'Sosyal / Beşeri Seçmeli', crd: 3, isElective: true },
+          { id: 'unrest3', code: 'Unrest. Elective 3', name: 'Serbest Seçmeli', crd: 3, isElective: true },
+          { id: 'math338', code: 'MATH 338', name: 'Complex Analysis I', crd: 4, isElective: false },
+          { id: 'htr332', code: 'HTR 332', name: 'Hist. of Turk. Rep. II', crd: 2, isElective: false },
+          { id: 'mathelect1', code: 'Math Elective 1', name: 'Matematik Seçmeli', crd: 3, isElective: true },
+          { id: 'mathelect2', code: 'Math Elective 2', name: 'Matematik Seçmeli', crd: 3, isElective: true },
+          { id: 'scielect1', code: 'Science Elective 1', name: 'Fen Seçmeli', crd: 3, isElective: true },
+          { id: 'hss2', code: 'HSS Elective 2', name: 'Sosyal / Beşeri Seçmeli', crd: 3, isElective: true },
+          { id: 'mathelect3', code: 'Math Elective 3', name: 'Matematik Seçmeli', crd: 3, isElective: true },
+          { id: 'mathelect4', code: 'Math Elective 4', name: 'Matematik Seçmeli', crd: 3, isElective: true },
+          { id: 'scielect2', code: 'Science Elective 2', name: 'Fen Seçmeli', crd: 3, isElective: true },
+          { id: 'unrest4', code: 'Unrest. Elective 4', name: 'Serbest Seçmeli', crd: 3, isElective: true },
+          { id: 'unrest5', code: 'Unrest. Elective 5', name: 'Serbest Seçmeli', crd: 3, isElective: true },
+          { id: 'mathelect5', code: 'Math Elective 5', name: 'Matematik Seçmeli', crd: 3, isElective: true },
+          { id: 'mathelect6', code: 'Math Elective 6', name: 'Matematik Seçmeli', crd: 3, isElective: true },
+          { id: 'mathelect7', code: 'Math Elective 7', name: 'Matematik Seçmeli', crd: 3, isElective: true },
+          { id: 'unrest6', code: 'Unrest. Elective 6', name: 'Serbest Seçmeli', crd: 3, isElective: true },
+          { id: 'hss3', code: 'HSS Elective 3', name: 'Sosyal / Beşeri Seçmeli', crd: 3, isElective: true },
+        ],
+        curriculumMap: {
+          '1.1': ['PHYS 101', 'AE 101/111', 'Unrest. Elective 1', 'MATH 111', 'MATH 131'],
+          '1.2': ['PHYS 102', 'AE 102/112', 'Unrest. Elective 2', 'MATH 132', 'MATH 162'],
+          '2.1': ['MATH 231', 'PHYS 201', 'CMPE 150', 'TK 221', 'MATH 221'],
+          '2.2': ['MATH 222', 'HSS/MLE', 'MATH 234', 'MATH 202', 'TK 222'],
+          '3.1': ['HSS Elective', 'HTR 331', 'MATH 323', 'Unrest. Elective', 'MATH 331'],
+          '3.2': ['HSS Elective', 'MATH 338', 'HTR 332', 'Math Elective (x2)', 'Science Elective'],
+          '4.1': ['Unrest. Elective (x2)', 'Science Elective', 'Math Elective (x2)'],
+          '4.2': ['Math Elective (x3)', 'Unrest. Elective', 'HSS Elective']
+        }
+      },
+      chem_ed: {
+        name: 'Kimya Öğretmenliği',
+        courses: [
+          // 1. Semester
+          { id: 'sced_chem105', code: 'CHEM 105', name: 'General Chemistry I', crd: 4, isElective: false },
+          { id: 'sced_ed101', code: 'ED 101', name: 'Introduction to Education', crd: 3, isElective: false },
+          { id: 'sced_math101', code: 'MATH 101', name: 'Calculus I', crd: 4, isElective: false },
+          { id: 'sced_phys101', code: 'PHYS 101', name: 'Physics I', crd: 4, isElective: false },
+          { id: 'sced_ae101', code: 'AE 101/111', name: 'Advanced English I', crd: 3, isElective: false },
+          // 2. Semester
+          { id: 'sced_chem106', code: 'CHEM 106', name: 'General Chemistry II', crd: 4, isElective: false },
+          { id: 'sced_ed102', code: 'ED 102', name: 'Educational Psychology', crd: 3, isElective: false },
+          { id: 'sced_math102', code: 'MATH 102', name: 'Calculus II', crd: 4, isElective: false },
+          { id: 'sced_phys102', code: 'PHYS 102', name: 'Physics II', crd: 4, isElective: false },
+          { id: 'sced_ae102', code: 'AE 102/112', name: 'Advanced English II', crd: 3, isElective: false },
+          // 3. Semester
+          { id: 'sced_chem201', code: 'CHEM 201', name: 'Organic Chemistry I', crd: 4, isElective: false },
+          { id: 'sced_chem245', code: 'CHEM 245', name: 'Analytical Chemistry', crd: 4, isElective: false },
+          { id: 'sced_ed211', code: 'ED 211', name: 'Sociology of Education', crd: 3, isElective: false },
+          { id: 'sced_tk221', code: 'TK 221', name: 'Written Expression', crd: 2, isElective: false },
+          { id: 'sced_hss1', code: 'HSS Elective 1', name: 'Humanities/Social Sci.', crd: 3, isElective: true },
+          // 4. Semester
+          { id: 'sced_chem202', code: 'CHEM 202', name: 'Organic Chemistry II', crd: 4, isElective: false },
+          { id: 'sced_chem246', code: 'CHEM 246', name: 'Instrumental Analysis', crd: 4, isElective: false },
+          { id: 'sced_ed204', code: 'ED 204', name: 'Assessment & Evaluation in Ed.', crd: 3, isElective: false },
+          { id: 'sced_sced204', code: 'SCED 204', name: 'Instructional Tech. in Sci. Ed.', crd: 3, isElective: false },
+          { id: 'sced_tk222', code: 'TK 222', name: 'Oral Expression', crd: 2, isElective: false },
+          // 5. Semester
+          { id: 'sced_chem301', code: 'CHEM 301', name: 'Physical Chemistry I', crd: 4, isElective: false },
+          { id: 'sced_bio101', code: 'BIO 101', name: 'General Biology I', crd: 4, isElective: false },
+          { id: 'sced_sced311', code: 'SCED 311', name: 'Methods of Teaching Chem. I', crd: 4, isElective: false },
+          { id: 'sced_htr331', code: 'HTR 331', name: 'History of Turkish Rep. I', crd: 2, isElective: false },
+          { id: 'sced_unrest1', code: 'Unrest. Elective 1', name: 'Serbest Seçmeli 1', crd: 3, isElective: true },
+          // 6. Semester
+          { id: 'sced_chem302', code: 'CHEM 302', name: 'Physical Chemistry II', crd: 4, isElective: false },
+          { id: 'sced_sced312', code: 'SCED 312', name: 'Methods of Teaching Chem. II', crd: 4, isElective: false },
+          { id: 'sced_htr332', code: 'HTR 332', name: 'History of Turkish Rep. II', crd: 2, isElective: false },
+          { id: 'sced_chemelect1', code: 'Chem. Elective 1', name: 'Kimya Seçmeli 1', crd: 3, isElective: true },
+          { id: 'sced_hss2', code: 'HSS Elective 2', name: 'Humanities/Social Sci.', crd: 3, isElective: true },
+          // 7. Semester
+          { id: 'sced_sced401', code: 'SCED 401', name: 'Practice Teaching in Chem. I', crd: 5, isElective: false },
+          { id: 'sced_sced411', code: 'SCED 411', name: 'Chemistry Curriculum Analysis', crd: 3, isElective: false },
+          { id: 'sced_chemelect2', code: 'Chem. Elective 2', name: 'Kimya Seçmeli 2', crd: 3, isElective: true },
+          { id: 'sced_unrest2', code: 'Unrest. Elective 2', name: 'Serbest Seçmeli 2', crd: 3, isElective: true },
+          // 8. Semester
+          { id: 'sced_sced402', code: 'SCED 402', name: 'Practice Teaching in Chem. II', crd: 5, isElective: false },
+          { id: 'sced_sced422', code: 'SCED 422', name: 'Guidance in Secondary Ed.', crd: 3, isElective: false },
+          { id: 'sced_chemelect3', code: 'Chem. Elective 3', name: 'Kimya Seçmeli 3', crd: 3, isElective: true },
+          { id: 'sced_unrest3', code: 'Unrest. Elective 3', name: 'Serbest Seçmeli 3', crd: 3, isElective: true },
+        ],
+        curriculumMap: {
+          '1.1': ['CHEM 105', 'ED 101', 'MATH 101', 'PHYS 101', 'AE 101/111'],
+          '1.2': ['CHEM 106', 'ED 102', 'MATH 102', 'PHYS 102', 'AE 102/112'],
+          '2.1': ['CHEM 201', 'CHEM 245', 'ED 211', 'TK 221', 'HSS Elective 1'],
+          '2.2': ['CHEM 202', 'CHEM 246', 'ED 204', 'SCED 204', 'TK 222'],
+          '3.1': ['CHEM 301', 'BIO 101', 'SCED 311', 'HTR 331', 'Unrest. Elective 1'],
+          '3.2': ['CHEM 302', 'SCED 312', 'HTR 332', 'Chem. Elective 1', 'HSS Elective 2'],
+          '4.1': ['SCED 401', 'SCED 411', 'Chem. Elective 2', 'Unrest. Elective 2'],
+          '4.2': ['SCED 402', 'SCED 422', 'Chem. Elective 3', 'Unrest. Elective 3']
+        }
+      }
+    };
+
+    const yearStructure = [
+      { yearLabel: '0. Yıl (Hazırlık / Erken Dönem)', isExtended: false, sems: ['0.1', '0.2', '0.3 (Yaz)'] },
+      { yearLabel: '1. Yıl', isExtended: false, sems: ['1.1', '1.2', '1.3 (Yaz)'] },
+      { yearLabel: '2. Yıl', isExtended: false, sems: ['2.1', '2.2', '2.3 (Yaz)'] },
+      { yearLabel: '3. Yıl', isExtended: false, sems: ['3.1', '3.2', '3.3 (Yaz)'] },
+      { yearLabel: '4. Yıl (Normal Mezuniyet Hedefi)', isExtended: false, sems: ['4.1', '4.2', '4.3 (Yaz)'] },
+      { yearLabel: '5. Yıl (1. Uzatma Yılı)', isExtended: true, sems: ['5.1', '5.2', '5.3 (Yaz)'] },
+      { yearLabel: '6. Yıl (2. Uzatma Yılı)', isExtended: true, sems: ['6.1', '6.2', '6.3 (Yaz)'] },
+      { yearLabel: '7. Yıl (Azami Öğrenim Süresi Sınırı)', isExtended: true, tag: 'YÖK Yasal Sınır', sems: ['7.1', '7.2', '7.3 (Yaz)'] }
+    ];
+
+    let currentDept = localStorage.getItem('boun_active_dept') || 'math';
+    let globalState = JSON.parse(localStorage.getItem('boun_multi_dept_instances_state')) || {};
+
+    function getDeptState(deptKey) {
+      if (!globalState[deptKey]) {
+        globalState[deptKey] = { instances: [] };
+      }
+      return globalState[deptKey];
+    }
+
+    function saveGlobalState() {
+      localStorage.setItem('boun_multi_dept_instances_state', JSON.stringify(globalState));
+      localStorage.setItem('boun_active_dept', currentDept);
+    }
+
+    function changeDepartment(newDept) {
+      currentDept = newDept;
+      saveGlobalState();
+      initUI();
+    }
+
+    function updateSidebarAndCounter() {
+      const state = getDeptState(currentDept);
+      const courses = departmentsData[currentDept].courses;
+      const pool = document.getElementById('course-pool');
+      pool.innerHTML = '';
+
+      let passedCourseIds = new Set();
+
+      courses.forEach(course => {
+        const courseInstances = state.instances.filter(inst => inst.courseId === course.id);
+        const hasPassed = courseInstances.some(inst => inst.passed === true);
+        const hasFailedOnly = courseInstances.length > 0 && !hasPassed;
+
+        if (hasPassed) passedCourseIds.add(course.id);
+
+        const poolCard = document.createElement('div');
+        poolCard.className = `course-card ${hasPassed ? 'status-passed' : (hasFailedOnly ? 'status-failed' : '')}`;
+        poolCard.draggable = true;
+        poolCard.dataset.courseId = course.id;
+
+        let statusBadge = '<span class="status-badge pending">• Alınmadı / Bekliyor</span>';
+        if (hasPassed) {
+          statusBadge = '<span class="status-badge passed">✓ Geçildi</span>';
+        } else if (hasFailedOnly) {
+          statusBadge = '<span class="status-badge failed">✕ Verilmedi (Tekrar Alınmalı)</span>';
+        }
+
+        poolCard.innerHTML = `
+          <div class="course-header">
+            <span class="course-title">${course.code}</span>
+            <span class="course-credits">${course.crd} Crd</span>
+          </div>
+          <div style="font-size: 0.78rem; color: #666;">${course.name}</div>
+          <div class="course-controls" style="margin-top: 4px;">
+            ${statusBadge}
+          </div>
+        `;
+
+        poolCard.addEventListener('dragstart', handlePoolDragStart);
+        pool.appendChild(poolCard);
+      });
+
+      const remaining = courses.length - passedCourseIds.size;
+      document.getElementById('remaining-count').innerText = remaining;
+    }
+
+    function initUI() {
+      document.getElementById('deptSelect').value = currentDept;
+
+      const activeDeptData = departmentsData[currentDept];
+      const state = getDeptState(currentDept);
+      const yearsGrid = document.getElementById('years-grid');
+      yearsGrid.innerHTML = '';
+
+      yearStructure.forEach(y => {
+        const row = document.createElement('div');
+        row.className = `year-row ${y.isExtended ? 'extended' : ''}`;
+
+        const title = document.createElement('div');
+        title.className = 'year-title';
+        title.innerHTML = `
+          <span>${y.yearLabel}</span>
+          ${y.tag ? `<span class="limit-tag">${y.tag}</span>` : ''}
+        `;
+        row.appendChild(title);
+
+        const semsContainer = document.createElement('div');
+        semsContainer.className = 'semesters-container';
+
+        y.sems.forEach(semId => {
+          const box = document.createElement('div');
+          box.className = 'semester-box';
+          box.dataset.semId = semId;
+
+          const curriculumInfo = activeDeptData.curriculumMap[semId];
+          let infoHtml = '';
+          if (curriculumInfo) {
+            const listStr = curriculumInfo.map(c => `• ${c}`).join('<br>');
+            infoHtml = `
+              <span class="info-btn">i
+                <span class="tooltip">
+                  <strong>${activeDeptData.name} Müfredatı (${semId}):</strong><br>${listStr}
+                </span>
+              </span>
+            `;
+          }
+
+          box.innerHTML = `
+            <div class="semester-header">
+              <span>Dönem ${semId}</span>
+              ${infoHtml}
+            </div>
+          `;
+
+          box.addEventListener('dragover', handleDragOver);
+          box.addEventListener('dragleave', handleDragLeave);
+          box.addEventListener('drop', handleDrop);
+
+          semsContainer.appendChild(box);
+        });
+
+        row.appendChild(semsContainer);
+        yearsGrid.appendChild(row);
+      });
+
+      state.instances.forEach(inst => {
+        const course = activeDeptData.courses.find(c => c.id === inst.courseId);
+        if (course) {
+          const semBox = document.querySelector(`[data-sem-id="${inst.semId}"]`);
+          if (semBox) {
+            const card = createSemesterCourseCard(inst, course);
+            semBox.appendChild(card);
+          }
+        }
+      });
+
+      updateSidebarAndCounter();
+    }
+
+    function createSemesterCourseCard(inst, course) {
+      const card = document.createElement('div');
+      card.className = `course-card ${inst.passed ? 'status-passed' : 'status-failed'}`;
+      card.id = `inst-${inst.instanceId}`;
+
+      card.innerHTML = `
+        <div class="course-header">
+          <span class="course-title">${course.code}</span>
+          <button class="delete-btn" onclick="removeInstance('${inst.instanceId}')" title="Bu dönemden kaldır">✕</button>
+        </div>
+        <div style="font-size: 0.78rem; color: #666;">${course.name}</div>
+        
+        ${course.isElective ? `
+          <input type="text" 
+                 class="custom-input" 
+                 placeholder="Seçilen Ders Adı/Kodu..." 
+                 value="${inst.customText || ''}" 
+                 oninput="handleInstanceInput('${inst.instanceId}', this.value)">
+        ` : ''}
+
+        <div class="course-controls">
+          <label style="cursor:pointer; display:flex; align-items:center; gap:4px;">
+            <input type="checkbox" ${inst.passed ? 'checked' : ''} onchange="toggleInstancePassed('${inst.instanceId}', this.checked)">
+            Verdim
+          </label>
+          <span class="status-badge ${inst.passed ? 'passed' : 'failed'}">
+            ${inst.passed ? '✓ Geçildi' : '✕ Verilmedi'}
+          </span>
+        </div>
+      `;
+      return card;
+    }
+
+    let draggedCourseId = null;
+
+    function handlePoolDragStart(e) {
+      draggedCourseId = this.dataset.courseId;
+      e.dataTransfer.setData('text/plain', this.dataset.courseId);
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      this.classList.add('drag-over');
+    }
+
+    function handleDragLeave() {
+      this.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      this.classList.remove('drag-over');
+
+      if (!draggedCourseId) return;
+
+      const semId = this.dataset.semId;
+      const state = getDeptState(currentDept);
+
+      const newInst = {
+        instanceId: 'inst_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+        courseId: draggedCourseId,
+        semId: semId,
+        passed: false,
+        customText: ''
+      };
+
+      state.instances.push(newInst);
+      saveGlobalState();
+
+      const course = departmentsData[currentDept].courses.find(c => c.id === draggedCourseId);
+      const card = createSemesterCourseCard(newInst, course);
+      this.appendChild(card);
+
+      updateSidebarAndCounter();
+      draggedCourseId = null;
+    }
+
+    function toggleInstancePassed(instanceId, isChecked) {
+      const state = getDeptState(currentDept);
+      const inst = state.instances.find(i => i.instanceId === instanceId);
+      if (inst) {
+        inst.passed = isChecked;
+        saveGlobalState();
+
+        const card = document.getElementById(`inst-${instanceId}`);
+        const course = departmentsData[currentDept].courses.find(c => c.id === inst.courseId);
+        const newCard = createSemesterCourseCard(inst, course);
+        card.parentElement.replaceChild(newCard, card);
+
+        updateSidebarAndCounter();
+      }
+    }
+
+    function handleInstanceInput(instanceId, text) {
+      const state = getDeptState(currentDept);
+      const inst = state.instances.find(i => i.instanceId === instanceId);
+      if (inst) {
+        inst.customText = text;
+        saveGlobalState();
+      }
+    }
+
+    function removeInstance(instanceId) {
+      const state = getDeptState(currentDept);
+      state.instances = state.instances.filter(i => i.instanceId !== instanceId);
+      saveGlobalState();
+
+      const card = document.getElementById(`inst-${instanceId}`);
+      if (card) card.remove();
+
+      updateSidebarAndCounter();
+    }
+
+    function resetCurrentDept() {
+      const deptName = departmentsData[currentDept].name;
+      if (confirm(`Yalnızca "${deptName}" bölümü planlamanız sıfırlanacak. Emin misin?`)) {
+        globalState[currentDept] = { instances: [] };
+        saveGlobalState();
+        initUI();
+      }
+    }
+
+    initUI();
+  </script>
+</body>
+</html>
