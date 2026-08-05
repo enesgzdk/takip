@@ -351,7 +351,7 @@
       <label for="deptSelect">Bölüm Seçiniz:</label>
       <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
         <option value="math">Matematik (MATH)</option>
-        <option value="chem_ed">Kimya Öğretmenliği (SCED)</option>
+        <option value="chem_ed">Kimya Öğretmenliği (CHED)</option>
       </select>
       <button class="reset-btn" onclick="resetCurrentDept()">Bu Bölümü Sıfırla</button>
     </div>
@@ -376,7 +376,7 @@
   <script>
     const departmentsData = {
       math: {
-        name: 'Matematik',
+        name: 'Matematik (MATH)',
         courses: [
           { id: 'math111', code: 'MATH 111', name: 'Intro. to Math. Structures', crd: 4, isElective: false },
           { id: 'math131', code: 'MATH 131', name: 'Calculus of a Single Var.', crd: 4, isElective: false },
@@ -432,58 +432,58 @@
         }
       },
       chem_ed: {
-        name: 'Kimya Öğretmenliği',
+        name: 'Kimya Öğretmenliği (CHED)',
         courses: [
-          // 1. Semester
-          { id: 'sced_chem105', code: 'CHEM 105', name: 'General Chemistry I', crd: 4, isElective: false },
-          { id: 'sced_ed101', code: 'ED 101', name: 'Introduction to Education', crd: 3, isElective: false },
-          { id: 'sced_math101', code: 'MATH 101', name: 'Calculus I', crd: 4, isElective: false },
-          { id: 'sced_phys101', code: 'PHYS 101', name: 'Physics I', crd: 4, isElective: false },
-          { id: 'sced_ae101', code: 'AE 101/111', name: 'Advanced English I', crd: 3, isElective: false },
-          // 2. Semester
-          { id: 'sced_chem106', code: 'CHEM 106', name: 'General Chemistry II', crd: 4, isElective: false },
-          { id: 'sced_ed102', code: 'ED 102', name: 'Educational Psychology', crd: 3, isElective: false },
-          { id: 'sced_math102', code: 'MATH 102', name: 'Calculus II', crd: 4, isElective: false },
-          { id: 'sced_phys102', code: 'PHYS 102', name: 'Physics II', crd: 4, isElective: false },
-          { id: 'sced_ae102', code: 'AE 102/112', name: 'Advanced English II', crd: 3, isElective: false },
-          // 3. Semester
-          { id: 'sced_chem201', code: 'CHEM 201', name: 'Organic Chemistry I', crd: 4, isElective: false },
-          { id: 'sced_chem245', code: 'CHEM 245', name: 'Analytical Chemistry', crd: 4, isElective: false },
-          { id: 'sced_ed211', code: 'ED 211', name: 'Sociology of Education', crd: 3, isElective: false },
-          { id: 'sced_tk221', code: 'TK 221', name: 'Written Expression', crd: 2, isElective: false },
-          { id: 'sced_hss1', code: 'HSS Elective 1', name: 'Humanities/Social Sci.', crd: 3, isElective: true },
-          // 4. Semester
-          { id: 'sced_chem202', code: 'CHEM 202', name: 'Organic Chemistry II', crd: 4, isElective: false },
-          { id: 'sced_chem246', code: 'CHEM 246', name: 'Instrumental Analysis', crd: 4, isElective: false },
-          { id: 'sced_ed204', code: 'ED 204', name: 'Assessment & Evaluation in Ed.', crd: 3, isElective: false },
-          { id: 'sced_sced204', code: 'SCED 204', name: 'Instructional Tech. in Sci. Ed.', crd: 3, isElective: false },
-          { id: 'sced_tk222', code: 'TK 222', name: 'Oral Expression', crd: 2, isElective: false },
-          // 5. Semester
-          { id: 'sced_chem301', code: 'CHEM 301', name: 'Physical Chemistry I', crd: 4, isElective: false },
-          { id: 'sced_bio101', code: 'BIO 101', name: 'General Biology I', crd: 4, isElective: false },
-          { id: 'sced_sced311', code: 'SCED 311', name: 'Methods of Teaching Chem. I', crd: 4, isElective: false },
-          { id: 'sced_htr331', code: 'HTR 331', name: 'History of Turkish Rep. I', crd: 2, isElective: false },
-          { id: 'sced_unrest1', code: 'Unrest. Elective 1', name: 'Serbest Seçmeli 1', crd: 3, isElective: true },
-          // 6. Semester
-          { id: 'sced_chem302', code: 'CHEM 302', name: 'Physical Chemistry II', crd: 4, isElective: false },
-          { id: 'sced_sced312', code: 'SCED 312', name: 'Methods of Teaching Chem. II', crd: 4, isElective: false },
-          { id: 'sced_htr332', code: 'HTR 332', name: 'History of Turkish Rep. II', crd: 2, isElective: false },
-          { id: 'sced_chemelect1', code: 'Chem. Elective 1', name: 'Kimya Seçmeli 1', crd: 3, isElective: true },
-          { id: 'sced_hss2', code: 'HSS Elective 2', name: 'Humanities/Social Sci.', crd: 3, isElective: true },
-          // 7. Semester
-          { id: 'sced_sced401', code: 'SCED 401', name: 'Practice Teaching in Chem. I', crd: 5, isElective: false },
-          { id: 'sced_sced411', code: 'SCED 411', name: 'Chemistry Curriculum Analysis', crd: 3, isElective: false },
-          { id: 'sced_chemelect2', code: 'Chem. Elective 2', name: 'Kimya Seçmeli 2', crd: 3, isElective: true },
-          { id: 'sced_unrest2', code: 'Unrest. Elective 2', name: 'Serbest Seçmeli 2', crd: 3, isElective: true },
-          // 8. Semester
-          { id: 'sced_sced402', code: 'SCED 402', name: 'Practice Teaching in Chem. II', crd: 5, isElective: false },
-          { id: 'sced_sced422', code: 'SCED 422', name: 'Guidance in Secondary Ed.', crd: 3, isElective: false },
-          { id: 'sced_chemelect3', code: 'Chem. Elective 3', name: 'Kimya Seçmeli 3', crd: 3, isElective: true },
-          { id: 'sced_unrest3', code: 'Unrest. Elective 3', name: 'Serbest Seçmeli 3', crd: 3, isElective: true },
+          // Semester 1
+          { id: 'ched_chem101', code: 'CHEM 101', name: 'General Chemistry I', crd: 4, isElective: false },
+          { id: 'ched_ed101', code: 'ED 101', name: 'Introduction to Education', crd: 3, isElective: false },
+          { id: 'ched_math101', code: 'MATH 101', name: 'Calculus I', crd: 4, isElective: false },
+          { id: 'ched_phys101', code: 'PHYS 101', name: 'Physics I', crd: 4, isElective: false },
+          { id: 'ched_ae101', code: 'AE 101/111', name: 'Advanced English I', crd: 3, isElective: false },
+          // Semester 2
+          { id: 'ched_chem102', code: 'CHEM 102', name: 'General Chemistry II', crd: 4, isElective: false },
+          { id: 'ched_ed102', code: 'ED 102', name: 'Educational Psychology', crd: 3, isElective: false },
+          { id: 'ched_math102', code: 'MATH 102', name: 'Calculus II', crd: 4, isElective: false },
+          { id: 'ched_phys102', code: 'PHYS 102', name: 'Physics II', crd: 4, isElective: false },
+          { id: 'ched_ae102', code: 'AE 102/112', name: 'Advanced English II', crd: 3, isElective: false },
+          // Semester 3
+          { id: 'ched_chem201', code: 'CHEM 201', name: 'Organic Chemistry I', crd: 4, isElective: false },
+          { id: 'ched_chem245', code: 'CHEM 245', name: 'Analytical Chemistry', crd: 4, isElective: false },
+          { id: 'ched_ed211', code: 'ED 211', name: 'Sociology of Education', crd: 3, isElective: false },
+          { id: 'ched_tk221', code: 'TK 221', name: 'Written Expression', crd: 2, isElective: false },
+          { id: 'ched_hss1', code: 'HSS Elective 1', name: 'Humanities/Social Sci.', crd: 3, isElective: true },
+          // Semester 4
+          { id: 'ched_chem202', code: 'CHEM 202', name: 'Organic Chemistry II', crd: 4, isElective: false },
+          { id: 'ched_chem246', code: 'CHEM 246', name: 'Instrumental Analysis', crd: 4, isElective: false },
+          { id: 'ched_ed204', code: 'ED 204', name: 'Assessment & Evaluation in Ed.', crd: 3, isElective: false },
+          { id: 'ched_sced204', code: 'SCED 204', name: 'Instructional Tech. in Sci. Ed.', crd: 3, isElective: false },
+          { id: 'ched_tk222', code: 'TK 222', name: 'Oral Expression', crd: 2, isElective: false },
+          // Semester 5
+          { id: 'ched_chem301', code: 'CHEM 301', name: 'Physical Chemistry I', crd: 4, isElective: false },
+          { id: 'ched_bio101', code: 'BIO 101', name: 'General Biology I', crd: 4, isElective: false },
+          { id: 'ched_sced311', code: 'SCED 311', name: 'Methods of Teaching Chem. I', crd: 4, isElective: false },
+          { id: 'ched_htr331', code: 'HTR 331', name: 'History of Turkish Rep. I', crd: 2, isElective: false },
+          { id: 'ched_unrest1', code: 'Unrest. Elective 1', name: 'Serbest Seçmeli 1', crd: 3, isElective: true },
+          // Semester 6
+          { id: 'ched_chem302', code: 'CHEM 302', name: 'Physical Chemistry II', crd: 4, isElective: false },
+          { id: 'ched_sced312', code: 'SCED 312', name: 'Methods of Teaching Chem. II', crd: 4, isElective: false },
+          { id: 'ched_htr332', code: 'HTR 332', name: 'History of Turkish Rep. II', crd: 2, isElective: false },
+          { id: 'ched_chemelect1', code: 'Chem. Elective 1', name: 'Kimya Seçmeli 1', crd: 3, isElective: true },
+          { id: 'ched_hss2', code: 'HSS Elective 2', name: 'Humanities/Social Sci.', crd: 3, isElective: true },
+          // Semester 7
+          { id: 'ched_sced401', code: 'SCED 401', name: 'Practice Teaching in Chem. I', crd: 5, isElective: false },
+          { id: 'ched_sced411', code: 'SCED 411', name: 'Chemistry Curriculum Analysis', crd: 3, isElective: false },
+          { id: 'ched_chemelect2', code: 'Chem. Elective 2', name: 'Kimya Seçmeli 2', crd: 3, isElective: true },
+          { id: 'ched_unrest2', code: 'Unrest. Elective 2', name: 'Serbest Seçmeli 2', crd: 3, isElective: true },
+          // Semester 8
+          { id: 'ched_sced402', code: 'SCED 402', name: 'Practice Teaching in Chem. II', crd: 5, isElective: false },
+          { id: 'ched_sced422', code: 'SCED 422', name: 'Guidance in Secondary Ed.', crd: 3, isElective: false },
+          { id: 'ched_chemelect3', code: 'Chem. Elective 3', name: 'Kimya Seçmeli 3', crd: 3, isElective: true },
+          { id: 'ched_unrest3', code: 'Unrest. Elective 3', name: 'Serbest Seçmeli 3', crd: 3, isElective: true },
         ],
         curriculumMap: {
-          '1.1': ['CHEM 105', 'ED 101', 'MATH 101', 'PHYS 101', 'AE 101/111'],
-          '1.2': ['CHEM 106', 'ED 102', 'MATH 102', 'PHYS 102', 'AE 102/112'],
+          '1.1': ['CHEM 101', 'ED 101', 'MATH 101', 'PHYS 101', 'AE 101/111'],
+          '1.2': ['CHEM 102', 'ED 102', 'MATH 102', 'PHYS 102', 'AE 102/112'],
           '2.1': ['CHEM 201', 'CHEM 245', 'ED 211', 'TK 221', 'HSS Elective 1'],
           '2.2': ['CHEM 202', 'CHEM 246', 'ED 204', 'SCED 204', 'TK 222'],
           '3.1': ['CHEM 301', 'BIO 101', 'SCED 311', 'HTR 331', 'Unrest. Elective 1'],
