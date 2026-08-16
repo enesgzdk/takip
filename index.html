@@ -21,6 +21,19 @@
     * {
       box-sizing: border-box;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* Genel Metin Seçimini Engelle */
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* Input ve Form Alanlarında Metin Düzenlemeye İzin Ver */
+    input, textarea, select {
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
     }
 
     body {
@@ -266,7 +279,6 @@
       padding: 8px 10px;
       border-radius: 4px;
       cursor: grab;
-      user-select: none;
       display: flex;
       flex-direction: column;
       gap: 6px;
