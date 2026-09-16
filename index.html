@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boğaziçi University - Program & GPA Tracker</title>
+  <title>Boğaziçi University Program Tracker</title>
   <style>
     :root {
       --bg-color: #f1f5f9;
@@ -536,8 +536,8 @@
     <div class="dept-select-container">
       <label for="deptSelect">Bölüm:</label>
       <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
-        <option value="math">Matematik (MATH)</option>
-        <option value="chem_ed">Kimya Öğretmenliği (SCED)</option>
+        <option value="math">Matematik</option>
+        <option value="chem_ed">Kimya Öğretmenliği</option>
       </select>
       <button class="reset-btn" onclick="resetCurrentDept()">Bu Bölümü Sıfırla</button>
     </div>
@@ -552,7 +552,7 @@
         <div class="dashboard-card">
           <div class="dash-row">
             <div class="dash-item">
-              <span class="dash-label">Kümülatif GPA</span>
+              <span class="dash-label">GPA</span>
               <span id="gpa-display" class="dash-val">0.00</span>
             </div>
             <div class="dash-item" style="text-align: right;">
@@ -573,7 +573,7 @@
         </div>
 
         <div class="sidebar-title">
-          <span>Ders Havuzu (Nihai Durum)</span>
+          <span>Ders Havuzu</span>
           <span style="font-size: 0.74rem; font-weight: normal; color: var(--text-muted);">Sürükle & Bırak</span>
         </div>
       </div>
@@ -874,7 +874,7 @@
           const gradeText = passedInst ? `(${passedInst.grade || 'AA'})` : '';
           statusBadge = `<span class="status-badge locked">🔒 Verildi ${gradeText} (Kilitli)</span>`;
         } else if (hasFailedOnly) {
-          statusBadge = '<span class="status-badge failed">✕ Verilmedi (Tekrar Alınmalı)</span>';
+          statusBadge = '<span class="status-badge failed">✕ Verilmedi</span>';
         }
 
         poolCard.innerHTML = `
@@ -1026,7 +1026,7 @@
             Verdim
           </label>
           <span class="status-badge ${isPassed ? 'locked' : 'failed'}">
-            ${isPassed ? '🔒 Geçildi (Kilitli)' : '✕ Verilmedi'}
+            ${isPassed ? 'Geçildi' : '✕ Verilmedi'}
           </span>
         </div>
       `;
