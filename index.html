@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Boğaziçi University Program Tracker</title>
   <style>
     :root {
@@ -27,14 +27,12 @@
     * {
       box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      /* Genel Metin Seçimini Engelle */
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
     }
 
-    /* Form elemanlarında metin seçimine ve yazımına izin ver */
     input, textarea, select, option {
       -webkit-user-select: text;
       -moz-user-select: text;
@@ -42,7 +40,6 @@
       user-select: text;
     }
 
-    /* Sitenin kendisi asla kaymasın (100vh sabit pencere) */
     html, body {
       height: 100vh;
       width: 100vw;
@@ -62,30 +59,31 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 24px;
+      padding: 10px 20px;
       background: #ffffff;
       border-bottom: 1px solid var(--border-color);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       z-index: 50;
+      gap: 10px;
     }
 
     .top-bar h1 {
       margin: 0;
       color: var(--accent-color);
-      font-size: 1.45rem;
+      font-size: 1.3rem;
       font-weight: 800;
       letter-spacing: -0.4px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .dept-select-container {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       background: #f8fafc;
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 9999px;
       border: 1px solid var(--border-color);
     }
@@ -93,12 +91,12 @@
     .dept-select-container label {
       font-weight: 700;
       color: var(--accent-color);
-      font-size: 0.88rem;
+      font-size: 0.85rem;
     }
 
     select.dept-select {
-      padding: 5px 12px;
-      font-size: 0.9rem;
+      padding: 5px 10px;
+      font-size: 0.88rem;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
       outline: none;
@@ -108,7 +106,7 @@
     }
 
     .reset-btn {
-      padding: 6px 14px;
+      padding: 6px 12px;
       background-color: #ef4444;
       color: white;
       border: none;
@@ -117,10 +115,44 @@
       font-weight: 600;
       font-size: 0.82rem;
       transition: background-color 0.15s;
+      white-space: nowrap;
     }
 
     .reset-btn:hover {
       background-color: #dc2626;
+    }
+
+    /* Mobil Sekme Değiştirici (Masaüstünde Gizli) */
+    .mobile-tab-bar {
+      display: none;
+      flex: 0 0 auto;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      padding: 6px 12px;
+      gap: 8px;
+      z-index: 40;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab-btn.active {
+      background: var(--accent-color);
+      color: #ffffff;
+      border-color: var(--accent-color);
     }
 
     /* İki Sütunlu Ana Gövde Düzeni */
@@ -128,9 +160,9 @@
       flex: 1 1 auto;
       display: flex;
       gap: 20px;
-      padding: 16px 24px;
+      padding: 16px 20px;
       overflow: hidden;
-      height: calc(100vh - 65px);
+      height: calc(100vh - 60px);
     }
 
     /* Sol Sütun: Sabit İstatistik Panosu + Bağımsız Scroll Ders Havuzu */
@@ -148,7 +180,7 @@
 
     .sidebar-fixed-top {
       flex: 0 0 auto;
-      padding: 16px 16px 10px 16px;
+      padding: 14px 16px 8px 16px;
       border-bottom: 1px solid #f1f5f9;
       background: #fff;
       z-index: 5;
@@ -158,10 +190,10 @@
       background: linear-gradient(135deg, #003366 0%, #004c99 100%);
       color: #fff;
       border-radius: 10px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       box-shadow: 0 4px 12px rgba(0, 51, 102, 0.18);
     }
 
@@ -177,7 +209,7 @@
     }
 
     .dash-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       opacity: 0.85;
@@ -185,21 +217,21 @@
     }
 
     .dash-val {
-      font-size: 1.55rem;
+      font-size: 1.45rem;
       font-weight: 800;
       line-height: 1.15;
     }
 
     .dash-subval {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       opacity: 0.95;
     }
 
     .sidebar-title {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--accent-color);
-      padding: 10px 0 2px 0;
+      padding: 8px 0 2px 0;
       margin: 0;
       display: flex;
       justify-content: space-between;
@@ -207,17 +239,16 @@
       font-weight: 700;
     }
 
-    /* Sol tarafta SADECE ders listesi kaydırılabilir */
     .sidebar-scroll-pool {
       flex: 1 1 auto;
       overflow-y: auto;
-      padding: 12px 16px 20px 16px;
+      padding: 10px 14px 20px 14px;
       display: flex;
       flex-direction: column;
       gap: 9px;
     }
 
-    /* Sağ Sütun: Bağımsız Scroll Eden Dönemler ve Yıllar */
+    /* Sağ Sütun */
     .main-content {
       flex: 1 1 auto;
       overflow-y: auto;
@@ -225,19 +256,12 @@
       padding-right: 6px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
 
-    /* Özel İnce Scrollbar */
     .sidebar-scroll-pool::-webkit-scrollbar,
     .main-content::-webkit-scrollbar {
-      width: 7px;
-    }
-
-    .sidebar-scroll-pool::-webkit-scrollbar-track,
-    .main-content::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 4px;
+      width: 6px;
     }
 
     .sidebar-scroll-pool::-webkit-scrollbar-thumb,
@@ -246,14 +270,9 @@
       border-radius: 4px;
     }
 
-    .sidebar-scroll-pool::-webkit-scrollbar-thumb:hover,
-    .main-content::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-
     .year-row {
       background: #fff;
-      padding: 16px;
+      padding: 14px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
       border: 1px solid var(--border-color);
@@ -265,10 +284,10 @@
     }
 
     .year-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--accent-color);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       border-bottom: 1px solid var(--border-color);
       padding-bottom: 6px;
       display: flex;
@@ -277,10 +296,10 @@
     }
 
     .year-title .limit-tag {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       background: #fee2e2;
       color: #991b1b;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 9999px;
       font-weight: 600;
       border: 1px solid #fca5a5;
@@ -289,16 +308,15 @@
     .semesters-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      gap: 12px;
     }
 
-    /* Dönem Kutuları */
     .semester-box {
       background: #f8fafc;
       border: 2px dashed #cbd5e1;
       border-radius: 8px;
       padding: 10px;
-      min-height: 170px;
+      min-height: 150px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -314,7 +332,7 @@
     .semester-header {
       font-weight: 700;
       color: #334155;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -323,10 +341,10 @@
     }
 
     .spa-badge {
-      font-size: 0.73rem;
+      font-size: 0.72rem;
       background: #e2e8f0;
       color: #0f172a;
-      padding: 2px 7px;
+      padding: 2px 6px;
       border-radius: 4px;
       font-weight: 700;
     }
@@ -340,7 +358,7 @@
       background: #ffffff;
       border: 1px solid var(--border-color);
       border-left: 4px solid var(--accent-color);
-      padding: 9px;
+      padding: 8px;
       border-radius: 6px;
       cursor: grab;
       display: flex;
@@ -348,7 +366,6 @@
       gap: 5px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       position: relative;
-      transition: all 0.15s ease;
     }
 
     .course-card:active {
@@ -367,10 +384,9 @@
       border-color: var(--failed-border);
     }
 
-    /* Verilince Kilitlenme Durumu */
     .course-card.locked {
       cursor: not-allowed !important;
-      opacity: 0.92;
+      opacity: 0.95;
       border-left-color: #059669;
     }
 
@@ -405,7 +421,7 @@
     }
 
     .course-name {
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       color: var(--text-muted);
       line-height: 1.25;
     }
@@ -465,11 +481,30 @@
       cursor: pointer;
       font-size: 0.85rem;
       padding: 0 4px;
-      transition: color 0.15s;
     }
     .delete-btn:hover { color: #ef4444; }
 
-    /* Müfredat Bilgi (i) İpucu */
+    /* Mobilde Kolay Döneme Ekleme Menüsü */
+    .mobile-add-wrap {
+      display: none;
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 1px dashed #cbd5e1;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mobile-add-select {
+      flex: 1;
+      font-size: 0.75rem;
+      padding: 3px 6px;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
+      background: #fff;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
     .info-btn {
       position: relative;
       display: inline-flex;
@@ -487,12 +522,12 @@
 
     .info-btn .tooltip {
       visibility: hidden;
-      width: 250px;
+      width: 240px;
       background-color: #0f172a;
       color: #f8fafc;
       text-align: left;
       border-radius: 6px;
-      padding: 10px 12px;
+      padding: 8px 10px;
       position: absolute;
       z-index: 100;
       bottom: 125%;
@@ -500,11 +535,10 @@
       transform: translateX(-50%);
       opacity: 0;
       transition: opacity 0.2s ease;
-      font-size: 0.74rem;
-      font-weight: 400;
+      font-size: 0.72rem;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
       pointer-events: none;
-      line-height: 1.45;
+      line-height: 1.4;
     }
 
     .info-btn .tooltip::after {
@@ -522,15 +556,107 @@
       visibility: visible;
       opacity: 1;
     }
+
+    /* ==========================================================================
+       MOBİL DUYARLILIK (RESPONSIVE) MEDYA SORGULARI (< 900px)
+       ========================================================================== */
+    @media (max-width: 900px) {
+      .top-bar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 8px 12px;
+        gap: 8px;
+      }
+
+      .top-bar h1 {
+        font-size: 1.15rem;
+        justify-content: center;
+      }
+
+      .top-bar h1 span:last-child {
+        display: none; /* Ekstra başlık yazısını mobilde gizle */
+      }
+
+      .dept-select-container {
+        justify-content: space-between;
+        padding: 4px 10px;
+      }
+
+      select.dept-select {
+        flex: 1;
+        max-width: 170px;
+      }
+
+      /* Mobil Sekme Çubuğunu Göster */
+      .mobile-tab-bar {
+        display: flex;
+      }
+
+      .app-main {
+        padding: 8px 10px;
+        gap: 0;
+        height: calc(100vh - 105px);
+        position: relative;
+      }
+
+      /* Sekmeli Görünüm: Sadece aktif sekme gösterilir */
+      .sidebar {
+        flex: 1 1 100%;
+        width: 100%;
+        display: none;
+      }
+
+      .sidebar.active-tab {
+        display: flex;
+      }
+
+      .main-content {
+        flex: 1 1 100%;
+        width: 100%;
+        display: none;
+        padding-right: 2px;
+      }
+
+      .main-content.active-tab {
+        display: flex;
+      }
+
+      /* Mobilde dönemleri 3 kolon yerine tek kolona indir */
+      .semesters-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .semester-box {
+        min-height: 110px;
+      }
+
+      /* Havuz kartlarında tek tıkla döneme ekleme menüsünü aç */
+      .mobile-add-wrap {
+        display: flex;
+      }
+
+      /* Tooltip mobilde ekran dışına taşmasın */
+      .info-btn .tooltip {
+        left: auto;
+        right: 0;
+        transform: none;
+        width: 210px;
+      }
+      .info-btn .tooltip::after {
+        left: auto;
+        right: 5px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Sabit Üst Çubuk (Sayfa Boyunca Asla Kaymaz) -->
+  <!-- Sabit Üst Çubuk -->
   <header class="top-bar">
     <h1>
-      <span>🎓 Boğaziçi University</span>
-      <span style="font-weight: 400; font-size: 1.15rem; color: #64748b;">| Ders & GPA Takip Sistemi</span>
+      <span>🎓 Boğaziçi Tracker</span>
+      <span style="font-weight: 400; font-size: 1.05rem; color: #64748b;">| Ders & GPA Takip</span>
     </h1>
     
     <div class="dept-select-container">
@@ -539,15 +665,25 @@
         <option value="math">Matematik</option>
         <option value="chem_ed">Kimya Öğretmenliği</option>
       </select>
-      <button class="reset-btn" onclick="resetCurrentDept()">Bu Bölümü Sıfırla</button>
+      <button class="reset-btn" onclick="resetCurrentDept()">Sıfırla</button>
     </div>
   </header>
 
-  <!-- İki Kolonlu Split Ekran (Sol Havuz ve Sağ Dönemler Ayrı Scroll Olur) -->
+  <!-- Mobil Sekme Çubuğu (Havuz & Dönemler Arası Geçiş) -->
+  <nav class="mobile-tab-bar" id="mobileTabs">
+    <button class="tab-btn active" id="tabBtnPool" onclick="switchMobileTab('pool')">
+      📋 Ders Havuzu
+    </button>
+    <button class="tab-btn" id="tabBtnSemesters" onclick="switchMobileTab('semesters')">
+      📅 Dönemler & Plan
+    </button>
+  </nav>
+
+  <!-- İki Kolonlu Split Ekran -->
   <main class="app-main">
     
     <!-- SOL: Sabit Üst İstatistikler + Kaydırılabilir Ders Havuzu -->
-    <aside class="sidebar">
+    <aside class="sidebar active-tab" id="sidebarContainer">
       <div class="sidebar-fixed-top">
         <div class="dashboard-card">
           <div class="dash-row">
@@ -560,13 +696,13 @@
               <span id="remaining-count" class="dash-val">0</span>
             </div>
           </div>
-          <div class="dash-row" style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px;">
+          <div class="dash-row" style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 6px;">
             <div class="dash-item">
-              <span class="dash-label">Tamamlanan Kredi</span>
+              <span class="dash-label">Tamamlanan</span>
               <span id="completed-credits" class="dash-subval">0 Cr</span>
             </div>
             <div class="dash-item" style="text-align: right;">
-              <span class="dash-label">Mezuniyet Kredisi</span>
+              <span class="dash-label">Hedef Kredi</span>
               <span id="total-credits" class="dash-subval">0 Cr</span>
             </div>
           </div>
@@ -574,21 +710,18 @@
 
         <div class="sidebar-title">
           <span>Ders Havuzu</span>
-          <span style="font-size: 0.74rem; font-weight: normal; color: var(--text-muted);">Sürükle & Bırak</span>
+          <span style="font-size: 0.74rem; font-weight: normal; color: var(--text-muted);">Sürükle veya Ekle</span>
         </div>
       </div>
 
-      <!-- Sadece burası kaydırılır -->
       <div id="course-pool" class="sidebar-scroll-pool"></div>
     </aside>
 
-    <!-- SAĞ: Bağımsız Kaydırılabilir 0. Yıldan 7. Yıla Kadar Dönemler -->
+    <!-- SAĞ: Bağımsız Kaydırılabilir Dönem Blokları -->
     <section class="main-content" id="years-grid"></section>
   </main>
 
   <script>
-    // Boğaziçi Üniversitesi Harf Notları & Ağırlık Katsayıları
-    // P (Pass) katsayı içermez, GPA/SPA'yı etkilemez ama tamamlanan krediyi artırır.
     const GRADE_POINTS = {
       'AA': 4.0,
       'BA': 3.5,
@@ -598,7 +731,7 @@
       'DC': 1.5,
       'DD': 1.0,
       'F': 0.0,
-      'P': null // Sayısal hesaplamaya girmez
+      'P': null
     };
 
     const departmentsData = {
@@ -661,39 +794,33 @@
       chem_ed: {
         name: 'Kimya Öğretmenliği Programı (SCED)',
         courses: [
-          // 1. Dönem
           { id: 'sced_ae101', code: 'AE 101/111/HSS', name: 'Eng. / HSS Elective', crd: 3, isElective: true },
           { id: 'sced_chem101', code: 'CHEM 101', name: 'Genel Kimya I', crd: 3, isElective: false },
           { id: 'sced_ed101', code: 'ED 101', name: 'Eğitime Giriş', crd: 3, isElective: false },
           { id: 'sced_math101', code: 'MATH 101', name: 'Analiz I', crd: 4, isElective: false },
           { id: 'sced_phys101', code: 'PHYS 101', name: 'Fizik I', crd: 4, isElective: false },
-          // 2. Dönem
           { id: 'sced_unrest1', code: 'Unrest. Elective', name: 'Sınırsız Seçmeli 1', crd: 3, isElective: true },
           { id: 'sced_chem102', code: 'CHEM 102', name: 'Genel Kimya II', crd: 3, isElective: false },
           { id: 'sced_chem106', code: 'CHEM 106', name: 'Genel Kimya Lab.', crd: 2, isElective: false },
           { id: 'sced_math102', code: 'MATH 102', name: 'Analiz II', crd: 4, isElective: false },
           { id: 'sced_phys102', code: 'PHYS 102', name: 'Fizik II', crd: 4, isElective: false },
-          // 3. Dönem
           { id: 'sced_bio101', code: 'BIO 101', name: 'Hücresel ve Moleküler Biyoloji I', crd: 3, isElective: false },
           { id: 'sced_chem223', code: 'CHEM 223', name: 'Analitik Kimya', crd: 3, isElective: false },
           { id: 'sced_chem225', code: 'CHEM 225', name: 'Analitik Kimya Lab.', crd: 2, isElective: false },
           { id: 'sced_ed211', code: 'ED 211', name: 'Eğitim Psikolojisi', crd: 3, isElective: false },
           { id: 'sced_math201', code: 'MATH 201', name: 'Matris Kuramı', crd: 4, isElective: false },
           { id: 'sced_tk221', code: 'TK 221', name: 'Türkçe I', crd: 2, isElective: false },
-          // 4. Dönem
           { id: 'sced_hss1', code: 'HSS Elective', name: 'Sosyal Bilimler Seçmeli', crd: 3, isElective: true },
           { id: 'sced_chem234', code: 'CHEM 234', name: 'Anorganik Kimya I', crd: 3, isElective: false },
           { id: 'sced_phys201', code: 'PHYS 201', name: 'Fizik III', crd: 4, isElective: false },
           { id: 'sced_sced240', code: 'SCED 240', name: 'Bilim, Teknoloji ve Toplum', crd: 3, isElective: false },
           { id: 'sced_sced282', code: 'SCED 282', name: 'Mat. ve Fende Öğretim İlke ve Yöntemleri', crd: 3, isElective: false },
           { id: 'sced_tk222', code: 'TK 222', name: 'Türkçe II', crd: 2, isElective: false },
-          // 5. Dönem
           { id: 'sced_chem213', code: 'CHEM 213', name: 'Organik Kimya I', crd: 4, isElective: false },
           { id: 'sced_chem215', code: 'CHEM 215', name: 'Organik Kimya Lab. I', crd: 2, isElective: false },
           { id: 'sced_ed221', code: 'ED 221', name: 'Rehberlik ve Danışmanlığın Temelleri', crd: 3, isElective: false },
           { id: 'sced_htr311', code: 'HTR 311', name: 'Türkiye Cumhuriyeti Tarihi I', crd: 2, isElective: false },
           { id: 'sced_sced320', code: 'SCED 320', name: 'Fen Bilimlerinde Öğretim Yöntemleri I', crd: 4, isElective: false },
-          // 6. Dönem
           { id: 'sced_complelect', code: 'Complementary Elective', name: 'Tamamlayıcı Seçmeli', crd: 3, isElective: true },
           { id: 'sced_chemelect1', code: 'Chem. Elective 1', name: 'Kimya Seçmeli 1', crd: 3, isElective: true },
           { id: 'sced_cet360', code: 'CET 360', name: 'Öğretim Teknolojileri ve Materyal Geliştirme', crd: 3, isElective: false },
@@ -701,13 +828,11 @@
           { id: 'sced_chem216', code: 'CHEM 216', name: 'Organik Kimya Lab. II', crd: 2, isElective: false },
           { id: 'sced_htr312', code: 'HTR 312', name: 'Türkiye Cumhuriyeti Tarihi II', crd: 2, isElective: false },
           { id: 'sced_sced370', code: 'SCED 370', name: 'Mat. ve Fen Eğit. Ölçme ve Değerlendirme', crd: 3, isElective: false },
-          // 7. Dönem
           { id: 'sced_chem345', code: 'CHEM 345', name: 'Denge Termodinamiği', crd: 4, isElective: false },
           { id: 'sced_ed401', code: 'ED 401', name: 'Sınıf Yönetimi', crd: 3, isElective: false },
           { id: 'sced_sced404', code: 'SCED 404', name: 'Mat. ve Fen Eğit. Araştırma Yöntemleri', crd: 4, isElective: false },
           { id: 'sced_sced421', code: 'SCED 421', name: 'Kimyada Öğretim Yöntemleri', crd: 3, isElective: false },
           { id: 'sced_sced450', code: 'SCED 450', name: 'Mat. ve Fen Bil. Öğretmenliği Uygulaması', crd: 4, isElective: false },
-          // 8. Dönem
           { id: 'sced_chemelect2', code: 'Chem. Elective 2', name: 'Kimya Seçmeli 2', crd: 3, isElective: true },
           { id: 'sced_environelect', code: 'Environmental Elective', name: 'Çevre ve Bilim Seçmeli', crd: 3, isElective: true },
           { id: 'sced_philhist', code: 'Phil/Hist Elective', name: 'Bilim Felsefesi / Tarihi Seçmeli', crd: 3, isElective: true },
@@ -727,16 +852,15 @@
       }
     };
 
-    // 0. Yıl Hazırlık'tan 7. Yıl Azami Süreye Kadar Dönem Yapısı
     const yearStructure = [
       { yearLabel: '0. Yıl (Hazırlık / Erken Dönem)', isExtended: false, sems: ['0.1', '0.2', '0.3 (Yaz)'] },
       { yearLabel: '1. Yıl', isExtended: false, sems: ['1.1', '1.2', '1.3 (Yaz)'] },
       { yearLabel: '2. Yıl', isExtended: false, sems: ['2.1', '2.2', '2.3 (Yaz)'] },
       { yearLabel: '3. Yıl', isExtended: false, sems: ['3.1', '3.2', '3.3 (Yaz)'] },
-      { yearLabel: '4. Yıl (Normal Mezuniyet Hedefi)', isExtended: false, sems: ['4.1', '4.2', '4.3 (Yaz)'] },
-      { yearLabel: '5. Yıl (1. Uzatma Yılı)', isExtended: true, sems: ['5.1', '5.2', '5.3 (Yaz)'] },
-      { yearLabel: '6. Yıl (2. Uzatma Yılı)', isExtended: true, sems: ['6.1', '6.2', '6.3 (Yaz)'] },
-      { yearLabel: '7. Yıl (Azami Öğrenim Süresi Sınırı)', isExtended: true, tag: 'YÖK Yasal Sınır', sems: ['7.1', '7.2', '7.3 (Yaz)'] }
+      { yearLabel: '4. Yıl (Normal Mezuniyet)', isExtended: false, sems: ['4.1', '4.2', '4.3 (Yaz)'] },
+      { yearLabel: '5. Yıl (1. Uzatma)', isExtended: true, sems: ['5.1', '5.2', '5.3 (Yaz)'] },
+      { yearLabel: '6. Yıl (2. Uzatma)', isExtended: true, sems: ['6.1', '6.2', '6.3 (Yaz)'] },
+      { yearLabel: '7. Yıl (Azami Yasal Süre)', isExtended: true, tag: 'YÖK Sınır', sems: ['7.1', '7.2', '7.3 (Yaz)'] }
     ];
 
     let currentDept = localStorage.getItem('boun_active_dept') || 'math';
@@ -760,11 +884,30 @@
       initUI();
     }
 
+    /* Mobil Sekme Değiştirme */
+    function switchMobileTab(tab) {
+      const sidebar = document.getElementById('sidebarContainer');
+      const main = document.getElementById('years-grid');
+      const btnPool = document.getElementById('tabBtnPool');
+      const btnSem = document.getElementById('tabBtnSemesters');
+
+      if (tab === 'pool') {
+        sidebar.classList.add('active-tab');
+        main.classList.remove('active-tab');
+        btnPool.classList.add('active');
+        btnSem.classList.remove('active');
+      } else {
+        sidebar.classList.remove('active-tab');
+        main.classList.add('active-tab');
+        btnPool.classList.remove('active');
+        btnSem.classList.add('active');
+      }
+    }
+
     function calculateAverages() {
       const state = getDeptState(currentDept);
       const courses = departmentsData[currentDept].courses;
 
-      // 1. Dönemlik SPA Hesaplaması
       const semesterStats = {};
       const allSems = [];
       yearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
@@ -779,7 +922,6 @@
             const crd = course.crd;
             semesterStats[inst.semId].earnedCredits += crd;
 
-            // P harf notu sayısal GPA/SPA katsayısına girmez
             if (inst.grade && GRADE_POINTS[inst.grade] !== null && GRADE_POINTS[inst.grade] !== undefined) {
               const pts = GRADE_POINTS[inst.grade];
               semesterStats[inst.semId].totalPoints += (pts * crd);
@@ -789,7 +931,6 @@
         }
       });
 
-      // Her dönemin headerındaki SPA rozetini güncelle
       allSems.forEach(s => {
         const safeSemId = s.replace(/[^a-zA-Z0-9]/g, '_');
         const badge = document.getElementById(`spa-${safeSemId}`);
@@ -808,8 +949,6 @@
         }
       });
 
-      // 2. Kümülatif GPA & Tamamlanan Kredi
-      // Tekrarlanan derslerde son geçerli not hesaba girer
       const bestCourseGrades = {};
       let passedCourseIds = new Set();
       let completedCreditsTotal = 0;
@@ -857,22 +996,27 @@
       const pool = document.getElementById('course-pool');
       pool.innerHTML = '';
 
+      // Mobilde ekleme yapmak için dönem listesi optionları
+      const allSems = [];
+      yearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
+      const semOptions = allSems.map(s => `<option value="${s}">Dönem ${s}</option>`).join('');
+
       courses.forEach(course => {
         const courseInstances = state.instances.filter(inst => inst.courseId === course.id);
         const hasPassed = courseInstances.some(inst => inst.passed === true);
         const hasFailedOnly = courseInstances.length > 0 && !hasPassed;
 
         const poolCard = document.createElement('div');
-        const isLocked = hasPassed; // Verilen ders solda da kilitlensin
+        const isLocked = hasPassed;
         poolCard.className = `course-card ${hasPassed ? 'status-passed pool-locked' : (hasFailedOnly ? 'status-failed' : '')}`;
         poolCard.draggable = !isLocked;
         poolCard.dataset.courseId = course.id;
 
-        let statusBadge = '<span class="status-badge pending">• Alınmadı / Bekliyor</span>';
+        let statusBadge = '<span class="status-badge pending">• Alınmadı</span>';
         if (hasPassed) {
           const passedInst = courseInstances.find(inst => inst.passed);
           const gradeText = passedInst ? `(${passedInst.grade || 'AA'})` : '';
-          statusBadge = `<span class="status-badge locked">🔒 Verildi ${gradeText} (Kilitli)</span>`;
+          statusBadge = `<span class="status-badge locked">🔒 Verildi ${gradeText}</span>`;
         } else if (hasFailedOnly) {
           statusBadge = '<span class="status-badge failed">✕ Verilmedi</span>';
         }
@@ -886,6 +1030,15 @@
           <div class="course-controls" style="margin-top: 4px;">
             ${statusBadge}
           </div>
+          
+          ${!isLocked ? `
+            <div class="mobile-add-wrap">
+              <select class="mobile-add-select" onchange="handleMobileAddCourse('${course.id}', this.value)">
+                <option value="">➕ Döneme Ekle...</option>
+                ${semOptions}
+              </select>
+            </div>
+          ` : ''}
         `;
 
         if (!isLocked) {
@@ -896,6 +1049,41 @@
       });
 
       calculateAverages();
+    }
+
+    /* Mobilde Açılır Menüden Döneme Ekleme */
+    function handleMobileAddCourse(courseId, targetSem) {
+      if (!targetSem) return;
+
+      const state = getDeptState(currentDept);
+      const newInst = {
+        instanceId: 'inst_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+        courseId: courseId,
+        semId: targetSem,
+        passed: false,
+        grade: 'AA',
+        customText: ''
+      };
+
+      state.instances.push(newInst);
+      saveGlobalState();
+
+      const course = departmentsData[currentDept].courses.find(c => c.id === courseId);
+      const card = createSemesterCourseCard(newInst, course);
+      const targetBox = document.querySelector(`[data-sem-id="${targetSem}"]`);
+      if (targetBox) {
+        targetBox.appendChild(card);
+      }
+
+      updateSidebarPool();
+      
+      // Mobilde kullanıcıyı eklediği döneme geçirme kolaylığı
+      if (window.innerWidth <= 900) {
+        switchMobileTab('semesters');
+        if (targetBox) {
+          targetBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
     }
 
     function initUI() {
@@ -933,7 +1121,7 @@
             infoHtml = `
               <span class="info-btn">i
                 <span class="tooltip">
-                  <strong>${activeDeptData.name} Müfredatı (${semId}):</strong><br>${listStr}
+                  <strong>${activeDeptData.name} (${semId}):</strong><br>${listStr}
                 </span>
               </span>
             `;
@@ -962,7 +1150,6 @@
         yearsGrid.appendChild(row);
       });
 
-      // Kayıtlı ders kopyalarını dönem kutularına ekle
       state.instances.forEach(inst => {
         const course = activeDeptData.courses.find(c => c.id === inst.courseId);
         if (course) {
@@ -1026,7 +1213,7 @@
             Verdim
           </label>
           <span class="status-badge ${isPassed ? 'locked' : 'failed'}">
-            ${isPassed ? 'Geçildi' : '✕ Verilmedi'}
+            ${isPassed ? '✓ Geçildi' : '✕ Verilmedi'}
           </span>
         </div>
       `;
