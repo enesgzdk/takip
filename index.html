@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Boğaziçi University Program Tracker</title>
   <style>
     :root {
@@ -31,6 +31,7 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     input, textarea, select, option {
@@ -41,7 +42,8 @@
     }
 
     html, body {
-      height: 100vh;
+      height: 100%;
+      height: 100dvh;
       width: 100vw;
       margin: 0;
       padding: 0;
@@ -122,7 +124,7 @@
       background-color: #dc2626;
     }
 
-    /* Mobil Sekme Değiştirici (Masaüstünde Gizli) */
+    /* Mobil Sekme Değiştirici */
     .mobile-tab-bar {
       display: none;
       flex: 0 0 auto;
@@ -155,17 +157,18 @@
       border-color: var(--accent-color);
     }
 
-    /* İki Sütunlu Ana Gövde Düzeni */
+    /* Tam Ekran Flexbox */
     .app-main {
-      flex: 1 1 auto;
+      flex: 1 1 0%;
+      min-height: 0;
       display: flex;
       gap: 20px;
       padding: 16px 20px;
       overflow: hidden;
-      height: calc(100vh - 60px);
+      position: relative;
     }
 
-    /* Sol Sütun: Sabit İstatistik Panosu + Bağımsız Scroll Ders Havuzu */
+    /* Sol Sütun: Havuz */
     .sidebar {
       flex: 0 0 350px;
       background: var(--card-bg);
@@ -175,6 +178,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      min-height: 0;
       overflow: hidden;
     }
 
@@ -240,19 +244,22 @@
     }
 
     .sidebar-scroll-pool {
-      flex: 1 1 auto;
+      flex: 1 1 0%;
+      min-height: 0;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       padding: 10px 14px 20px 14px;
       display: flex;
       flex-direction: column;
       gap: 9px;
     }
 
-    /* Sağ Sütun */
+    /* Sağ Sütun: Dönemler */
     .main-content {
-      flex: 1 1 auto;
+      flex: 1 1 0%;
+      min-height: 0;
       overflow-y: auto;
-      height: 100%;
+      -webkit-overflow-scrolling: touch;
       padding-right: 6px;
       display: flex;
       flex-direction: column;
@@ -484,7 +491,6 @@
     }
     .delete-btn:hover { color: #ef4444; }
 
-    /* Mobilde Kolay Döneme Ekleme Menüsü */
     .mobile-add-wrap {
       display: none;
       margin-top: 4px;
@@ -497,7 +503,7 @@
     .mobile-add-select {
       flex: 1;
       font-size: 0.75rem;
-      padding: 3px 6px;
+      padding: 4px 6px;
       border: 1px solid #94a3b8;
       border-radius: 4px;
       background: #fff;
@@ -557,53 +563,76 @@
       opacity: 1;
     }
 
+    /* Mobilde Eklenen Dersi Haber Veren Ufak Toast Bildirim */
+    .toast-msg {
+      position: fixed;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(15, 23, 42, 0.92);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 1000;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+    .toast-msg.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
     /* ==========================================================================
-       MOBİL DUYARLILIK (RESPONSIVE) MEDYA SORGULARI (< 900px)
+       MOBİL MEDYA SORGULARI (< 900px)
        ========================================================================== */
     @media (max-width: 900px) {
       .top-bar {
-        flex-direction: column;
-        align-items: stretch;
         padding: 8px 12px;
-        gap: 8px;
+        gap: 6px;
       }
 
       .top-bar h1 {
-        font-size: 1.15rem;
+        font-size: 1.05rem;
         justify-content: center;
       }
 
       .top-bar h1 span:last-child {
-        display: none; /* Ekstra başlık yazısını mobilde gizle */
+        display: none;
       }
 
       .dept-select-container {
         justify-content: space-between;
-        padding: 4px 10px;
+        padding: 3px 10px;
+        width: 100%;
       }
 
       select.dept-select {
         flex: 1;
-        max-width: 170px;
+        max-width: none;
+        margin: 0 4px;
       }
 
-      /* Mobil Sekme Çubuğunu Göster */
       .mobile-tab-bar {
         display: flex;
+        padding: 6px 12px;
       }
 
       .app-main {
         padding: 8px 10px;
         gap: 0;
-        height: calc(100vh - 105px);
-        position: relative;
+        padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
       }
 
-      /* Sekmeli Görünüm: Sadece aktif sekme gösterilir */
       .sidebar {
         flex: 1 1 100%;
         width: 100%;
         display: none;
+        border-radius: 8px;
       }
 
       .sidebar.active-tab {
@@ -614,29 +643,31 @@
         flex: 1 1 100%;
         width: 100%;
         display: none;
-        padding-right: 2px;
+        padding-right: 0;
       }
 
       .main-content.active-tab {
         display: flex;
       }
 
-      /* Mobilde dönemleri 3 kolon yerine tek kolona indir */
       .semesters-container {
         grid-template-columns: 1fr;
         gap: 10px;
       }
 
       .semester-box {
-        min-height: 110px;
+        min-height: 100px;
       }
 
-      /* Havuz kartlarında tek tıkla döneme ekleme menüsünü aç */
       .mobile-add-wrap {
         display: flex;
       }
 
-      /* Tooltip mobilde ekran dışına taşmasın */
+      .sidebar-scroll-pool,
+      .main-content {
+        padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+      }
+
       .info-btn .tooltip {
         left: auto;
         right: 0;
@@ -669,7 +700,7 @@
     </div>
   </header>
 
-  <!-- Mobil Sekme Çubuğu (Havuz & Dönemler Arası Geçiş) -->
+  <!-- Mobil Sekme Çubuğu -->
   <nav class="mobile-tab-bar" id="mobileTabs">
     <button class="tab-btn active" id="tabBtnPool" onclick="switchMobileTab('pool')">
       📋 Ders Havuzu
@@ -679,7 +710,7 @@
     </button>
   </nav>
 
-  <!-- İki Kolonlu Split Ekran -->
+  <!-- Ana Gövde -->
   <main class="app-main">
     
     <!-- SOL: Sabit Üst İstatistikler + Kaydırılabilir Ders Havuzu -->
@@ -720,6 +751,8 @@
     <!-- SAĞ: Bağımsız Kaydırılabilir Dönem Blokları -->
     <section class="main-content" id="years-grid"></section>
   </main>
+
+  <div id="toast" class="toast-msg"></div>
 
   <script>
     const GRADE_POINTS = {
@@ -884,7 +917,6 @@
       initUI();
     }
 
-    /* Mobil Sekme Değiştirme */
     function switchMobileTab(tab) {
       const sidebar = document.getElementById('sidebarContainer');
       const main = document.getElementById('years-grid');
@@ -902,6 +934,18 @@
         btnPool.classList.remove('active');
         btnSem.classList.add('active');
       }
+    }
+
+    /* Ufak Bilgilendirme Balonu */
+    let toastTimeout;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 1800);
     }
 
     function calculateAverages() {
@@ -996,7 +1040,6 @@
       const pool = document.getElementById('course-pool');
       pool.innerHTML = '';
 
-      // Mobilde ekleme yapmak için dönem listesi optionları
       const allSems = [];
       yearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
       const semOptions = allSems.map(s => `<option value="${s}">Dönem ${s}</option>`).join('');
@@ -1033,7 +1076,7 @@
           
           ${!isLocked ? `
             <div class="mobile-add-wrap">
-              <select class="mobile-add-select" onchange="handleMobileAddCourse('${course.id}', this.value)">
+              <select class="mobile-add-select" onchange="handleMobileAddCourse('${course.id}', this.value, this)">
                 <option value="">➕ Döneme Ekle...</option>
                 ${semOptions}
               </select>
@@ -1051,8 +1094,8 @@
       calculateAverages();
     }
 
-    /* Mobilde Açılır Menüden Döneme Ekleme */
-    function handleMobileAddCourse(courseId, targetSem) {
+    /* Mobilde Kesintisiz Döneme Ekleme */
+    function handleMobileAddCourse(courseId, targetSem, selectEl) {
       if (!targetSem) return;
 
       const state = getDeptState(currentDept);
@@ -1075,15 +1118,14 @@
         targetBox.appendChild(card);
       }
 
-      updateSidebarPool();
-      
-      // Mobilde kullanıcıyı eklediği döneme geçirme kolaylığı
-      if (window.innerWidth <= 900) {
-        switchMobileTab('semesters');
-        if (targetBox) {
-          targetBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+      // Seçim menüsünü varsayılana döndür
+      if (selectEl) {
+        selectEl.value = "";
       }
+
+      // İstatistikleri güncelle ve ekran değiştirmeden bildirim ver
+      calculateAverages();
+      showToast(`✓ ${course.code} → Dönem ${targetSem}'e eklendi`);
     }
 
     function initUI() {
