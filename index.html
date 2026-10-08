@@ -5,14 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Boğaziçi University Program Tracker</title>
   <style>
+    /* Açık Tema (Default) */
     :root {
       --bg-color: #f1f5f9;
       --card-bg: #ffffff;
+      --card-secondary: #f8fafc;
+      --topbar-bg: #ffffff;
       --accent-color: #003366;
       --accent-light: #e6eef8;
       --text-color: #1e293b;
       --text-muted: #64748b;
       --border-color: #cbd5e1;
+      --border-dashed: #cbd5e1;
       --success-color: #15803d;
       --success-bg: #f0fdf4;
       --success-border: #86efac;
@@ -22,6 +26,45 @@
       --info-color: #0284c7;
       --locked-bg: #f8fafc;
       --locked-border: #94a3b8;
+      --badge-bg: #e2e8f0;
+      --badge-color: #334155;
+      --dash-gradient: linear-gradient(135deg, #003366 0%, #004c99 100%);
+      --year-row-bg: #ffffff;
+      --year-extended-bg: #fffbeb;
+      --year-extended-border: #f59e0b;
+      --drag-over-bg: #e0f2fe;
+      --input-bg: #ffffff;
+    }
+
+    /* Koyu Tema (Dark Mode) */
+    [data-theme="dark"] {
+      --bg-color: #0b1120;
+      --card-bg: #1e293b;
+      --card-secondary: #0f172a;
+      --topbar-bg: #1e293b;
+      --accent-color: #38bdf8;
+      --accent-light: #0369a1;
+      --text-color: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --border-dashed: #475569;
+      --success-color: #4ade80;
+      --success-bg: rgba(34, 197, 94, 0.12);
+      --success-border: #166534;
+      --failed-color: #f87171;
+      --failed-bg: rgba(239, 68, 68, 0.12);
+      --failed-border: #991b1b;
+      --info-color: #38bdf8;
+      --locked-bg: #0f172a;
+      --locked-border: #334155;
+      --badge-bg: #334155;
+      --badge-color: #e2e8f0;
+      --dash-gradient: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      --year-row-bg: #1e293b;
+      --year-extended-bg: #1c1917;
+      --year-extended-border: #b45309;
+      --drag-over-bg: #1e3a8a;
+      --input-bg: #0f172a;
     }
 
     * {
@@ -32,6 +75,7 @@
       -ms-user-select: none;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
     }
 
     input, textarea, select, option {
@@ -39,6 +83,8 @@
       -moz-user-select: text;
       -ms-user-select: text;
       user-select: text;
+      background-color: var(--input-bg);
+      color: var(--text-color);
     }
 
     html, body {
@@ -62,7 +108,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 20px;
-      background: #ffffff;
+      background: var(--topbar-bg);
       border-bottom: 1px solid var(--border-color);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       z-index: 50;
@@ -80,11 +126,17 @@
       gap: 8px;
     }
 
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .dept-select-container {
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: #f8fafc;
+      gap: 8px;
+      background: var(--card-secondary);
       padding: 5px 12px;
       border-radius: 9999px;
       border: 1px solid var(--border-color);
@@ -99,12 +151,29 @@
     select.dept-select {
       padding: 5px 10px;
       font-size: 0.88rem;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       outline: none;
       cursor: pointer;
-      background-color: #fff;
       font-weight: 600;
+    }
+
+    .theme-toggle-btn {
+      padding: 6px 10px;
+      background: var(--card-secondary);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--border-color);
     }
 
     .reset-btn {
@@ -116,7 +185,6 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 0.82rem;
-      transition: background-color 0.15s;
       white-space: nowrap;
     }
 
@@ -128,7 +196,7 @@
     .mobile-tab-bar {
       display: none;
       flex: 0 0 auto;
-      background: #ffffff;
+      background: var(--topbar-bg);
       border-bottom: 1px solid var(--border-color);
       padding: 6px 12px;
       gap: 8px;
@@ -138,8 +206,8 @@
     .tab-btn {
       flex: 1;
       padding: 8px 12px;
-      border: 1px solid #cbd5e1;
-      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      background: var(--card-secondary);
       border-radius: 8px;
       font-weight: 700;
       font-size: 0.85rem;
@@ -153,8 +221,12 @@
 
     .tab-btn.active {
       background: var(--accent-color);
-      color: #ffffff;
+      color: #0b1120;
       border-color: var(--accent-color);
+    }
+
+    [data-theme="light"] .tab-btn.active {
+      color: #ffffff;
     }
 
     /* Tam Ekran Flexbox */
@@ -185,20 +257,21 @@
     .sidebar-fixed-top {
       flex: 0 0 auto;
       padding: 14px 16px 8px 16px;
-      border-bottom: 1px solid #f1f5f9;
-      background: #fff;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--card-bg);
       z-index: 5;
     }
 
     .dashboard-card {
-      background: linear-gradient(135deg, #003366 0%, #004c99 100%);
+      background: var(--dash-gradient);
       color: #fff;
       border-radius: 10px;
       padding: 12px 14px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      box-shadow: 0 4px 12px rgba(0, 51, 102, 0.18);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
     .dash-row {
@@ -273,12 +346,12 @@
 
     .sidebar-scroll-pool::-webkit-scrollbar-thumb,
     .main-content::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
+      background: var(--border-color);
       border-radius: 4px;
     }
 
     .year-row {
-      background: #fff;
+      background: var(--year-row-bg);
       padding: 14px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
@@ -286,8 +359,8 @@
     }
 
     .year-row.extended {
-      background: #fffbeb;
-      border: 1px dashed #f59e0b;
+      background: var(--year-extended-bg);
+      border: 1px dashed var(--year-extended-border);
     }
 
     .year-title {
@@ -304,12 +377,12 @@
 
     .year-title .limit-tag {
       font-size: 0.7rem;
-      background: #fee2e2;
-      color: #991b1b;
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
       padding: 2px 7px;
       border-radius: 9999px;
       font-weight: 600;
-      border: 1px solid #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.4);
     }
 
     .semesters-container {
@@ -319,50 +392,50 @@
     }
 
     .semester-box {
-      background: #f8fafc;
-      border: 2px dashed #cbd5e1;
+      background: var(--card-secondary);
+      border: 2px dashed var(--border-dashed);
       border-radius: 8px;
       padding: 10px;
       min-height: 150px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      transition: all 0.15s ease;
     }
 
     .semester-box.drag-over {
-      background-color: #e0f2fe;
-      border-color: #0284c7;
-      box-shadow: inset 0 0 0 2px #0284c7;
+      background-color: var(--drag-over-bg);
+      border-color: var(--info-color);
+      box-shadow: inset 0 0 0 2px var(--info-color);
     }
 
     .semester-header {
       font-weight: 700;
-      color: #334155;
+      color: var(--text-color);
       font-size: 0.9rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-bottom: 5px;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .spa-badge {
       font-size: 0.72rem;
-      background: #e2e8f0;
-      color: #0f172a;
+      background: var(--badge-bg);
+      color: var(--badge-color);
       padding: 2px 6px;
       border-radius: 4px;
       font-weight: 700;
     }
+
     .spa-badge.active {
-      background: #dbeafe;
-      color: #1e40af;
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent-color);
     }
 
     /* Ders Kartları */
     .course-card {
-      background: #ffffff;
+      background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-left: 4px solid var(--accent-color);
       padding: 8px;
@@ -399,9 +472,9 @@
 
     .course-card.pool-locked {
       cursor: not-allowed !important;
-      opacity: 0.55;
+      opacity: 0.5;
       filter: grayscale(0.5);
-      background: #f1f5f9;
+      background: var(--card-secondary);
     }
 
     .course-header {
@@ -419,11 +492,11 @@
 
     .course-credits {
       font-size: 0.7rem;
-      background: #e2e8f0;
+      background: var(--badge-bg);
       padding: 2px 6px;
       border-radius: 9999px;
       font-weight: 700;
-      color: #334155;
+      color: var(--badge-color);
       white-space: nowrap;
     }
 
@@ -443,10 +516,10 @@
       padding: 2px 4px;
       font-size: 0.75rem;
       font-weight: 700;
-      border: 1px solid #16a34a;
+      border: 1px solid var(--success-color);
       border-radius: 4px;
-      background-color: #ffffff;
-      color: #15803d;
+      background-color: var(--card-bg);
+      color: var(--success-color);
       outline: none;
       cursor: pointer;
     }
@@ -462,10 +535,10 @@
     .custom-input {
       width: 100%;
       padding: 4px 6px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       font-size: 0.76rem;
-      background: #fff;
+      background: var(--input-bg);
     }
 
     .status-badge {
@@ -478,12 +551,12 @@
     .status-badge.passed { color: var(--success-color); }
     .status-badge.failed { color: var(--failed-color); }
     .status-badge.pending { color: var(--text-muted); }
-    .status-badge.locked { color: #047857; }
+    .status-badge.locked { color: #059669; }
 
     .delete-btn {
       background: none;
       border: none;
-      color: #94a3b8;
+      color: var(--text-muted);
       font-weight: 700;
       cursor: pointer;
       font-size: 0.85rem;
@@ -495,7 +568,7 @@
       display: none;
       margin-top: 4px;
       padding-top: 4px;
-      border-top: 1px dashed #cbd5e1;
+      border-top: 1px dashed var(--border-color);
       align-items: center;
       gap: 6px;
     }
@@ -504,10 +577,10 @@
       flex: 1;
       font-size: 0.75rem;
       padding: 4px 6px;
-      border: 1px solid #94a3b8;
+      border: 1px solid var(--border-color);
       border-radius: 4px;
-      background: #fff;
-      color: #0f172a;
+      background: var(--input-bg);
+      color: var(--text-color);
       font-weight: 600;
     }
 
@@ -519,11 +592,15 @@
       width: 17px;
       height: 17px;
       background-color: var(--info-color);
-      color: white;
+      color: #0b1120;
       border-radius: 50%;
       font-size: 0.7rem;
       font-weight: 800;
       cursor: help;
+    }
+
+    [data-theme="light"] .info-btn {
+      color: #ffffff;
     }
 
     .info-btn .tooltip {
@@ -542,7 +619,8 @@
       opacity: 0;
       transition: opacity 0.2s ease;
       font-size: 0.72rem;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+      border: 1px solid #334155;
       pointer-events: none;
       line-height: 1.4;
     }
@@ -563,19 +641,19 @@
       opacity: 1;
     }
 
-    /* Mobilde Eklenen Dersi Haber Veren Ufak Toast Bildirim */
     .toast-msg {
       position: fixed;
       bottom: calc(20px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: rgba(15, 23, 42, 0.92);
+      background: rgba(15, 23, 42, 0.95);
       color: #fff;
       padding: 8px 16px;
       border-radius: 9999px;
       font-size: 0.8rem;
       font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border: 1px solid #334155;
       z-index: 1000;
       pointer-events: none;
       opacity: 0;
@@ -587,13 +665,12 @@
       opacity: 1;
     }
 
-    /* ==========================================================================
-       MOBİL MEDYA SORGULARI (< 900px)
-       ========================================================================== */
+    /* Mobil Medya Sorguları */
     @media (max-width: 900px) {
       .top-bar {
         padding: 8px 12px;
         gap: 6px;
+        flex-direction: column;
       }
 
       .top-bar h1 {
@@ -605,16 +682,19 @@
         display: none;
       }
 
-      .dept-select-container {
-        justify-content: space-between;
-        padding: 3px 10px;
+      .top-actions {
         width: 100%;
+        justify-content: space-between;
+      }
+
+      .dept-select-container {
+        flex: 1;
+        padding: 3px 8px;
       }
 
       select.dept-select {
         flex: 1;
-        max-width: none;
-        margin: 0 4px;
+        margin: 0 2px;
       }
 
       .mobile-tab-bar {
@@ -687,15 +767,22 @@
   <header class="top-bar">
     <h1>
       <span>🎓 Boğaziçi Tracker</span>
-      <span style="font-weight: 400; font-size: 1.05rem; color: #64748b;">| Ders & GPA Takip</span>
+      <span style="font-weight: 400; font-size: 1.05rem; color: var(--text-muted);">| Ders & GPA Takip</span>
     </h1>
     
-    <div class="dept-select-container">
-      <label for="deptSelect">Bölüm:</label>
-      <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
-        <option value="math">Matematik</option>
-        <option value="chem_ed">Kimya Öğretmenliği</option>
-      </select>
+    <div class="top-actions">
+      <div class="dept-select-container">
+        <label for="deptSelect">Bölüm:</label>
+        <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
+          <option value="math">Matematik</option>
+          <option value="chem_ed">Kimya Öğretmenliği</option>
+        </select>
+      </div>
+
+      <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" title="Koyu / Açık Tema">
+        🌙
+      </button>
+
       <button class="reset-btn" onclick="resetCurrentDept()">Sıfırla</button>
     </div>
   </header>
@@ -712,7 +799,6 @@
 
   <!-- Ana Gövde -->
   <main class="app-main">
-    
     <!-- SOL: Sabit Üst İstatistikler + Kaydırılabilir Ders Havuzu -->
     <aside class="sidebar active-tab" id="sidebarContainer">
       <div class="sidebar-fixed-top">
@@ -755,6 +841,30 @@
   <div id="toast" class="toast-msg"></div>
 
   <script>
+    // --- TEMA YÖNETİMİ ---
+    let currentTheme = localStorage.getItem('boun_tracker_theme');
+    if (!currentTheme) {
+      currentTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const btn = document.getElementById('themeBtn');
+      if (btn) {
+        btn.innerText = theme === 'dark' ? '☀️' : '🌙';
+      }
+      localStorage.setItem('boun_tracker_theme', theme);
+      currentTheme = theme;
+    }
+
+    function toggleTheme() {
+      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+    }
+
+    applyTheme(currentTheme);
+
+    // --- NOT SKALASI & KATSAYILARI ---
     const GRADE_POINTS = {
       'AA': 4.0,
       'BA': 3.5,
@@ -825,575 +935,3 @@
         }
       },
       chem_ed: {
-        name: 'Kimya Öğretmenliği Programı (SCED)',
-        courses: [
-          { id: 'sced_ae101', code: 'AE 101/111/HSS', name: 'Eng. / HSS Elective', crd: 3, isElective: true },
-          { id: 'sced_chem101', code: 'CHEM 101', name: 'Genel Kimya I', crd: 3, isElective: false },
-          { id: 'sced_ed101', code: 'ED 101', name: 'Eğitime Giriş', crd: 3, isElective: false },
-          { id: 'sced_math101', code: 'MATH 101', name: 'Analiz I', crd: 4, isElective: false },
-          { id: 'sced_phys101', code: 'PHYS 101', name: 'Fizik I', crd: 4, isElective: false },
-          { id: 'sced_unrest1', code: 'Unrest. Elective', name: 'Sınırsız Seçmeli 1', crd: 3, isElective: true },
-          { id: 'sced_chem102', code: 'CHEM 102', name: 'Genel Kimya II', crd: 3, isElective: false },
-          { id: 'sced_chem106', code: 'CHEM 106', name: 'Genel Kimya Lab.', crd: 2, isElective: false },
-          { id: 'sced_math102', code: 'MATH 102', name: 'Analiz II', crd: 4, isElective: false },
-          { id: 'sced_phys102', code: 'PHYS 102', name: 'Fizik II', crd: 4, isElective: false },
-          { id: 'sced_bio101', code: 'BIO 101', name: 'Hücresel ve Moleküler Biyoloji I', crd: 3, isElective: false },
-          { id: 'sced_chem223', code: 'CHEM 223', name: 'Analitik Kimya', crd: 3, isElective: false },
-          { id: 'sced_chem225', code: 'CHEM 225', name: 'Analitik Kimya Lab.', crd: 2, isElective: false },
-          { id: 'sced_ed211', code: 'ED 211', name: 'Eğitim Psikolojisi', crd: 3, isElective: false },
-          { id: 'sced_math201', code: 'MATH 201', name: 'Matris Kuramı', crd: 4, isElective: false },
-          { id: 'sced_tk221', code: 'TK 221', name: 'Türkçe I', crd: 2, isElective: false },
-          { id: 'sced_hss1', code: 'HSS Elective', name: 'Sosyal Bilimler Seçmeli', crd: 3, isElective: true },
-          { id: 'sced_chem234', code: 'CHEM 234', name: 'Anorganik Kimya I', crd: 3, isElective: false },
-          { id: 'sced_phys201', code: 'PHYS 201', name: 'Fizik III', crd: 4, isElective: false },
-          { id: 'sced_sced240', code: 'SCED 240', name: 'Bilim, Teknoloji ve Toplum', crd: 3, isElective: false },
-          { id: 'sced_sced282', code: 'SCED 282', name: 'Mat. ve Fende Öğretim İlke ve Yöntemleri', crd: 3, isElective: false },
-          { id: 'sced_tk222', code: 'TK 222', name: 'Türkçe II', crd: 2, isElective: false },
-          { id: 'sced_chem213', code: 'CHEM 213', name: 'Organik Kimya I', crd: 4, isElective: false },
-          { id: 'sced_chem215', code: 'CHEM 215', name: 'Organik Kimya Lab. I', crd: 2, isElective: false },
-          { id: 'sced_ed221', code: 'ED 221', name: 'Rehberlik ve Danışmanlığın Temelleri', crd: 3, isElective: false },
-          { id: 'sced_htr311', code: 'HTR 311', name: 'Türkiye Cumhuriyeti Tarihi I', crd: 2, isElective: false },
-          { id: 'sced_sced320', code: 'SCED 320', name: 'Fen Bilimlerinde Öğretim Yöntemleri I', crd: 4, isElective: false },
-          { id: 'sced_complelect', code: 'Complementary Elective', name: 'Tamamlayıcı Seçmeli', crd: 3, isElective: true },
-          { id: 'sced_chemelect1', code: 'Chem. Elective 1', name: 'Kimya Seçmeli 1', crd: 3, isElective: true },
-          { id: 'sced_cet360', code: 'CET 360', name: 'Öğretim Teknolojileri ve Materyal Geliştirme', crd: 3, isElective: false },
-          { id: 'sced_chem214', code: 'CHEM 214', name: 'Organik Kimya II', crd: 4, isElective: false },
-          { id: 'sced_chem216', code: 'CHEM 216', name: 'Organik Kimya Lab. II', crd: 2, isElective: false },
-          { id: 'sced_htr312', code: 'HTR 312', name: 'Türkiye Cumhuriyeti Tarihi II', crd: 2, isElective: false },
-          { id: 'sced_sced370', code: 'SCED 370', name: 'Mat. ve Fen Eğit. Ölçme ve Değerlendirme', crd: 3, isElective: false },
-          { id: 'sced_chem345', code: 'CHEM 345', name: 'Denge Termodinamiği', crd: 4, isElective: false },
-          { id: 'sced_ed401', code: 'ED 401', name: 'Sınıf Yönetimi', crd: 3, isElective: false },
-          { id: 'sced_sced404', code: 'SCED 404', name: 'Mat. ve Fen Eğit. Araştırma Yöntemleri', crd: 4, isElective: false },
-          { id: 'sced_sced421', code: 'SCED 421', name: 'Kimyada Öğretim Yöntemleri', crd: 3, isElective: false },
-          { id: 'sced_sced450', code: 'SCED 450', name: 'Mat. ve Fen Bil. Öğretmenliği Uygulaması', crd: 4, isElective: false },
-          { id: 'sced_chemelect2', code: 'Chem. Elective 2', name: 'Kimya Seçmeli 2', crd: 3, isElective: true },
-          { id: 'sced_environelect', code: 'Environmental Elective', name: 'Çevre ve Bilim Seçmeli', crd: 3, isElective: true },
-          { id: 'sced_philhist', code: 'Phil/Hist Elective', name: 'Bilim Felsefesi / Tarihi Seçmeli', crd: 3, isElective: true },
-          { id: 'sced_sced422', code: 'SCED 422', name: 'Kimya Öğretimi Uygulaması', crd: 4, isElective: false },
-          { id: 'sced_sced424', code: 'SCED 424', name: 'Kimya Eğitiminde Güncel Eğilimler', crd: 3, isElective: false }
-        ],
-        curriculumMap: {
-          '1.1': ['AE 101/111 / HSS', 'CHEM 101', 'ED 101', 'MATH 101', 'PHYS 101'],
-          '1.2': ['Sınırsız Seçmeli', 'CHEM 102', 'CHEM 106', 'MATH 102', 'PHYS 102'],
-          '2.1': ['BIO 101', 'CHEM 223', 'CHEM 225', 'ED 211', 'MATH 201', 'TK 221'],
-          '2.2': ['Sosyal Bilimler Seçmeli', 'CHEM 234', 'PHYS 201', 'SCED 240', 'SCED 282', 'TK 222'],
-          '3.1': ['CHEM 213', 'CHEM 215', 'ED 221', 'HTR 311', 'SCED 320'],
-          '3.2': ['Tamamlayıcı Seçmeli', 'Kimya Seçmeli 1', 'CET 360', 'CHEM 214', 'CHEM 216', 'HTR 312', 'SCED 370'],
-          '4.1': ['CHEM 345', 'ED 401', 'SCED 404', 'SCED 421', 'SCED 450'],
-          '4.2': ['Kimya Seçmeli 2', 'Çevre Seçmeli', 'Bilim Felsefesi/Tarihi Seçmeli', 'SCED 422', 'SCED 424']
-        }
-      }
-    };
-
-    const yearStructure = [
-      { yearLabel: '0. Yıl (Hazırlık / Erken Dönem)', isExtended: false, sems: ['0.1', '0.2', '0.3 (Yaz)'] },
-      { yearLabel: '1. Yıl', isExtended: false, sems: ['1.1', '1.2', '1.3 (Yaz)'] },
-      { yearLabel: '2. Yıl', isExtended: false, sems: ['2.1', '2.2', '2.3 (Yaz)'] },
-      { yearLabel: '3. Yıl', isExtended: false, sems: ['3.1', '3.2', '3.3 (Yaz)'] },
-      { yearLabel: '4. Yıl (Normal Mezuniyet)', isExtended: false, sems: ['4.1', '4.2', '4.3 (Yaz)'] },
-      { yearLabel: '5. Yıl (1. Uzatma)', isExtended: true, sems: ['5.1', '5.2', '5.3 (Yaz)'] },
-      { yearLabel: '6. Yıl (2. Uzatma)', isExtended: true, sems: ['6.1', '6.2', '6.3 (Yaz)'] },
-      { yearLabel: '7. Yıl (Azami Yasal Süre)', isExtended: true, tag: 'YÖK Sınır', sems: ['7.1', '7.2', '7.3 (Yaz)'] }
-    ];
-
-    let currentDept = localStorage.getItem('boun_active_dept') || 'math';
-    let globalState = JSON.parse(localStorage.getItem('boun_multi_dept_gpa_state')) || {};
-
-    function getDeptState(deptKey) {
-      if (!globalState[deptKey]) {
-        globalState[deptKey] = { instances: [] };
-      }
-      return globalState[deptKey];
-    }
-
-    function saveGlobalState() {
-      localStorage.setItem('boun_multi_dept_gpa_state', JSON.stringify(globalState));
-      localStorage.setItem('boun_active_dept', currentDept);
-    }
-
-    function changeDepartment(newDept) {
-      currentDept = newDept;
-      saveGlobalState();
-      initUI();
-    }
-
-    function switchMobileTab(tab) {
-      const sidebar = document.getElementById('sidebarContainer');
-      const main = document.getElementById('years-grid');
-      const btnPool = document.getElementById('tabBtnPool');
-      const btnSem = document.getElementById('tabBtnSemesters');
-
-      if (tab === 'pool') {
-        sidebar.classList.add('active-tab');
-        main.classList.remove('active-tab');
-        btnPool.classList.add('active');
-        btnSem.classList.remove('active');
-      } else {
-        sidebar.classList.remove('active-tab');
-        main.classList.add('active-tab');
-        btnPool.classList.remove('active');
-        btnSem.classList.add('active');
-      }
-    }
-
-    /* Ufak Bilgilendirme Balonu */
-    let toastTimeout;
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.innerText = msg;
-      toast.classList.add('show');
-      clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove('show');
-      }, 1800);
-    }
-
-    function calculateAverages() {
-      const state = getDeptState(currentDept);
-      const courses = departmentsData[currentDept].courses;
-
-      const semesterStats = {};
-      const allSems = [];
-      yearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
-      allSems.forEach(s => {
-        semesterStats[s] = { totalPoints: 0, totalCredits: 0, earnedCredits: 0 };
-      });
-
-      state.instances.forEach(inst => {
-        if (inst.passed && semesterStats[inst.semId]) {
-          const course = courses.find(c => c.id === inst.courseId);
-          if (course) {
-            const crd = course.crd;
-            semesterStats[inst.semId].earnedCredits += crd;
-
-            if (inst.grade && GRADE_POINTS[inst.grade] !== null && GRADE_POINTS[inst.grade] !== undefined) {
-              const pts = GRADE_POINTS[inst.grade];
-              semesterStats[inst.semId].totalPoints += (pts * crd);
-              semesterStats[inst.semId].totalCredits += crd;
-            }
-          }
-        }
-      });
-
-      allSems.forEach(s => {
-        const safeSemId = s.replace(/[^a-zA-Z0-9]/g, '_');
-        const badge = document.getElementById(`spa-${safeSemId}`);
-        if (badge) {
-          const stat = semesterStats[s];
-          if (stat && stat.earnedCredits > 0) {
-            const spaStr = stat.totalCredits > 0 
-              ? (stat.totalPoints / stat.totalCredits).toFixed(2) 
-              : 'P';
-            badge.innerText = `SPA: ${spaStr} | ${stat.earnedCredits} Cr`;
-            badge.className = 'spa-badge active';
-          } else {
-            badge.innerText = `SPA: -`;
-            badge.className = 'spa-badge';
-          }
-        }
-      });
-
-      const bestCourseGrades = {};
-      let passedCourseIds = new Set();
-      let completedCreditsTotal = 0;
-
-      state.instances.forEach(inst => {
-        if (inst.passed) {
-          passedCourseIds.add(inst.courseId);
-          const course = courses.find(c => c.id === inst.courseId);
-          if (course) {
-            bestCourseGrades[inst.courseId] = {
-              grade: inst.grade || 'AA',
-              crd: course.crd
-            };
-          }
-        }
-      });
-
-      let cumPoints = 0;
-      let cumCredits = 0;
-
-      Object.keys(bestCourseGrades).forEach(cId => {
-        const item = bestCourseGrades[cId];
-        completedCreditsTotal += item.crd;
-
-        if (item.grade !== 'P' && GRADE_POINTS[item.grade] !== null && GRADE_POINTS[item.grade] !== undefined) {
-          cumPoints += (GRADE_POINTS[item.grade] * item.crd);
-          cumCredits += item.crd;
-        }
-      });
-
-      const gpa = cumCredits > 0 ? (cumPoints / cumCredits).toFixed(2) : "0.00";
-      document.getElementById('gpa-display').innerText = gpa;
-      document.getElementById('completed-credits').innerText = `${completedCreditsTotal} Cr`;
-
-      const totalRequiredCredits = courses.reduce((sum, c) => sum + c.crd, 0);
-      document.getElementById('total-credits').innerText = `${totalRequiredCredits} Cr`;
-
-      const remaining = courses.length - passedCourseIds.size;
-      document.getElementById('remaining-count').innerText = remaining;
-    }
-
-    function updateSidebarPool() {
-      const state = getDeptState(currentDept);
-      const courses = departmentsData[currentDept].courses;
-      const pool = document.getElementById('course-pool');
-      pool.innerHTML = '';
-
-      const allSems = [];
-      yearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
-      const semOptions = allSems.map(s => `<option value="${s}">Dönem ${s}</option>`).join('');
-
-      courses.forEach(course => {
-        const courseInstances = state.instances.filter(inst => inst.courseId === course.id);
-        const hasPassed = courseInstances.some(inst => inst.passed === true);
-        const hasFailedOnly = courseInstances.length > 0 && !hasPassed;
-
-        const poolCard = document.createElement('div');
-        const isLocked = hasPassed;
-        poolCard.className = `course-card ${hasPassed ? 'status-passed pool-locked' : (hasFailedOnly ? 'status-failed' : '')}`;
-        poolCard.draggable = !isLocked;
-        poolCard.dataset.courseId = course.id;
-
-        let statusBadge = '<span class="status-badge pending">• Alınmadı</span>';
-        if (hasPassed) {
-          const passedInst = courseInstances.find(inst => inst.passed);
-          const gradeText = passedInst ? `(${passedInst.grade || 'AA'})` : '';
-          statusBadge = `<span class="status-badge locked">🔒 Verildi ${gradeText}</span>`;
-        } else if (hasFailedOnly) {
-          statusBadge = '<span class="status-badge failed">✕ Verilmedi</span>';
-        }
-
-        poolCard.innerHTML = `
-          <div class="course-header">
-            <span class="course-title">${course.code}</span>
-            <span class="course-credits">${course.crd} Crd</span>
-          </div>
-          <div class="course-name">${course.name}</div>
-          <div class="course-controls" style="margin-top: 4px;">
-            ${statusBadge}
-          </div>
-          
-          ${!isLocked ? `
-            <div class="mobile-add-wrap">
-              <select class="mobile-add-select" onchange="handleMobileAddCourse('${course.id}', this.value, this)">
-                <option value="">➕ Döneme Ekle...</option>
-                ${semOptions}
-              </select>
-            </div>
-          ` : ''}
-        `;
-
-        if (!isLocked) {
-          poolCard.addEventListener('dragstart', handlePoolDragStart);
-        }
-
-        pool.appendChild(poolCard);
-      });
-
-      calculateAverages();
-    }
-
-    /* Mobilde Kesintisiz Döneme Ekleme */
-    function handleMobileAddCourse(courseId, targetSem, selectEl) {
-      if (!targetSem) return;
-
-      const state = getDeptState(currentDept);
-      const newInst = {
-        instanceId: 'inst_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-        courseId: courseId,
-        semId: targetSem,
-        passed: false,
-        grade: 'AA',
-        customText: ''
-      };
-
-      state.instances.push(newInst);
-      saveGlobalState();
-
-      const course = departmentsData[currentDept].courses.find(c => c.id === courseId);
-      const card = createSemesterCourseCard(newInst, course);
-      const targetBox = document.querySelector(`[data-sem-id="${targetSem}"]`);
-      if (targetBox) {
-        targetBox.appendChild(card);
-      }
-
-      // Seçim menüsünü varsayılana döndür
-      if (selectEl) {
-        selectEl.value = "";
-      }
-
-      // İstatistikleri güncelle ve ekran değiştirmeden bildirim ver
-      calculateAverages();
-      showToast(`✓ ${course.code} → Dönem ${targetSem}'e eklendi`);
-    }
-
-    function initUI() {
-      document.getElementById('deptSelect').value = currentDept;
-
-      const activeDeptData = departmentsData[currentDept];
-      const state = getDeptState(currentDept);
-      const yearsGrid = document.getElementById('years-grid');
-      yearsGrid.innerHTML = '';
-
-      yearStructure.forEach(y => {
-        const row = document.createElement('div');
-        row.className = `year-row ${y.isExtended ? 'extended' : ''}`;
-
-        const title = document.createElement('div');
-        title.className = 'year-title';
-        title.innerHTML = `
-          <span>${y.yearLabel}</span>
-          ${y.tag ? `<span class="limit-tag">${y.tag}</span>` : ''}
-        `;
-        row.appendChild(title);
-
-        const semsContainer = document.createElement('div');
-        semsContainer.className = 'semesters-container';
-
-        y.sems.forEach(semId => {
-          const box = document.createElement('div');
-          box.className = 'semester-box';
-          box.dataset.semId = semId;
-
-          const curriculumInfo = activeDeptData.curriculumMap[semId];
-          let infoHtml = '';
-          if (curriculumInfo) {
-            const listStr = curriculumInfo.map(c => `• ${c}`).join('<br>');
-            infoHtml = `
-              <span class="info-btn">i
-                <span class="tooltip">
-                  <strong>${activeDeptData.name} (${semId}):</strong><br>${listStr}
-                </span>
-              </span>
-            `;
-          }
-
-          const safeSemId = semId.replace(/[^a-zA-Z0-9]/g, '_');
-
-          box.innerHTML = `
-            <div class="semester-header">
-              <div style="display:flex; align-items:center; gap:6px;">
-                <span>Dönem ${semId}</span>
-                ${infoHtml}
-              </div>
-              <span id="spa-${safeSemId}" class="spa-badge">SPA: -</span>
-            </div>
-          `;
-
-          box.addEventListener('dragover', handleDragOver);
-          box.addEventListener('dragleave', handleDragLeave);
-          box.addEventListener('drop', handleDrop);
-
-          semsContainer.appendChild(box);
-        });
-
-        row.appendChild(semsContainer);
-        yearsGrid.appendChild(row);
-      });
-
-      state.instances.forEach(inst => {
-        const course = activeDeptData.courses.find(c => c.id === inst.courseId);
-        if (course) {
-          const semBox = document.querySelector(`[data-sem-id="${inst.semId}"]`);
-          if (semBox) {
-            const card = createSemesterCourseCard(inst, course);
-            semBox.appendChild(card);
-          }
-        }
-      });
-
-      updateSidebarPool();
-    }
-
-    function createSemesterCourseCard(inst, course) {
-      const card = document.createElement('div');
-      const isPassed = !!inst.passed;
-      card.className = `course-card ${isPassed ? 'status-passed locked' : 'status-failed'}`;
-      card.id = `inst-${inst.instanceId}`;
-      card.draggable = !isPassed;
-      card.dataset.instanceId = inst.instanceId;
-
-      const currentGrade = inst.grade || 'AA';
-
-      const gradeOptions = Object.keys(GRADE_POINTS).map(g => {
-        const valText = GRADE_POINTS[g] !== null ? `(${GRADE_POINTS[g].toFixed(1)})` : '(Pass)';
-        return `<option value="${g}" ${currentGrade === g ? 'selected' : ''}>${g} ${valText}</option>`;
-      }).join('');
-
-      card.innerHTML = `
-        <div class="course-header">
-          <span class="course-title">${course.code}</span>
-          <div style="display:flex; align-items:center; gap:6px;">
-            ${isPassed ? `
-              <div class="grade-selector-wrap" title="Harf Notu">
-                <select class="grade-select" onchange="handleGradeChange('${inst.instanceId}', this.value)">
-                  ${gradeOptions}
-                </select>
-              </div>
-            ` : ''}
-            <span class="course-credits">${course.crd} Crd</span>
-            ${!isPassed ? `
-              <button class="delete-btn" onclick="removeInstance('${inst.instanceId}')" title="Bu dönemden kaldır">✕</button>
-            ` : ''}
-          </div>
-        </div>
-        <div class="course-name">${course.name}</div>
-        
-        ${course.isElective ? `
-          <input type="text" 
-                 class="custom-input" 
-                 placeholder="Seçilen Ders Adı/Kodu..." 
-                 value="${inst.customText || ''}" 
-                 ${isPassed ? 'disabled style="background:#f1f5f9; cursor:not-allowed;"' : ''}
-                 oninput="handleInstanceInput('${inst.instanceId}', this.value)">
-        ` : ''}
-
-        <div class="course-controls">
-          <label style="cursor:pointer; display:flex; align-items:center; gap:5px; font-weight:600;">
-            <input type="checkbox" ${isPassed ? 'checked' : ''} onchange="toggleInstancePassed('${inst.instanceId}', this.checked)">
-            Verdim
-          </label>
-          <span class="status-badge ${isPassed ? 'locked' : 'failed'}">
-            ${isPassed ? '✓ Geçildi' : '✕ Verilmedi'}
-          </span>
-        </div>
-      `;
-
-      if (!isPassed) {
-        card.addEventListener('dragstart', handleInstanceDragStart);
-      }
-
-      return card;
-    }
-
-    let dragType = null;
-    let draggedId = null;
-
-    function handlePoolDragStart(e) {
-      dragType = 'pool';
-      draggedId = this.dataset.courseId;
-      e.dataTransfer.setData('text/plain', this.dataset.courseId);
-    }
-
-    function handleInstanceDragStart(e) {
-      dragType = 'instance';
-      draggedId = this.dataset.instanceId;
-      e.dataTransfer.setData('text/plain', this.dataset.instanceId);
-    }
-
-    function handleDragOver(e) {
-      e.preventDefault();
-      this.classList.add('drag-over');
-    }
-
-    function handleDragLeave() {
-      this.classList.remove('drag-over');
-    }
-
-    function handleDrop(e) {
-      e.preventDefault();
-      this.classList.remove('drag-over');
-
-      if (!draggedId) return;
-
-      const semId = this.dataset.semId;
-      const state = getDeptState(currentDept);
-
-      if (dragType === 'pool') {
-        const newInst = {
-          instanceId: 'inst_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-          courseId: draggedId,
-          semId: semId,
-          passed: false,
-          grade: 'AA',
-          customText: ''
-        };
-
-        state.instances.push(newInst);
-        saveGlobalState();
-
-        const course = departmentsData[currentDept].courses.find(c => c.id === draggedId);
-        const card = createSemesterCourseCard(newInst, course);
-        this.appendChild(card);
-
-      } else if (dragType === 'instance') {
-        const inst = state.instances.find(i => i.instanceId === draggedId);
-        if (inst && !inst.passed) {
-          inst.semId = semId;
-          saveGlobalState();
-
-          const card = document.getElementById(`inst-${draggedId}`);
-          if (card) {
-            this.appendChild(card);
-          }
-        }
-      }
-
-      updateSidebarPool();
-      draggedId = null;
-      dragType = null;
-    }
-
-    function toggleInstancePassed(instanceId, isChecked) {
-      const state = getDeptState(currentDept);
-      const inst = state.instances.find(i => i.instanceId === instanceId);
-      if (inst) {
-        inst.passed = isChecked;
-        if (isChecked && !inst.grade) {
-          inst.grade = 'AA';
-        }
-        saveGlobalState();
-
-        const oldCard = document.getElementById(`inst-${instanceId}`);
-        const course = departmentsData[currentDept].courses.find(c => c.id === inst.courseId);
-        const newCard = createSemesterCourseCard(inst, course);
-        oldCard.parentElement.replaceChild(newCard, oldCard);
-
-        updateSidebarPool();
-      }
-    }
-
-    function handleGradeChange(instanceId, newGrade) {
-      const state = getDeptState(currentDept);
-      const inst = state.instances.find(i => i.instanceId === instanceId);
-      if (inst) {
-        inst.grade = newGrade;
-        saveGlobalState();
-        calculateAverages();
-      }
-    }
-
-    function handleInstanceInput(instanceId, text) {
-      const state = getDeptState(currentDept);
-      const inst = state.instances.find(i => i.instanceId === instanceId);
-      if (inst) {
-        inst.customText = text;
-        saveGlobalState();
-      }
-    }
-
-    function removeInstance(instanceId) {
-      const state = getDeptState(currentDept);
-      state.instances = state.instances.filter(i => i.instanceId !== instanceId);
-      saveGlobalState();
-
-      const card = document.getElementById(`inst-${instanceId}`);
-      if (card) card.remove();
-
-      updateSidebarPool();
-    }
-
-    function resetCurrentDept() {
-      const deptName = departmentsData[currentDept].name;
-      if (confirm(`Yalnızca "${deptName}" bölümü planlamanız sıfırlanacak. Emin misiniz?`)) {
-        globalState[currentDept] = { instances: [] };
-        saveGlobalState();
-        initUI();
-      }
-    }
-
-    initUI();
-  </script>
-</body>
-</html>
