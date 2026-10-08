@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <!-- 404 Favicon hatasını önlemek için gömülü SVG Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
   <title>Boğaziçi University Program Tracker</title>
   <style>
     :root {
@@ -24,26 +22,6 @@
       --info-color: #0284c7;
       --locked-bg: #f8fafc;
       --locked-border: #94a3b8;
-    }
-
-    /* Koyu Tema (Dark Mode) Renk Değişkenleri */
-    body.dark-mode {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --accent-color: #38bdf8;
-      --accent-light: #0c4a6e;
-      --text-color: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-color: #334155;
-      --success-color: #4ade80;
-      --success-bg: #064e3b;
-      --success-border: #059669;
-      --failed-color: #f87171;
-      --failed-bg: #450a0a;
-      --failed-border: #dc2626;
-      --info-color: #38bdf8;
-      --locked-bg: #1e293b;
-      --locked-border: #475569;
     }
 
     * {
@@ -75,7 +53,6 @@
       font-size: 14px;
       display: flex;
       flex-direction: column;
-      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     /* Sabit Üst Başlık & Kontrol Çubuğu */
@@ -85,7 +62,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 20px;
-      background: var(--card-bg);
+      background: #ffffff;
       border-bottom: 1px solid var(--border-color);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       z-index: 50;
@@ -103,17 +80,11 @@
       gap: 8px;
     }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
     .dept-select-container {
       display: flex;
       align-items: center;
-      gap: 8px;
-      background: var(--bg-color);
+      gap: 10px;
+      background: #f8fafc;
       padding: 5px 12px;
       border-radius: 9999px;
       border: 1px solid var(--border-color);
@@ -128,33 +99,12 @@
     select.dept-select {
       padding: 5px 10px;
       font-size: 0.88rem;
-      border: 1px solid var(--border-color);
+      border: 1px solid #cbd5e1;
       border-radius: 6px;
       outline: none;
       cursor: pointer;
-      background-color: var(--card-bg);
-      color: var(--text-color);
+      background-color: #fff;
       font-weight: 600;
-    }
-
-    .theme-toggle-btn {
-      padding: 6px 10px;
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-color);
-      transition: background-color 0.15s, transform 0.1s;
-    }
-    .theme-toggle-btn:hover {
-      background: var(--border-color);
-    }
-    .theme-toggle-btn:active {
-      transform: scale(0.95);
     }
 
     .reset-btn {
@@ -178,7 +128,7 @@
     .mobile-tab-bar {
       display: none;
       flex: 0 0 auto;
-      background: var(--card-bg);
+      background: #ffffff;
       border-bottom: 1px solid var(--border-color);
       padding: 6px 12px;
       gap: 8px;
@@ -188,8 +138,8 @@
     .tab-btn {
       flex: 1;
       padding: 8px 12px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-color);
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
       border-radius: 8px;
       font-weight: 700;
       font-size: 0.85rem;
@@ -205,10 +155,6 @@
       background: var(--accent-color);
       color: #ffffff;
       border-color: var(--accent-color);
-    }
-
-    body.dark-mode .tab-btn.active {
-      color: #0f172a;
     }
 
     /* Tam Ekran Flexbox */
@@ -239,8 +185,8 @@
     .sidebar-fixed-top {
       flex: 0 0 auto;
       padding: 14px 16px 8px 16px;
-      border-bottom: 1px solid var(--border-color);
-      background: var(--card-bg);
+      border-bottom: 1px solid #f1f5f9;
+      background: #fff;
       z-index: 5;
     }
 
@@ -253,10 +199,6 @@
       flex-direction: column;
       gap: 8px;
       box-shadow: 0 4px 12px rgba(0, 51, 102, 0.18);
-    }
-
-    body.dark-mode .dashboard-card {
-      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
     }
 
     .dash-row {
@@ -331,12 +273,12 @@
 
     .sidebar-scroll-pool::-webkit-scrollbar-thumb,
     .main-content::-webkit-scrollbar-thumb {
-      background: var(--border-color);
+      background: #cbd5e1;
       border-radius: 4px;
     }
 
     .year-row {
-      background: var(--card-bg);
+      background: #fff;
       padding: 14px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
@@ -346,11 +288,6 @@
     .year-row.extended {
       background: #fffbeb;
       border: 1px dashed #f59e0b;
-    }
-
-    body.dark-mode .year-row.extended {
-      background: #1c1917;
-      border-color: #d97706;
     }
 
     .year-title {
@@ -382,8 +319,8 @@
     }
 
     .semester-box {
-      background: var(--bg-color);
-      border: 2px dashed var(--border-color);
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
       border-radius: 8px;
       padding: 10px;
       min-height: 150px;
@@ -399,27 +336,21 @@
       box-shadow: inset 0 0 0 2px #0284c7;
     }
 
-    body.dark-mode .semester-box.drag-over {
-      background-color: #0c4a6e;
-      border-color: #38bdf8;
-      box-shadow: inset 0 0 0 2px #38bdf8;
-    }
-
     .semester-header {
       font-weight: 700;
-      color: var(--text-color);
+      color: #334155;
       font-size: 0.9rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-bottom: 5px;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid #e2e8f0;
     }
 
     .spa-badge {
       font-size: 0.72rem;
-      background: var(--border-color);
-      color: var(--text-color);
+      background: #e2e8f0;
+      color: #0f172a;
       padding: 2px 6px;
       border-radius: 4px;
       font-weight: 700;
@@ -428,14 +359,10 @@
       background: #dbeafe;
       color: #1e40af;
     }
-    body.dark-mode .spa-badge.active {
-      background: #1e3a5f;
-      color: #93c5fd;
-    }
 
     /* Ders Kartları */
     .course-card {
-      background: var(--card-bg);
+      background: #ffffff;
       border: 1px solid var(--border-color);
       border-left: 4px solid var(--accent-color);
       padding: 8px;
@@ -474,7 +401,7 @@
       cursor: not-allowed !important;
       opacity: 0.55;
       filter: grayscale(0.5);
-      background: var(--bg-color);
+      background: #f1f5f9;
     }
 
     .course-header {
@@ -492,12 +419,11 @@
 
     .course-credits {
       font-size: 0.7rem;
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
+      background: #e2e8f0;
       padding: 2px 6px;
       border-radius: 9999px;
       font-weight: 700;
-      color: var(--text-color);
+      color: #334155;
       white-space: nowrap;
     }
 
@@ -517,10 +443,10 @@
       padding: 2px 4px;
       font-size: 0.75rem;
       font-weight: 700;
-      border: 1px solid var(--success-border);
+      border: 1px solid #16a34a;
       border-radius: 4px;
-      background-color: var(--card-bg);
-      color: var(--success-color);
+      background-color: #ffffff;
+      color: #15803d;
       outline: none;
       cursor: pointer;
     }
@@ -536,11 +462,10 @@
     .custom-input {
       width: 100%;
       padding: 4px 6px;
-      border: 1px solid var(--border-color);
+      border: 1px solid #cbd5e1;
       border-radius: 4px;
       font-size: 0.76rem;
-      background: var(--card-bg);
-      color: var(--text-color);
+      background: #fff;
     }
 
     .status-badge {
@@ -553,12 +478,12 @@
     .status-badge.passed { color: var(--success-color); }
     .status-badge.failed { color: var(--failed-color); }
     .status-badge.pending { color: var(--text-muted); }
-    .status-badge.locked { color: #059669; }
+    .status-badge.locked { color: #047857; }
 
     .delete-btn {
       background: none;
       border: none;
-      color: var(--text-muted);
+      color: #94a3b8;
       font-weight: 700;
       cursor: pointer;
       font-size: 0.85rem;
@@ -570,7 +495,7 @@
       display: none;
       margin-top: 4px;
       padding-top: 4px;
-      border-top: 1px dashed var(--border-color);
+      border-top: 1px dashed #cbd5e1;
       align-items: center;
       gap: 6px;
     }
@@ -579,10 +504,10 @@
       flex: 1;
       font-size: 0.75rem;
       padding: 4px 6px;
-      border: 1px solid var(--border-color);
+      border: 1px solid #94a3b8;
       border-radius: 4px;
-      background: var(--card-bg);
-      color: var(--text-color);
+      background: #fff;
+      color: #0f172a;
       font-weight: 600;
     }
 
@@ -638,6 +563,7 @@
       opacity: 1;
     }
 
+    /* Mobilde Eklenen Dersi Haber Veren Ufak Toast Bildirim */
     .toast-msg {
       position: fixed;
       bottom: calc(20px + env(safe-area-inset-bottom, 0px));
@@ -661,6 +587,9 @@
       opacity: 1;
     }
 
+    /* ==========================================================================
+       MOBİL MEDYA SORGULARI (< 900px)
+       ========================================================================== */
     @media (max-width: 900px) {
       .top-bar {
         padding: 8px 12px;
@@ -676,19 +605,15 @@
         display: none;
       }
 
-      .header-actions {
-        width: 100%;
-        justify-content: space-between;
-      }
-
       .dept-select-container {
-        flex: 1;
         justify-content: space-between;
-        padding: 3px 8px;
+        padding: 3px 10px;
+        width: 100%;
       }
 
       select.dept-select {
         flex: 1;
+        max-width: none;
         margin: 0 4px;
       }
 
@@ -762,23 +687,15 @@
   <header class="top-bar">
     <h1>
       <span>🎓 Boğaziçi Tracker</span>
-      <span style="font-weight: 400; font-size: 1.05rem; color: var(--text-muted);">| Ders & GPA Takip</span>
+      <span style="font-weight: 400; font-size: 1.05rem; color: #64748b;">| Ders & GPA Takip</span>
     </h1>
     
-    <div class="header-actions">
-      <div class="dept-select-container">
-        <label for="deptSelect">Bölüm:</label>
-        <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
-          <option value="math">Matematik</option>
-          <option value="chem_ed">Kimya Öğretmenliği</option>
-        </select>
-      </div>
-
-      <!-- Tema Değiştirme Butonu -->
-      <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn" title="Temayı Değiştir">
-        🌙
-      </button>
-
+    <div class="dept-select-container">
+      <label for="deptSelect">Bölüm:</label>
+      <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
+        <option value="math">Matematik</option>
+        <option value="chem_ed">Kimya Öğretmenliği</option>
+      </select>
       <button class="reset-btn" onclick="resetCurrentDept()">Sıfırla</button>
     </div>
   </header>
@@ -838,28 +755,6 @@
   <div id="toast" class="toast-msg"></div>
 
   <script>
-    // --- TEMA DESTEĞİ & TOGGLE FONKSİYONU ---
-    function initTheme() {
-      const savedTheme = localStorage.getItem('boun_theme');
-      // Kullanıcı seçimi varsa onu uygula, yoksa sistem tercihlerini denetle
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const activeTheme = savedTheme ? savedTheme : (prefersDark ? 'dark' : 'light');
-
-      if (activeTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('themeBtn').innerText = '☀️';
-      } else {
-        document.body.classList.remove('dark-mode');
-        document.getElementById('themeBtn').innerText = '🌙';
-      }
-    }
-
-    function toggleTheme() {
-      const isDark = document.body.classList.toggle('dark-mode');
-      localStorage.setItem('boun_theme', isDark ? 'dark' : 'light');
-      document.getElementById('themeBtn').innerText = isDark ? '☀️' : '🌙';
-    }
-
     const GRADE_POINTS = {
       'AA': 4.0,
       'BA': 3.5,
@@ -1041,6 +936,7 @@
       }
     }
 
+    /* Ufak Bilgilendirme Balonu */
     let toastTimeout;
     function showToast(msg) {
       const toast = document.getElementById('toast');
@@ -1198,6 +1094,7 @@
       calculateAverages();
     }
 
+    /* Mobilde Kesintisiz Döneme Ekleme */
     function handleMobileAddCourse(courseId, targetSem, selectEl) {
       if (!targetSem) return;
 
@@ -1221,10 +1118,12 @@
         targetBox.appendChild(card);
       }
 
+      // Seçim menüsünü varsayılana döndür
       if (selectEl) {
         selectEl.value = "";
       }
 
+      // İstatistikleri güncelle ve ekran değiştirmeden bildirim ver
       calculateAverages();
       showToast(`✓ ${course.code} → Dönem ${targetSem}'e eklendi`);
     }
@@ -1346,7 +1245,7 @@
                  class="custom-input" 
                  placeholder="Seçilen Ders Adı/Kodu..." 
                  value="${inst.customText || ''}" 
-                 ${isPassed ? 'disabled style="background:var(--border-color); cursor:not-allowed;"' : ''}
+                 ${isPassed ? 'disabled style="background:#f1f5f9; cursor:not-allowed;"' : ''}
                  oninput="handleInstanceInput('${inst.instanceId}', this.value)">
         ` : ''}
 
@@ -1494,8 +1393,6 @@
       }
     }
 
-    // Uygulamayı ve Temayı Başlat
-    initTheme();
     initUI();
   </script>
 </body>
