@@ -61,24 +61,25 @@
       border-bottom: 1px solid var(--border-color);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       z-index: 50;
-      gap: 10px;
+      gap: 12px;
     }
 
     .top-bar h1 {
       margin: 0;
       color: var(--accent-color);
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 800;
       letter-spacing: -0.4px;
       display: flex;
       align-items: center;
       gap: 8px;
+      white-space: nowrap;
     }
 
     .dept-select-container {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       background: #f8fafc;
       padding: 5px 12px;
       border-radius: 9999px;
@@ -89,6 +90,7 @@
       font-weight: 700;
       color: var(--accent-color);
       font-size: 0.85rem;
+      white-space: nowrap;
     }
 
     select.dept-select {
@@ -410,7 +412,7 @@
       color: #1e40af;
     }
 
-    /* KART STİLLERİ VE CANLI SÜRÜKLEME */
+    /* KART STİLLERİ */
     .course-card {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -423,7 +425,7 @@
       gap: 5px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       position: relative;
-      touch-action: none;
+      touch-action: pan-y; /* Mobilde dikey kaydırmaya izin ver */
       transition: box-shadow 0.15s ease, transform 0.15s ease;
     }
 
@@ -431,7 +433,6 @@
       cursor: grabbing;
     }
 
-    /* Sürükleme esnasında orijinal kart soluk kalmaz, diri durur */
     .course-card.is-dragging {
       opacity: 0.85 !important;
       border-color: #0284c7 !important;
@@ -641,38 +642,97 @@
       opacity: 1;
     }
 
+    /* MOBİL VE KÜÇÜK EKRAN DÜZELTMELERİ */
     @media (max-width: 900px) {
-      .top-bar { padding: 8px 12px; gap: 6px; }
-      .top-bar h1 { font-size: 1.05rem; justify-content: center; }
-      .top-bar h1 span:last-child { display: none; }
-      .dept-select-container { justify-content: space-between; padding: 3px 10px; width: 100%; }
-      select.dept-select { flex: 1; max-width: none; margin: 0 4px; }
-      .mobile-tab-bar { display: flex; padding: 6px 12px; }
-      .app-main { padding: 8px 10px; gap: 0; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
-      .sidebar { flex: 1 1 100%; width: 100%; display: none; border-radius: 8px; }
-      .sidebar.active-tab { display: flex; }
-      .main-content { flex: 1 1 100%; width: 100%; display: none; padding-right: 0; }
-      .main-content.active-tab { display: flex; }
-      .semesters-container { grid-template-columns: 1fr; gap: 10px; }
-      .semester-box { min-height: 100px; }
-      .mobile-add-wrap { display: flex; }
-      .sidebar-scroll-pool, .main-content { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); }
+      .top-bar {
+        padding: 8px 12px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .top-bar-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+      .top-bar h1 {
+        font-size: 1.1rem;
+      }
+      .dept-select-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 10px;
+        width: 100%;
+        border-radius: 8px;
+      }
+      select.dept-select {
+        flex: 1;
+        min-width: 0;
+        text-overflow: ellipsis;
+      }
+      .mobile-tab-bar {
+        display: flex;
+        padding: 6px 12px;
+      }
+      .app-main {
+        padding: 8px 10px;
+        gap: 0;
+        padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+      }
+      .sidebar {
+        flex: 1 1 100%;
+        width: 100%;
+        display: none;
+        border-radius: 8px;
+      }
+      .sidebar.active-tab {
+        display: flex;
+      }
+      .main-content {
+        flex: 1 1 100%;
+        width: 100%;
+        display: none;
+        padding-right: 0;
+      }
+      .main-content.active-tab {
+        display: flex;
+      }
+      .semesters-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .semester-box {
+        min-height: 100px;
+      }
+      .mobile-add-wrap {
+        display: flex;
+      }
+      .sidebar-scroll-pool, .main-content {
+        padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+      }
+      /* Mobilde kart sürükleme imleci yerine default dokunma hissiyatı */
+      .course-card {
+        cursor: default;
+      }
     }
   </style>
 </head>
 <body>
 
   <header class="top-bar">
-    <h1>
-      <span>🎓 Boğaziçi Tracker</span>
-      <span style="font-weight: 400; font-size: 1.05rem; color: #64748b;">| Ders & GPA Takip</span>
-    </h1>
+    <div class="top-bar-row">
+      <h1>
+        <span>🎓 Boğaziçi Tracker</span>
+      </h1>
+      <button class="reset-btn" onclick="resetCurrentDept()">Sıfırla</button>
+    </div>
     
     <div class="dept-select-container">
       <label for="deptSelect">Bölüm:</label>
       <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
       </select>
-      <button class="reset-btn" onclick="resetCurrentDept()">Sıfırla</button>
     </div>
   </header>
 
@@ -739,6 +799,8 @@
   <div id="toast" class="toast-msg"></div>
 
   <script>
+    const isMobileDevice = () => window.innerWidth <= 900;
+
     const GRADE_POINTS = {
       'AA': 4.0, 'BA': 3.5, 'BB': 3.0, 'CB': 2.5,
       'CC': 2.0, 'DC': 1.5, 'DD': 1.0, 'F': 0.0, 'P': null
@@ -1024,6 +1086,8 @@
         'other': 'Diğer / Genel Seçmeliler'
       };
 
+      const isMobile = isMobileDevice();
+
       Object.keys(groups).forEach(semKey => {
         const groupCourses = groups[semKey];
         if (!groupCourses || groupCourses.length === 0) return;
@@ -1048,7 +1112,9 @@
           const poolCard = document.createElement('div');
           const isLocked = hasPassed;
           poolCard.className = `course-card ${hasPassed ? 'status-passed pool-locked' : (hasFailedOnly ? 'status-failed' : '')}`;
-          poolCard.draggable = !isLocked;
+          
+          // Mobilde native drag kapalı, PC'de açık
+          poolCard.draggable = !isLocked && !isMobile;
           poolCard.dataset.courseId = course.id;
 
           let statusBadge = '<span class="status-badge pending">• Alınmadı</span>';
@@ -1081,7 +1147,7 @@
             ` : ''}
           `;
 
-          if (!isLocked) {
+          if (!isLocked && !isMobile) {
             poolCard.addEventListener('dragstart', handlePoolDragStart);
             poolCard.addEventListener('dragend', handleDragEnd);
           }
@@ -1205,9 +1271,11 @@
     function createSemesterCourseCard(inst, course) {
       const card = document.createElement('div');
       const isPassed = !!inst.passed;
+      const isMobile = isMobileDevice();
+
       card.className = `course-card ${isPassed ? 'status-passed locked' : 'status-failed'}`;
       card.id = `inst-${inst.instanceId}`;
-      card.draggable = !isPassed;
+      card.draggable = !isPassed && !isMobile;
       card.dataset.instanceId = inst.instanceId;
 
       const currentGrade = inst.grade || 'AA';
@@ -1257,7 +1325,7 @@
         </div>
       `;
 
-      if (!isPassed) {
+      if (!isPassed && !isMobile) {
         card.addEventListener('dragstart', handleInstanceDragStart);
         card.addEventListener('dragend', handleDragEnd);
       }
@@ -1482,6 +1550,11 @@
         initUI();
       }
     }
+
+    window.addEventListener('resize', () => {
+      // Ekran genişliği PC/mobil arasında geçiş yaparsa drag özelliklerini yeniler
+      initUI();
+    });
 
     loadCurriculum();
   </script>
