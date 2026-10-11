@@ -9,7 +9,6 @@
       --bg-color: #f1f5f9;
       --card-bg: #ffffff;
       --accent-color: #003366;
-      --accent-light: #e6eef8;
       --text-color: #1e293b;
       --text-muted: #64748b;
       --border-color: #cbd5e1;
@@ -20,8 +19,6 @@
       --failed-bg: #fef2f2;
       --failed-border: #fca5a5;
       --info-color: #0284c7;
-      --locked-bg: #f8fafc;
-      --locked-border: #94a3b8;
     }
 
     * {
@@ -55,7 +52,6 @@
       flex-direction: column;
     }
 
-    /* Sabit Üst Başlık & Kontrol Çubuğu */
     .top-bar {
       flex: 0 0 auto;
       display: flex;
@@ -120,11 +116,8 @@
       white-space: nowrap;
     }
 
-    .reset-btn:hover {
-      background-color: #dc2626;
-    }
+    .reset-btn:hover { background-color: #dc2626; }
 
-    /* Mobil Sekme Değiştirici */
     .mobile-tab-bar {
       display: none;
       flex: 0 0 auto;
@@ -157,7 +150,6 @@
       border-color: var(--accent-color);
     }
 
-    /* Tam Ekran Flexbox */
     .app-main {
       flex: 1 1 0%;
       min-height: 0;
@@ -168,7 +160,6 @@
       position: relative;
     }
 
-    /* Sol Sütun: Havuz */
     .sidebar {
       flex: 0 0 350px;
       background: var(--card-bg);
@@ -184,7 +175,7 @@
 
     .sidebar-fixed-top {
       flex: 0 0 auto;
-      padding: 14px 16px 8px 16px;
+      padding: 12px 14px 6px 14px;
       border-bottom: 1px solid #f1f5f9;
       background: #fff;
       z-index: 5;
@@ -194,10 +185,10 @@
       background: linear-gradient(135deg, #003366 0%, #004c99 100%);
       color: #fff;
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       box-shadow: 0 4px 12px rgba(0, 51, 102, 0.18);
     }
 
@@ -213,7 +204,7 @@
     }
 
     .dash-label {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       opacity: 0.85;
@@ -221,21 +212,21 @@
     }
 
     .dash-val {
-      font-size: 1.45rem;
+      font-size: 1.35rem;
       font-weight: 800;
       line-height: 1.15;
     }
 
     .dash-subval {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       opacity: 0.95;
     }
 
     .sidebar-title {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       color: var(--accent-color);
-      padding: 8px 0 2px 0;
+      padding: 6px 0 2px 0;
       margin: 0;
       display: flex;
       justify-content: space-between;
@@ -254,7 +245,6 @@
       gap: 12px;
     }
 
-    /* Sol taraftaki Dönem Renk Blokları */
     .pool-sem-group {
       border-radius: 10px;
       padding: 8px 9px 10px 9px;
@@ -277,7 +267,6 @@
       align-items: center;
     }
 
-    /* Dönem renk varyasyonları */
     .pool-sem-1-1 { background-color: #f0fdf4; border-color: #bbf7d0; color: #166534; }
     .pool-sem-1-2 { background-color: #ecfeff; border-color: #a5f3fc; color: #155e75; }
     .pool-sem-2-1 { background-color: #eff6ff; border-color: #bfdbfe; color: #1e40af; }
@@ -288,7 +277,6 @@
     .pool-sem-4-2 { background-color: #fefce8; border-color: #fef08a; color: #854d0e; }
     .pool-sem-other { background-color: #f8fafc; border-color: #e2e8f0; color: #475569; }
 
-    /* Sağ Sütun: Dönemler */
     .main-content {
       flex: 1 1 0%;
       min-height: 0;
@@ -362,6 +350,7 @@
       flex-direction: column;
       gap: 8px;
       transition: all 0.15s ease;
+      position: relative;
     }
 
     .semester-box.drag-over {
@@ -379,6 +368,8 @@
       align-items: center;
       padding-bottom: 5px;
       border-bottom: 1px solid #e2e8f0;
+      position: relative;
+      z-index: 10;
     }
 
     .spa-badge {
@@ -394,7 +385,6 @@
       color: #1e40af;
     }
 
-    /* Ders Kartları */
     .course-card {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -409,9 +399,7 @@
       position: relative;
     }
 
-    .course-card:active {
-      cursor: grabbing;
-    }
+    .course-card:active { cursor: grabbing; }
 
     .course-card.status-passed {
       border-left-color: var(--success-color);
@@ -469,12 +457,14 @@
 
     .course-prereq {
       font-size: 0.68rem;
-      font-weight: 600;
+      font-weight: 700;
       color: #b45309;
       background: #fef3c7;
-      padding: 1px 5px;
+      border: 1px solid #fde68a;
+      padding: 1px 6px;
       border-radius: 4px;
       align-self: flex-start;
+      margin-top: 1px;
     }
 
     .grade-selector-wrap {
@@ -555,19 +545,21 @@
       font-weight: 600;
     }
 
+    /* TOP-MOST i BİLGİ İKONU & TOOLTIP */
     .info-btn {
       position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
       background-color: var(--info-color);
       color: white;
       border-radius: 50%;
       font-size: 0.7rem;
       font-weight: 800;
       cursor: help;
+      z-index: 100;
     }
 
     .info-btn .tooltip {
@@ -579,16 +571,16 @@
       border-radius: 6px;
       padding: 8px 10px;
       position: absolute;
-      z-index: 100;
+      z-index: 9999 !important;
       bottom: 125%;
       left: 50%;
       transform: translateX(-50%);
       opacity: 0;
       transition: opacity 0.2s ease;
       font-size: 0.72rem;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
       pointer-events: none;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .info-btn .tooltip::after {
@@ -607,7 +599,6 @@
       opacity: 1;
     }
 
-    /* Mobilde Eklenen Dersi Bildiren Toast */
     .toast-msg {
       position: fixed;
       bottom: calc(20px + env(safe-area-inset-bottom, 0px));
@@ -632,99 +623,28 @@
     }
 
     @media (max-width: 900px) {
-      .top-bar {
-        padding: 8px 12px;
-        gap: 6px;
-      }
-
-      .top-bar h1 {
-        font-size: 1.05rem;
-        justify-content: center;
-      }
-
-      .top-bar h1 span:last-child {
-        display: none;
-      }
-
-      .dept-select-container {
-        justify-content: space-between;
-        padding: 3px 10px;
-        width: 100%;
-      }
-
-      select.dept-select {
-        flex: 1;
-        max-width: none;
-        margin: 0 4px;
-      }
-
-      .mobile-tab-bar {
-        display: flex;
-        padding: 6px 12px;
-      }
-
-      .app-main {
-        padding: 8px 10px;
-        gap: 0;
-        padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-      }
-
-      .sidebar {
-        flex: 1 1 100%;
-        width: 100%;
-        display: none;
-        border-radius: 8px;
-      }
-
-      .sidebar.active-tab {
-        display: flex;
-      }
-
-      .main-content {
-        flex: 1 1 100%;
-        width: 100%;
-        display: none;
-        padding-right: 0;
-      }
-
-      .main-content.active-tab {
-        display: flex;
-      }
-
-      .semesters-container {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .semester-box {
-        min-height: 100px;
-      }
-
-      .mobile-add-wrap {
-        display: flex;
-      }
-
-      .sidebar-scroll-pool,
-      .main-content {
-        padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
-      }
-
-      .info-btn .tooltip {
-        left: auto;
-        right: 0;
-        transform: none;
-        width: 210px;
-      }
-      .info-btn .tooltip::after {
-        left: auto;
-        right: 5px;
-      }
+      .top-bar { padding: 8px 12px; gap: 6px; }
+      .top-bar h1 { font-size: 1.05rem; justify-content: center; }
+      .top-bar h1 span:last-child { display: none; }
+      .dept-select-container { justify-content: space-between; padding: 3px 10px; width: 100%; }
+      select.dept-select { flex: 1; max-width: none; margin: 0 4px; }
+      .mobile-tab-bar { display: flex; padding: 6px 12px; }
+      .app-main { padding: 8px 10px; gap: 0; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
+      .sidebar { flex: 1 1 100%; width: 100%; display: none; border-radius: 8px; }
+      .sidebar.active-tab { display: flex; }
+      .main-content { flex: 1 1 100%; width: 100%; display: none; padding-right: 0; }
+      .main-content.active-tab { display: flex; }
+      .semesters-container { grid-template-columns: 1fr; gap: 10px; }
+      .semester-box { min-height: 100px; }
+      .mobile-add-wrap { display: flex; }
+      .sidebar-scroll-pool, .main-content { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); }
+      .info-btn .tooltip { left: auto; right: 0; transform: none; width: 220px; }
+      .info-btn .tooltip::after { left: auto; right: 5px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Sabit Üst Çubuk -->
   <header class="top-bar">
     <h1>
       <span>🎓 Boğaziçi Tracker</span>
@@ -734,15 +654,11 @@
     <div class="dept-select-container">
       <label for="deptSelect">Bölüm:</label>
       <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
-        <option value="math">Matematik</option>
-        <option value="math_ims">Matematik + MIS Yandal</option>
-        <option value="chem_ed">Kimya Öğretmenliği</option>
       </select>
       <button class="reset-btn" onclick="resetCurrentDept()">Sıfırla</button>
     </div>
   </header>
 
-  <!-- Mobil Sekme Çubuğu -->
   <nav class="mobile-tab-bar" id="mobileTabs">
     <button class="tab-btn active" id="tabBtnPool" onclick="switchMobileTab('pool')">
       📋 Ders Havuzu
@@ -752,13 +668,11 @@
     </button>
   </nav>
 
-  <!-- Ana Gövde -->
   <main class="app-main">
-    
-    <!-- SOL: Sabit Üst İstatistikler + Kaydırılabilir Renk Bloklu Ders Havuzu -->
     <aside class="sidebar active-tab" id="sidebarContainer">
       <div class="sidebar-fixed-top">
         <div class="dashboard-card">
+          <!-- 1. Satır: GPA ve Kalan Ders Sayısı -->
           <div class="dash-row">
             <div class="dash-item">
               <span class="dash-label">GPA</span>
@@ -769,10 +683,24 @@
               <span id="remaining-count" class="dash-val">0</span>
             </div>
           </div>
-          <div class="dash-row" style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 6px;">
+          
+          <!-- 2. Satır: Seçilen (Dönemlere Yerleştirilen) Ders & Kredi -->
+          <div class="dash-row" style="border-top: 1px solid rgba(255,255,255,0.18); padding-top: 5px;">
+            <div class="dash-item">
+              <span class="dash-label">Seçilen Ders</span>
+              <span id="selected-courses-count" class="dash-subval">0 Ders</span>
+            </div>
+            <div class="dash-item" style="text-align: right;">
+              <span class="dash-label">Seçilen Kredi</span>
+              <span id="selected-credits" class="dash-subval">0 Cr</span>
+            </div>
+          </div>
+
+          <!-- 3. Satır: Tamamlanan ve Hedef Kredi -->
+          <div class="dash-row" style="border-top: 1px solid rgba(255,255,255,0.18); padding-top: 5px;">
             <div class="dash-item">
               <span class="dash-label">Tamamlanan</span>
-              <span id="completed-credits" class="dash-subval">0 Cr</span>
+              <span id="completed-credits" class="dash-subval">0 Cr (0 Ders)</span>
             </div>
             <div class="dash-item" style="text-align: right;">
               <span class="dash-label">Hedef Kredi</span>
@@ -790,7 +718,6 @@
       <div id="course-pool" class="sidebar-scroll-pool"></div>
     </aside>
 
-    <!-- SAĞ: Bağımsız Kaydırılabilir Dönem Blokları -->
     <section class="main-content" id="years-grid"></section>
   </main>
 
@@ -798,157 +725,8 @@
 
   <script>
     const GRADE_POINTS = {
-      'AA': 4.0,
-      'BA': 3.5,
-      'BB': 3.0,
-      'CB': 2.5,
-      'CC': 2.0,
-      'DC': 1.5,
-      'DD': 1.0,
-      'F': 0.0,
-      'P': null
-    };
-
-    const mathBaseCourses = [
-      { id: 'math111', code: 'MATH 111', name: 'Intro. to Math. Structures', crd: 4, sem: '1.1', isElective: false },
-      { id: 'math131', code: 'MATH 131', name: 'Calculus of a Single Var.', crd: 4, sem: '1.1', isElective: false },
-      { id: 'phys101', code: 'PHYS 101', name: 'Physics I', crd: 4, sem: '1.1', isElective: false },
-      { id: 'ae101', code: 'AE 101/111/HSS/MLE', name: 'English/HSS/MLE', crd: 3, sem: '1.1', isElective: true },
-      { id: 'unrest1', code: 'Unrest. Elective 1', name: 'Serbest Seçmeli 1', crd: 3, sem: '1.1', isElective: true },
-      { id: 'math132', code: 'MATH 132', name: 'Calculus of Several Var.', crd: 4, sem: '1.2', isElective: false },
-      { id: 'math162', code: 'MATH 162', name: 'Discrete Mathematics', crd: 4, sem: '1.2', isElective: false },
-      { id: 'phys102', code: 'PHYS 102', name: 'Physics II', crd: 4, sem: '1.2', isElective: false },
-      { id: 'ae102', code: 'AE 102/112/HSS/MLE', name: 'English/HSS/MLE', crd: 3, sem: '1.2', isElective: true },
-      { id: 'unrest2', code: 'Unrest. Elective 2', name: 'Serbest Seçmeli 2', crd: 3, sem: '1.2', isElective: true },
-      { id: 'math231', code: 'MATH 231', name: 'Advanced Calculus I', crd: 4, sem: '2.1', isElective: false },
-      { id: 'math221', code: 'MATH 221', name: 'Linear Algebra', crd: 4, sem: '2.1', isElective: false },
-      { id: 'phys201', code: 'PHYS 201', name: 'Physics III', crd: 4, sem: '2.1', isElective: false },
-      { id: 'cmpe150', code: 'CMPE 150', name: 'Intro to Computing', crd: 3, sem: '2.1', isElective: false },
-      { id: 'tk221', code: 'TK 221', name: 'Turkish I', crd: 2, sem: '2.1', isElective: false },
-      { id: 'math222', code: 'MATH 222', name: 'Group Theory', crd: 4, sem: '2.2', isElective: false },
-      { id: 'math234', code: 'MATH 234', name: 'Advanced Calculus II', crd: 4, sem: '2.2', isElective: false },
-      { id: 'math202', code: 'MATH 202', name: 'Differential Equations', crd: 4, sem: '2.2', isElective: false },
-      { id: 'hss_mle', code: 'HSS / MLE', name: 'HSS or MLE Elective', crd: 3, sem: '2.2', isElective: true },
-      { id: 'tk222', code: 'TK 222', name: 'Turkish II', crd: 2, sem: '2.2', isElective: false },
-      { id: 'math323', code: 'MATH 323', name: 'Rings, Fields & Galois', crd: 4, sem: '3.1', isElective: false },
-      { id: 'math331', code: 'MATH 331', name: 'Metric Spaces', crd: 4, sem: '3.1', isElective: false },
-      { id: 'htr331', code: 'HTR 331', name: 'Hist. of Turk. Rep. I', crd: 2, sem: '3.1', isElective: false },
-      { id: 'hss1', code: 'HSS Elective 1', name: 'Sosyal / Beşeri Seçmeli 1', crd: 3, sem: '3.1', isElective: true },
-      { id: 'unrest3', code: 'Unrest. Elective 3', name: 'Serbest Seçmeli 3', crd: 3, sem: '3.1', isElective: true },
-      { id: 'math338', code: 'MATH 338', name: 'Complex Analysis I', crd: 4, sem: '3.2', isElective: false },
-      { id: 'htr332', code: 'HTR 332', name: 'Hist. of Turk. Rep. II', crd: 2, sem: '3.2', isElective: false },
-      { id: 'mathelect1', code: 'Math Elective 1', name: 'Matematik Seçmeli 1', crd: 3, sem: '3.2', isElective: true },
-      { id: 'mathelect2', code: 'Math Elective 2', name: 'Matematik Seçmeli 2', crd: 3, sem: '3.2', isElective: true },
-      { id: 'scielect1', code: 'Science Elective 1', name: 'Fen Seçmeli 1', crd: 3, sem: '3.2', isElective: true },
-      { id: 'hss2', code: 'HSS Elective 2', name: 'Sosyal / Beşeri Seçmeli 2', crd: 3, sem: '4.1', isElective: true },
-      { id: 'mathelect3', code: 'Math Elective 3', name: 'Matematik Seçmeli 3', crd: 3, sem: '4.1', isElective: true },
-      { id: 'mathelect4', code: 'Math Elective 4', name: 'Matematik Seçmeli 4', crd: 3, sem: '4.1', isElective: true },
-      { id: 'scielect2', code: 'Science Elective 2', name: 'Fen Seçmeli 2', crd: 3, sem: '4.1', isElective: true },
-      { id: 'unrest4', code: 'Unrest. Elective 4', name: 'Serbest Seçmeli 4', crd: 3, sem: '4.1', isElective: true },
-      { id: 'unrest5', code: 'Unrest. Elective 5', name: 'Serbest Seçmeli 5', crd: 3, sem: '4.1', isElective: true },
-      { id: 'mathelect5', code: 'Math Elective 5', name: 'Matematik Seçmeli 5', crd: 3, sem: '4.2', isElective: true },
-      { id: 'mathelect6', code: 'Math Elective 6', name: 'Matematik Seçmeli 6', crd: 3, sem: '4.2', isElective: true },
-      { id: 'mathelect7', code: 'Math Elective 7', name: 'Matematik Seçmeli 7', crd: 3, sem: '4.2', isElective: true },
-      { id: 'unrest6', code: 'Unrest. Elective 6', name: 'Serbest Seçmeli 6', crd: 3, sem: '4.2', isElective: true },
-      { id: 'hss3', code: 'HSS Elective 3', name: 'Sosyal / Beşeri Seçmeli 3', crd: 3, sem: '4.2', isElective: true },
-    ];
-
-    const departmentsData = {
-      math: {
-        name: 'Matematik (MATH)',
-        courses: mathBaseCourses,
-        curriculumMap: {
-          '1.1': ['PHYS 101', 'AE 101/111', 'Unrest. Elective 1', 'MATH 111', 'MATH 131'],
-          '1.2': ['PHYS 102', 'AE 102/112', 'Unrest. Elective 2', 'MATH 132', 'MATH 162'],
-          '2.1': ['MATH 231', 'PHYS 201', 'CMPE 150', 'TK 221', 'MATH 221'],
-          '2.2': ['MATH 222', 'HSS/MLE', 'MATH 234', 'MATH 202', 'TK 222'],
-          '3.1': ['HSS Elective 1', 'HTR 331', 'MATH 323', 'Unrest. Elective 3', 'MATH 331'],
-          '3.2': ['HSS Elective 2', 'MATH 338', 'HTR 332', 'Math Elective (x2)', 'Science Elective 1'],
-          '4.1': ['Unrest. Elective (x2)', 'Science Elective 2', 'Math Elective (x2)'],
-          '4.2': ['Math Elective (x3)', 'Unrest. Elective 6', 'HSS Elective 3']
-        }
-      },
-      math_ims: {
-        name: 'Matematik + MIS Yandal (MATH-MIS)',
-        courses: [
-          ...mathBaseCourses,
-          { id: 'mis125', code: 'MIS 125', name: 'Bilişim Sistemleri ve Teknolojilerine Giriş (5 ECTS)', crd: 3, sem: '2.1', prereq: 'Önkoşul: -', isElective: false },
-          { id: 'mis132', code: 'MIS 132', name: 'Orta seviye programlama (6 ECTS)', crd: 3, sem: '2.2', prereq: 'Önkoşul: MIS 131', isElective: false },
-          { id: 'mis321', code: 'MIS 321', name: 'Sistem Analizi ve Tasarımı (6 ECTS)', crd: 3, sem: '3.1', prereq: 'Önkoşul: MIS 131', isElective: false },
-          { id: 'mis236', code: 'MIS 236', name: 'Veri Tabanı Sistemleri (6 ECTS)', crd: 3, sem: '3.2', prereq: 'Önkoşul: -', isElective: false },
-          { id: 'mis326', code: 'MIS 326', name: 'Nesne Yönelimli Modelleme (5 ECTS)', crd: 3, sem: '4.1', prereq: 'Önkoşul: MIS 132 & MIS 321', isElective: false },
-          { id: 'mis346', code: 'MIS 346', name: 'Kurumsal Bilgi Sistemleri (5 ECTS)', crd: 3, sem: '4.2', prereq: 'Önkoşul: MIS 321', isElective: false }
-        ],
-        curriculumMap: {
-          '1.1': ['PHYS 101', 'AE 101/111', 'Unrest. Elective 1', 'MATH 111', 'MATH 131'],
-          '1.2': ['PHYS 102', 'AE 102/112', 'Unrest. Elective 2', 'MATH 132', 'MATH 162'],
-          '2.1': ['MATH 231', 'PHYS 201', 'CMPE 150', 'TK 221', 'MATH 221', '★ MIS 125 (Yandal)'],
-          '2.2': ['MATH 222', 'HSS/MLE', 'MATH 234', 'MATH 202', 'TK 222', '★ MIS 132 (Yandal)'],
-          '3.1': ['HSS Elective 1', 'HTR 331', 'MATH 323', 'Unrest. Elective 3', 'MATH 331', '★ MIS 321 (Yandal)'],
-          '3.2': ['HSS Elective 2', 'MATH 338', 'HTR 332', 'Math Elective (x2)', 'Science Elective 1', '★ MIS 236 (Yandal)'],
-          '4.1': ['Unrest. Elective (x2)', 'Science Elective 2', 'Math Elective (x2)', '★ MIS 326 (Yandal)'],
-          '4.2': ['Math Elective (x3)', 'Unrest. Elective 6', 'HSS Elective 3', '★ MIS 346 (Yandal)']
-        }
-      },
-      chem_ed: {
-        name: 'Kimya Öğretmenliği Programı (SCED)',
-        courses: [
-          { id: 'sced_ae101', code: 'AE 101/111/HSS', name: 'Eng. / HSS Elective', crd: 3, sem: '1.1', isElective: true },
-          { id: 'sced_chem101', code: 'CHEM 101', name: 'Genel Kimya I', crd: 3, sem: '1.1', isElective: false },
-          { id: 'sced_ed101', code: 'ED 101', name: 'Eğitime Giriş', crd: 3, sem: '1.1', isElective: false },
-          { id: 'sced_math101', code: 'MATH 101', name: 'Analiz I', crd: 4, sem: '1.1', isElective: false },
-          { id: 'sced_phys101', code: 'PHYS 101', name: 'Fizik I', crd: 4, sem: '1.1', isElective: false },
-          { id: 'sced_unrest1', code: 'Unrest. Elective', name: 'Sınırsız Seçmeli 1', crd: 3, sem: '1.2', isElective: true },
-          { id: 'sced_chem102', code: 'CHEM 102', name: 'Genel Kimya II', crd: 3, sem: '1.2', isElective: false },
-          { id: 'sced_chem106', code: 'CHEM 106', name: 'Genel Kimya Lab.', crd: 2, sem: '1.2', isElective: false },
-          { id: 'sced_math102', code: 'MATH 102', name: 'Analiz II', crd: 4, sem: '1.2', isElective: false },
-          { id: 'sced_phys102', code: 'PHYS 102', name: 'Fizik II', crd: 4, sem: '1.2', isElective: false },
-          { id: 'sced_bio101', code: 'BIO 101', name: 'Hücresel ve Moleküler Biyoloji I', crd: 3, sem: '2.1', isElective: false },
-          { id: 'sced_chem223', code: 'CHEM 223', name: 'Analitik Kimya', crd: 3, sem: '2.1', isElective: false },
-          { id: 'sced_chem225', code: 'CHEM 225', name: 'Analitik Kimya Lab.', crd: 2, sem: '2.1', isElective: false },
-          { id: 'sced_ed211', code: 'ED 211', name: 'Eğitim Psikolojisi', crd: 3, sem: '2.1', isElective: false },
-          { id: 'sced_math201', code: 'MATH 201', name: 'Matris Kuramı', crd: 4, sem: '2.1', isElective: false },
-          { id: 'sced_tk221', code: 'TK 221', name: 'Türkçe I', crd: 2, sem: '2.1', isElective: false },
-          { id: 'sced_hss1', code: 'HSS Elective', name: 'Sosyal Bilimler Seçmeli', crd: 3, sem: '2.2', isElective: true },
-          { id: 'sced_chem234', code: 'CHEM 234', name: 'Anorganik Kimya I', crd: 3, sem: '2.2', isElective: false },
-          { id: 'sced_phys201', code: 'PHYS 201', name: 'Fizik III', crd: 4, sem: '2.2', isElective: false },
-          { id: 'sced_sced240', code: 'SCED 240', name: 'Bilim, Teknoloji ve Toplum', crd: 3, sem: '2.2', isElective: false },
-          { id: 'sced_sced282', code: 'SCED 282', name: 'Mat. ve Fende Öğretim İlke ve Yöntemleri', crd: 3, sem: '2.2', isElective: false },
-          { id: 'sced_tk222', code: 'TK 222', name: 'Türkçe II', crd: 2, sem: '2.2', isElective: false },
-          { id: 'sced_chem213', code: 'CHEM 213', name: 'Organik Kimya I', crd: 4, sem: '3.1', isElective: false },
-          { id: 'sced_chem215', code: 'CHEM 215', name: 'Organik Kimya Lab. I', crd: 2, sem: '3.1', isElective: false },
-          { id: 'sced_ed221', code: 'ED 221', name: 'Rehberlik ve Danışmanlığın Temelleri', crd: 3, sem: '3.1', isElective: false },
-          { id: 'sced_htr311', code: 'HTR 311', name: 'Türkiye Cumhuriyeti Tarihi I', crd: 2, sem: '3.1', isElective: false },
-          { id: 'sced_sced320', code: 'SCED 320', name: 'Fen Bilimlerinde Öğretim Yöntemleri I', crd: 4, sem: '3.1', isElective: false },
-          { id: 'sced_complelect', code: 'Complementary Elective', name: 'Tamamlayıcı Seçmeli', crd: 3, sem: '3.2', isElective: true },
-          { id: 'sced_chemelect1', code: 'Chem. Elective 1', name: 'Kimya Seçmeli 1', crd: 3, sem: '3.2', isElective: true },
-          { id: 'sced_cet360', code: 'CET 360', name: 'Öğretim Teknolojileri ve Materyal Geliştirme', crd: 3, sem: '3.2', isElective: false },
-          { id: 'sced_chem214', code: 'CHEM 214', name: 'Organik Kimya II', crd: 4, sem: '3.2', isElective: false },
-          { id: 'sced_chem216', code: 'CHEM 216', name: 'Organik Kimya Lab. II', crd: 2, sem: '3.2', isElective: false },
-          { id: 'sced_htr312', code: 'HTR 312', name: 'Türkiye Cumhuriyeti Tarihi II', crd: 2, sem: '3.2', isElective: false },
-          { id: 'sced_sced370', code: 'SCED 370', name: 'Mat. ve Fen Eğit. Ölçme ve Değerlendirme', crd: 3, sem: '3.2', isElective: false },
-          { id: 'sced_chem345', code: 'CHEM 345', name: 'Denge Termodinamiği', crd: 4, sem: '4.1', isElective: false },
-          { id: 'sced_ed401', code: 'ED 401', name: 'Sınıf Yönetimi', crd: 3, sem: '4.1', isElective: false },
-          { id: 'sced_sced404', code: 'SCED 404', name: 'Mat. ve Fen Eğit. Araştırma Yöntemleri', crd: 4, sem: '4.1', isElective: false },
-          { id: 'sced_sced421', code: 'SCED 421', name: 'Kimyada Öğretim Yöntemleri', crd: 3, sem: '4.1', isElective: false },
-          { id: 'sced_sced450', code: 'SCED 450', name: 'Mat. ve Fen Bil. Öğretmenliği Uygulaması', crd: 4, sem: '4.1', isElective: false },
-          { id: 'sced_chemelect2', code: 'Chem. Elective 2', name: 'Kimya Seçmeli 2', crd: 3, sem: '4.2', isElective: true },
-          { id: 'sced_environelect', code: 'Environmental Elective', name: 'Çevre ve Bilim Seçmeli', crd: 3, sem: '4.2', isElective: true },
-          { id: 'sced_philhist', code: 'Phil/Hist Elective', name: 'Bilim Felsefesi / Tarihi Seçmeli', crd: 3, sem: '4.2', isElective: true },
-          { id: 'sced_sced422', code: 'SCED 422', name: 'Kimya Öğretimi Uygulaması', crd: 4, sem: '4.2', isElective: false },
-          { id: 'sced_sced424', code: 'SCED 424', name: 'Kimya Eğitiminde Güncel Eğilimler', crd: 3, sem: '4.2', isElective: false }
-        ],
-        curriculumMap: {
-          '1.1': ['AE 101/111 / HSS', 'CHEM 101', 'ED 101', 'MATH 101', 'PHYS 101'],
-          '1.2': ['Sınırsız Seçmeli', 'CHEM 102', 'CHEM 106', 'MATH 102', 'PHYS 102'],
-          '2.1': ['BIO 101', 'CHEM 223', 'CHEM 225', 'ED 211', 'MATH 201', 'TK 221'],
-          '2.2': ['Sosyal Bilimler Seçmeli', 'CHEM 234', 'PHYS 201', 'SCED 240', 'SCED 282', 'TK 222'],
-          '3.1': ['CHEM 213', 'CHEM 215', 'ED 221', 'HTR 311', 'SCED 320'],
-          '3.2': ['Tamamlayıcı Seçmeli', 'Kimya Seçmeli 1', 'CET 360', 'CHEM 214', 'CHEM 216', 'HTR 312', 'SCED 370'],
-          '4.1': ['CHEM 345', 'ED 401', 'SCED 404', 'SCED 421', 'SCED 450'],
-          '4.2': ['Kimya Seçmeli 2', 'Çevre Seçmeli', 'Bilim Felsefesi/Tarihi Seçmeli', 'SCED 422', 'SCED 424']
-        }
-      }
+      'AA': 4.0, 'BA': 3.5, 'BB': 3.0, 'CB': 2.5,
+      'CC': 2.0, 'DC': 1.5, 'DD': 1.0, 'F': 0.0, 'P': null
     };
 
     const yearStructure = [
@@ -962,8 +740,46 @@
       { yearLabel: '7. Yıl (Azami Yasal Süre)', isExtended: true, tag: 'YÖK Sınır', sems: ['7.1', '7.2', '7.3 (Yaz)'] }
     ];
 
+    let departmentsData = {};
     let currentDept = localStorage.getItem('boun_active_dept') || 'math';
     let globalState = JSON.parse(localStorage.getItem('boun_multi_dept_gpa_state')) || {};
+
+    async function loadCurriculum() {
+      try {
+        const response = await fetch('./curriculum.json');
+        if (!response.ok) throw new Error(`HTTP Hata Kodu: ${response.status}`);
+        departmentsData = await response.json();
+
+        const availableKeys = Object.keys(departmentsData);
+        if (!departmentsData[currentDept]) {
+          currentDept = availableKeys[0] || 'math';
+        }
+
+        populateDepartmentSelect();
+        initUI();
+      } catch (err) {
+        console.error("Müfredat JSON dosyası yüklenemedi:", err);
+        document.body.innerHTML = `
+          <div style="padding: 24px; font-family: sans-serif; color: #b91c1c; text-align: center;">
+            <h2>Müfredat Verisi Yüklenemedi!</h2>
+            <p><code>curriculum.json</code> dosyasının <code>index.html</code> ile aynı klasörde olduğundan ve sayfayı yerel bir web sunucusu (Live Server vb.) üzerinden açtığınızdan emin olun.</p>
+            <p style="color: #64748b; font-size: 0.85rem;">Hata detayı: ${err.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function populateDepartmentSelect() {
+      const select = document.getElementById('deptSelect');
+      select.innerHTML = '';
+      Object.keys(departmentsData).forEach(deptKey => {
+        const opt = document.createElement('option');
+        opt.value = deptKey;
+        opt.textContent = departmentsData[deptKey].name;
+        if (deptKey === currentDept) opt.selected = true;
+        select.appendChild(opt);
+      });
+    }
 
     function getDeptState(deptKey) {
       if (!globalState[deptKey]) {
@@ -1015,7 +831,7 @@
 
     function calculateAverages() {
       const state = getDeptState(currentDept);
-      const courses = departmentsData[currentDept].courses;
+      const courses = departmentsData[currentDept]?.courses || [];
 
       const semesterStats = {};
       const allSems = [];
@@ -1024,9 +840,18 @@
         semesterStats[s] = { totalPoints: 0, totalCredits: 0, earnedCredits: 0 };
       });
 
+      // Seçilen (dönemlere yerleştirilmiş tüm tekil dersler ve kredi toplamı)
+      const selectedCourseIds = new Set();
+      let selectedCreditsTotal = 0;
+
       state.instances.forEach(inst => {
+        const course = courses.find(c => c.id === inst.courseId);
+        if (course) {
+          selectedCourseIds.add(inst.courseId);
+          selectedCreditsTotal += course.crd;
+        }
+
         if (inst.passed && semesterStats[inst.semId]) {
-          const course = courses.find(c => c.id === inst.courseId);
           if (course) {
             const crd = course.crd;
             semesterStats[inst.semId].earnedCredits += crd;
@@ -1040,6 +865,7 @@
         }
       });
 
+      // SPA Badgeleri güncelle
       allSems.forEach(s => {
         const safeSemId = s.replace(/[^a-zA-Z0-9]/g, '_');
         const badge = document.getElementById(`spa-${safeSemId}`);
@@ -1090,7 +916,13 @@
 
       const gpa = cumCredits > 0 ? (cumPoints / cumCredits).toFixed(2) : "0.00";
       document.getElementById('gpa-display').innerText = gpa;
-      document.getElementById('completed-credits').innerText = `${completedCreditsTotal} Cr`;
+      
+      // Seçilen İstatistikleri
+      document.getElementById('selected-courses-count').innerText = `${selectedCourseIds.size} Ders`;
+      document.getElementById('selected-credits').innerText = `${selectedCreditsTotal} Cr`;
+
+      // Tamamlanan ve Hedef İstatistikleri
+      document.getElementById('completed-credits').innerText = `${completedCreditsTotal} Cr (${passedCourseIds.size} Ders)`;
 
       const totalRequiredCredits = courses.reduce((sum, c) => sum + c.crd, 0);
       document.getElementById('total-credits').innerText = `${totalRequiredCredits} Cr`;
@@ -1099,10 +931,9 @@
       document.getElementById('remaining-count').innerText = remaining;
     }
 
-    /* Sol Sütundaki Havuzu Dönem Blokları Olarak Render Etme */
     function updateSidebarPool() {
       const state = getDeptState(currentDept);
-      const courses = departmentsData[currentDept].courses;
+      const courses = departmentsData[currentDept]?.courses || [];
       const pool = document.getElementById('course-pool');
       pool.innerHTML = '';
 
@@ -1110,7 +941,6 @@
       yearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
       const semOptions = allSems.map(s => `<option value="${s}">Dönem ${s}</option>`).join('');
 
-      // Dersleri dönemlerine göre grupla
       const groups = {
         '1.1': [], '1.2': [],
         '2.1': [], '2.2': [],
@@ -1232,9 +1062,7 @@
         targetBox.appendChild(card);
       }
 
-      if (selectEl) {
-        selectEl.value = "";
-      }
+      if (selectEl) selectEl.value = "";
 
       calculateAverages();
       showToast(`✓ ${course.code} → Dönem ${targetSem}'e eklendi`);
@@ -1244,6 +1072,8 @@
       document.getElementById('deptSelect').value = currentDept;
 
       const activeDeptData = departmentsData[currentDept];
+      if (!activeDeptData) return;
+
       const state = getDeptState(currentDept);
       const yearsGrid = document.getElementById('years-grid');
       yearsGrid.innerHTML = '';
@@ -1268,7 +1098,7 @@
           box.className = 'semester-box';
           box.dataset.semId = semId;
 
-          const curriculumInfo = activeDeptData.curriculumMap[semId];
+          const curriculumInfo = activeDeptData.curriculumMap ? activeDeptData.curriculumMap[semId] : null;
           let infoHtml = '';
           if (curriculumInfo) {
             const listStr = curriculumInfo.map(c => `• ${c}`).join('<br>');
@@ -1498,7 +1328,7 @@
     }
 
     function resetCurrentDept() {
-      const deptName = departmentsData[currentDept].name;
+      const deptName = departmentsData[currentDept]?.name || currentDept;
       if (confirm(`Yalnızca "${deptName}" bölümü planlamanız sıfırlanacak. Emin misiniz?`)) {
         globalState[currentDept] = { instances: [] };
         saveGlobalState();
@@ -1506,7 +1336,7 @@
       }
     }
 
-    initUI();
+    loadCurriculum();
   </script>
 </body>
 </html>
