@@ -9,11 +9,12 @@
 
   <style>
     :root {
-      --bg-color: #f1f5f9;
+      --bg-color: #f8fafc;
       --card-bg: #ffffff;
       --accent-color: #003366;
-      --text-color: #1e293b;
-      --text-muted: #64748b;
+      --accent-hover: #002244;
+      --text-color: #0f172a;
+      --text-muted: #475569;
       --border-color: #cbd5e1;
       --success-color: #15803d;
       --success-bg: #f0fdf4;
@@ -26,15 +27,8 @@
 
     * {
       box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      -webkit-user-select: none;
-      user-select: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
-    }
-
-    input, textarea, select, option {
-      -webkit-user-select: text;
-      user-select: text;
     }
 
     html, body {
@@ -51,36 +45,38 @@
       flex-direction: column;
     }
 
+    /* ÜST BAR */
     .top-bar {
       flex: 0 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
+      padding: 10px 16px;
       background: #ffffff;
       border-bottom: 1px solid var(--border-color);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
       z-index: 50;
-      gap: 10px;
+      gap: 12px;
     }
 
     .top-bar h1 {
       margin: 0;
       color: var(--accent-color);
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 800;
       letter-spacing: -0.4px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      white-space: nowrap;
     }
 
     .dept-select-container {
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: #f8fafc;
-      padding: 5px 12px;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 4px 10px;
       border-radius: 9999px;
       border: 1px solid var(--border-color);
     }
@@ -88,35 +84,37 @@
     .dept-select-container label {
       font-weight: 700;
       color: var(--accent-color);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
+      white-space: nowrap;
     }
 
     select.dept-select {
-      padding: 5px 10px;
-      font-size: 0.88rem;
+      padding: 5px 8px;
+      font-size: 0.85rem;
       border: 1px solid #cbd5e1;
       border-radius: 6px;
       outline: none;
-      cursor: pointer;
       background-color: #fff;
       font-weight: 600;
+      color: #0f172a;
     }
 
     .reset-btn {
-      padding: 6px 12px;
+      padding: 5px 12px;
       background-color: #ef4444;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      font-weight: 600;
-      font-size: 0.82rem;
+      font-weight: 700;
+      font-size: 0.8rem;
       transition: background-color 0.15s;
       white-space: nowrap;
     }
 
     .reset-btn:hover { background-color: #dc2626; }
 
+    /* MOBİL TAB BUTONLARI */
     .mobile-tab-bar {
       display: none;
       flex: 0 0 auto;
@@ -129,7 +127,7 @@
 
     .tab-btn {
       flex: 1;
-      padding: 8px 12px;
+      padding: 9px 12px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
       border-radius: 8px;
@@ -149,21 +147,23 @@
       border-color: var(--accent-color);
     }
 
+    /* ANA ÇALIŞMA ALANI */
     .app-main {
       flex: 1 1 0%;
       min-height: 0;
       display: flex;
-      gap: 20px;
-      padding: 16px 20px;
+      gap: 16px;
+      padding: 14px 16px;
       overflow: hidden;
       position: relative;
     }
 
+    /* SOL PANEL: HAVUZ */
     .sidebar {
-      flex: 0 0 350px;
+      flex: 0 0 360px;
       background: var(--card-bg);
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
       border: 1px solid var(--border-color);
       display: flex;
       flex-direction: column;
@@ -176,21 +176,20 @@
 
     .sidebar-fixed-top {
       flex: 0 0 auto;
-      padding: 12px 14px 6px 14px;
-      border-bottom: 1px solid #f1f5f9;
+      padding: 12px 14px;
+      border-bottom: 1px solid #e2e8f0;
       background: #fff;
-      z-index: 5;
     }
 
     .dashboard-card {
-      background: linear-gradient(135deg, #003366 0%, #004c99 100%);
+      background: linear-gradient(135deg, #003366 0%, #004b93 100%);
       color: #fff;
       border-radius: 10px;
-      padding: 10px 12px;
+      padding: 10px 14px;
       display: flex;
       flex-direction: column;
       gap: 6px;
-      box-shadow: 0 4px 12px rgba(0, 51, 102, 0.18);
+      box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
     }
 
     .dash-row {
@@ -208,8 +207,8 @@
       font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      opacity: 0.85;
-      font-weight: 600;
+      opacity: 0.9;
+      font-weight: 700;
     }
 
     .dash-val {
@@ -219,20 +218,19 @@
     }
 
     .dash-subval {
-      font-size: 0.78rem;
-      font-weight: 600;
-      opacity: 0.95;
+      font-size: 0.8rem;
+      font-weight: 700;
     }
 
     .sidebar-title {
       font-size: 0.92rem;
       color: var(--accent-color);
-      padding: 6px 0 2px 0;
+      padding: 8px 2px 0 2px;
       margin: 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .sidebar-scroll-pool {
@@ -240,20 +238,20 @@
       min-height: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 10px 14px 20px 14px;
+      padding: 12px 12px 24px 12px;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
+    /* DÖNEM RENK BLOKLARI */
     .pool-sem-group {
       border-radius: 10px;
-      padding: 8px 9px 10px 9px;
-      border: 1px solid rgba(0, 0, 0, 0.07);
+      padding: 9px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
       display: flex;
       flex-direction: column;
       gap: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
 
     .pool-sem-header {
@@ -261,7 +259,7 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.4px;
-      padding-bottom: 4px;
+      padding-bottom: 5px;
       border-bottom: 1px dashed rgba(0, 0, 0, 0.15);
       display: flex;
       justify-content: space-between;
@@ -278,12 +276,13 @@
     .pool-sem-4-2 { background-color: #fefce8; border-color: #fef08a; color: #854d0e; }
     .pool-sem-other { background-color: #f8fafc; border-color: #e2e8f0; color: #475569; }
 
+    /* SAĞ PANEL: DÖNEMLER */
     .main-content {
       flex: 1 1 0%;
       min-height: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding-right: 6px;
+      padding-right: 4px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -295,7 +294,6 @@
     .main-content::-webkit-scrollbar {
       width: 6px;
     }
-
     .sidebar-scroll-pool::-webkit-scrollbar-thumb,
     .main-content::-webkit-scrollbar-thumb {
       background: #cbd5e1;
@@ -306,21 +304,21 @@
       background: #fff;
       padding: 14px;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
       border: 1px solid var(--border-color);
     }
 
     .year-row.extended {
-      background: #fffbeb;
+      background: #fffdf5;
       border: 1px dashed #f59e0b;
     }
 
     .year-title {
-      font-size: 1.05rem;
-      font-weight: 700;
+      font-size: 1rem;
+      font-weight: 800;
       color: var(--accent-color);
       margin-bottom: 10px;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid #f1f5f9;
       padding-bottom: 6px;
       display: flex;
       justify-content: space-between;
@@ -333,7 +331,7 @@
       color: #991b1b;
       padding: 2px 7px;
       border-radius: 9999px;
-      font-weight: 600;
+      font-weight: 700;
       border: 1px solid #fca5a5;
     }
 
@@ -348,40 +346,39 @@
       border: 2px dashed #cbd5e1;
       border-radius: 8px;
       padding: 10px;
-      min-height: 150px;
+      min-height: 140px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      transition: all 0.15s ease;
+      transition: background 0.15s, border-color 0.15s;
       position: relative;
     }
 
     .semester-box.drag-over {
       background-color: #f0f9ff;
       border-color: #0284c7;
-      box-shadow: inset 0 0 0 2px #0284c7;
+      border-style: solid;
     }
 
     .semester-header {
-      font-weight: 700;
+      font-weight: 800;
       color: #334155;
       font-size: 0.88rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 5px;
+      padding-bottom: 6px;
       border-bottom: 1px solid #e2e8f0;
-      position: relative;
     }
 
     .sem-header-badges {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
 
     .sem-crd-badge {
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       background: #f1f5f9;
       color: #475569;
       border: 1px solid #cbd5e1;
@@ -397,7 +394,7 @@
     }
 
     .spa-badge {
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       background: #e2e8f0;
       color: #0f172a;
       padding: 2px 6px;
@@ -410,32 +407,33 @@
       color: #1e40af;
     }
 
-    /* KART STİLLERİ VE CANLI SÜRÜKLEME */
+    /* NET, CANLI VE ASLA SİLİK OLMAYAN DERS KARTLARI */
     .course-card {
       background: #ffffff;
-      border: 1px solid var(--border-color);
+      border: 1px solid #cbd5e1;
       border-left: 4px solid var(--accent-color);
       padding: 8px 10px;
-      border-radius: 7px;
+      border-radius: 6px;
       cursor: grab;
       display: flex;
       flex-direction: column;
       gap: 5px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
       position: relative;
-      touch-action: none;
-      transition: box-shadow 0.15s ease, transform 0.15s ease;
+      opacity: 1 !important; /* Siliklik kesin engellendi */
+      filter: none !important;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
 
     .course-card:active {
       cursor: grabbing;
     }
 
-    /* Sürükleme esnasında orijinal kart soluk kalmaz, diri durur */
+    /* Sürükleme esnasındaki canlı durum */
     .course-card.is-dragging {
-      opacity: 0.85 !important;
-      border-color: #0284c7 !important;
-      box-shadow: 0 6px 16px rgba(2, 132, 199, 0.18) !important;
+      border: 2px solid #0284c7 !important;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3) !important;
+      transform: scale(0.98);
     }
 
     .course-card.drop-indicator {
@@ -457,14 +455,6 @@
 
     .course-card.locked {
       cursor: not-allowed !important;
-      opacity: 0.95;
-      border-left-color: #059669;
-    }
-
-    .course-card.pool-locked {
-      cursor: not-allowed !important;
-      opacity: 0.65;
-      background: #f1f5f9;
     }
 
     .course-header {
@@ -475,25 +465,26 @@
     }
 
     .course-title {
-      font-weight: 700;
-      font-size: 0.88rem;
-      color: var(--text-color);
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #0f172a;
     }
 
     .course-credits {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       background: #e2e8f0;
       padding: 2px 7px;
       border-radius: 9999px;
-      font-weight: 700;
-      color: #334155;
+      font-weight: 800;
+      color: #1e293b;
       white-space: nowrap;
     }
 
     .course-name {
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      line-height: 1.25;
+      font-size: 0.76rem;
+      color: #334155;
+      font-weight: 500;
+      line-height: 1.3;
     }
 
     .course-prereq {
@@ -501,7 +492,7 @@
       font-weight: 700;
       color: #b45309;
       background: #fffbeb;
-      border: 1px solid #fed7aa;
+      border: 1px solid #fde68a;
       padding: 1px 6px;
       border-radius: 4px;
       align-self: flex-start;
@@ -517,7 +508,7 @@
     .grade-select {
       padding: 2px 4px;
       font-size: 0.75rem;
-      font-weight: 700;
+      font-weight: 800;
       border: 1px solid #16a34a;
       border-radius: 4px;
       background-color: #ffffff;
@@ -536,16 +527,16 @@
 
     .custom-input {
       width: 100%;
-      padding: 4px 6px;
+      padding: 5px 8px;
       border: 1px solid #cbd5e1;
       border-radius: 4px;
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       background: #fff;
     }
 
     .status-badge {
-      font-size: 0.7rem;
-      font-weight: 700;
+      font-size: 0.72rem;
+      font-weight: 800;
       display: flex;
       align-items: center;
       gap: 3px;
@@ -559,60 +550,63 @@
       background: none;
       border: none;
       color: #94a3b8;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       padding: 0 4px;
     }
     .delete-btn:hover { color: #ef4444; }
 
-    .mobile-add-wrap {
-      display: none;
-      margin-top: 4px;
-      padding-top: 4px;
-      border-top: 1px dashed #cbd5e1;
+    /* MOBİL VE MASAÜSTÜ İÇİN HIZLI DÖNEM EKLEME ÇUBUĞU */
+    .quick-add-wrap {
+      margin-top: 5px;
+      padding-top: 5px;
+      border-top: 1px dashed rgba(0, 0, 0, 0.1);
+      display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .mobile-add-select {
+    .quick-add-select {
       flex: 1;
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       padding: 4px 6px;
       border: 1px solid #94a3b8;
-      border-radius: 4px;
-      background: #fff;
+      border-radius: 5px;
+      background: #ffffff;
       color: #0f172a;
-      font-weight: 600;
+      font-weight: 700;
+      outline: none;
     }
 
+    /* TOP-MOST GLOBAL TOOLTIP */
     .info-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
       background-color: var(--info-color);
       color: white;
       border-radius: 50%;
       font-size: 0.68rem;
       font-weight: 800;
       cursor: help;
-      margin-left: 4px;
+      margin-left: 5px;
       flex-shrink: 0;
     }
 
     #global-tooltip {
       position: fixed;
       display: none;
-      width: 260px;
+      width: 270px;
       background-color: #0f172a;
       color: #f8fafc;
       text-align: left;
       border-radius: 8px;
       padding: 10px 12px;
       z-index: 99999999 !important;
-      font-size: 0.73rem;
+      font-size: 0.75rem;
       box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.5);
       pointer-events: none;
       line-height: 1.45;
@@ -623,13 +617,13 @@
       bottom: calc(20px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: rgba(15, 23, 42, 0.92);
+      background: rgba(15, 23, 42, 0.95);
       color: #fff;
-      padding: 8px 16px;
+      padding: 9px 18px;
       border-radius: 9999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      font-size: 0.82rem;
+      font-weight: 700;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
       z-index: 1000;
       pointer-events: none;
       opacity: 0;
@@ -641,22 +635,94 @@
       opacity: 1;
     }
 
+    /* MOBİL DOKUNMATİK SÜRÜKLEME GÖSTERGESİ (TOUCH AVATAR) */
+    #touch-drag-avatar {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999999;
+      opacity: 0.95;
+      transform: translate(-50%, -50%) rotate(3deg) scale(1.03);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
+      display: none;
+    }
+
+    /* ==========================================================================
+       MOBİL DÜZENLEMELER (< 900px)
+       ========================================================================== */
     @media (max-width: 900px) {
-      .top-bar { padding: 8px 12px; gap: 6px; }
-      .top-bar h1 { font-size: 1.05rem; justify-content: center; }
-      .top-bar h1 span:last-child { display: none; }
-      .dept-select-container { justify-content: space-between; padding: 3px 10px; width: 100%; }
-      select.dept-select { flex: 1; max-width: none; margin: 0 4px; }
-      .mobile-tab-bar { display: flex; padding: 6px 12px; }
-      .app-main { padding: 8px 10px; gap: 0; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
-      .sidebar { flex: 1 1 100%; width: 100%; display: none; border-radius: 8px; }
-      .sidebar.active-tab { display: flex; }
-      .main-content { flex: 1 1 100%; width: 100%; display: none; padding-right: 0; }
-      .main-content.active-tab { display: flex; }
-      .semesters-container { grid-template-columns: 1fr; gap: 10px; }
-      .semester-box { min-height: 100px; }
-      .mobile-add-wrap { display: flex; }
-      .sidebar-scroll-pool, .main-content { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); }
+      .top-bar {
+        padding: 8px 12px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .top-bar h1 {
+        font-size: 1.1rem;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .top-bar h1 span:last-child {
+        display: none;
+      }
+
+      .dept-select-container {
+        width: 100%;
+        justify-content: space-between;
+        padding: 4px 8px;
+      }
+
+      select.dept-select {
+        flex: 1;
+        margin: 0 4px;
+        max-width: 200px;
+      }
+
+      .mobile-tab-bar {
+        display: flex;
+      }
+
+      .app-main {
+        padding: 8px;
+        gap: 0;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      }
+
+      .sidebar {
+        flex: 1 1 100%;
+        width: 100%;
+        display: none;
+        border-radius: 8px;
+      }
+
+      .sidebar.active-tab {
+        display: flex;
+      }
+
+      .main-content {
+        flex: 1 1 100%;
+        width: 100%;
+        display: none;
+        padding-right: 0;
+      }
+
+      .main-content.active-tab {
+        display: flex;
+      }
+
+      .semesters-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .semester-box {
+        min-height: 110px;
+      }
+
+      .sidebar-scroll-pool,
+      .main-content {
+        padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
+      }
     }
   </style>
 </head>
@@ -735,6 +801,7 @@
     <section class="main-content" id="years-grid"></section>
   </main>
 
+  <div id="touch-drag-avatar"></div>
   <div id="global-tooltip"></div>
   <div id="toast" class="toast-msg"></div>
 
@@ -777,7 +844,7 @@
         document.body.innerHTML = `
           <div style="padding: 24px; font-family: sans-serif; color: #b91c1c; text-align: center;">
             <h2>Müfredat Verisi Yüklenemedi!</h2>
-            <p><code>curriculum.json</code> dosyasının <code>index.html</code> ile aynı klasörde olduğundan ve sayfayı yerel bir sunucu (Live Server vb.) üzerinden açtığınızdan emin olun.</p>
+            <p><code>curriculum.json</code> dosyasının <code>index.html</code> ile aynı klasörde olduğundan emin olun.</p>
             <p style="color: #64748b; font-size: 0.85rem;">Hata detayı: ${err.message}</p>
           </div>
         `;
@@ -851,7 +918,7 @@
         tooltip.style.display = 'block';
 
         const rect = el.getBoundingClientRect();
-        const tooltipWidth = 260;
+        const tooltipWidth = 270;
         let left = rect.left + (rect.width / 2) - (tooltipWidth / 2);
         let top = rect.top - tooltip.offsetHeight - 8;
 
@@ -1046,9 +1113,8 @@
           const hasFailedOnly = courseInstances.length > 0 && !hasPassed;
 
           const poolCard = document.createElement('div');
-          const isLocked = hasPassed;
-          poolCard.className = `course-card ${hasPassed ? 'status-passed pool-locked' : (hasFailedOnly ? 'status-failed' : '')}`;
-          poolCard.draggable = !isLocked;
+          poolCard.className = `course-card ${hasPassed ? 'status-passed' : (hasFailedOnly ? 'status-failed' : '')}`;
+          poolCard.draggable = true;
           poolCard.dataset.courseId = course.id;
 
           let statusBadge = '<span class="status-badge pending">• Alınmadı</span>';
@@ -1071,20 +1137,17 @@
               ${statusBadge}
             </div>
             
-            ${!isLocked ? `
-              <div class="mobile-add-wrap">
-                <select class="mobile-add-select" onchange="handleMobileAddCourse('${course.id}', this.value, this)">
-                  <option value="">➕ Döneme Ekle...</option>
-                  ${semOptions}
-                </select>
-              </div>
-            ` : ''}
+            <div class="quick-add-wrap">
+              <select class="quick-add-select" onchange="handleQuickAddCourse('${course.id}', this.value, this)">
+                <option value="">➕ Döneme Gönder...</option>
+                ${semOptions}
+              </select>
+            </div>
           `;
 
-          if (!isLocked) {
-            poolCard.addEventListener('dragstart', handlePoolDragStart);
-            poolCard.addEventListener('dragend', handleDragEnd);
-          }
+          poolCard.addEventListener('dragstart', handlePoolDragStart);
+          poolCard.addEventListener('dragend', handleDragEnd);
+          setupTouchDrag(poolCard, 'pool', course.id);
 
           groupContainer.appendChild(poolCard);
         });
@@ -1095,7 +1158,7 @@
       calculateAverages();
     }
 
-    function handleMobileAddCourse(courseId, targetSem, selectEl) {
+    function handleQuickAddCourse(courseId, targetSem, selectEl) {
       if (!targetSem) return;
 
       const state = getDeptState(currentDept);
@@ -1247,7 +1310,7 @@
         ` : ''}
 
         <div class="course-controls">
-          <label style="cursor:pointer; display:flex; align-items:center; gap:5px; font-weight:600;">
+          <label style="cursor:pointer; display:flex; align-items:center; gap:5px; font-weight:700;">
             <input type="checkbox" ${isPassed ? 'checked' : ''} onchange="toggleInstancePassed('${inst.instanceId}', this.checked)">
             Verdim
           </label>
@@ -1260,11 +1323,13 @@
       if (!isPassed) {
         card.addEventListener('dragstart', handleInstanceDragStart);
         card.addEventListener('dragend', handleDragEnd);
+        setupTouchDrag(card, 'instance', inst.instanceId);
       }
 
       return card;
     }
 
+    /* MASAÜSTÜ SÜRÜKLE - BIRAK */
     let dragType = null;
     let draggedId = null;
     let dragGhostNode = null;
@@ -1280,14 +1345,13 @@
       dragGhostNode.style.top = '-9999px';
       dragGhostNode.style.left = '-9999px';
       dragGhostNode.style.zIndex = '999999';
-      dragGhostNode.style.opacity = '0.98';
-      dragGhostNode.style.boxShadow = '0 12px 28px rgba(0, 51, 102, 0.25)';
-      dragGhostNode.style.transform = 'scale(1.02)';
+      dragGhostNode.style.opacity = '1';
+      dragGhostNode.style.boxShadow = '0 12px 28px rgba(0, 51, 102, 0.3)';
       dragGhostNode.style.pointerEvents = 'none';
       document.body.appendChild(dragGhostNode);
 
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setDragImage(dragGhostNode, sourceEl.offsetWidth / 2, 25);
+      e.dataTransfer.setDragImage(dragGhostNode, sourceEl.offsetWidth / 2, 20);
     }
 
     function handlePoolDragStart(e) {
@@ -1358,10 +1422,19 @@
       const state = getDeptState(currentDept);
       const afterElement = getDragAfterElement(this, e.clientY);
 
-      if (dragType === 'pool') {
+      executeDropPlacement(dragType, draggedId, semId, afterElement, this);
+
+      draggedId = null;
+      dragType = null;
+    }
+
+    function executeDropPlacement(type, id, semId, afterElement, targetBox) {
+      const state = getDeptState(currentDept);
+
+      if (type === 'pool') {
         const newInst = {
           instanceId: 'inst_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-          courseId: draggedId,
+          courseId: id,
           semId: semId,
           passed: false,
           grade: 'AA',
@@ -1380,16 +1453,16 @@
 
         saveGlobalState();
 
-        const course = departmentsData[currentDept].courses.find(c => c.id === draggedId);
+        const course = departmentsData[currentDept].courses.find(c => c.id === id);
         const card = createSemesterCourseCard(newInst, course);
         if (afterElement) {
-          this.insertBefore(card, afterElement);
+          targetBox.insertBefore(card, afterElement);
         } else {
-          this.appendChild(card);
+          targetBox.appendChild(card);
         }
 
-      } else if (dragType === 'instance') {
-        const instIndex = state.instances.findIndex(i => i.instanceId === draggedId);
+      } else if (type === 'instance') {
+        const instIndex = state.instances.findIndex(i => i.instanceId === id);
         if (instIndex > -1) {
           const inst = state.instances[instIndex];
           if (!inst.passed) {
@@ -1408,12 +1481,12 @@
 
             saveGlobalState();
 
-            const card = document.getElementById(`inst-${draggedId}`);
+            const card = document.getElementById(`inst-${id}`);
             if (card) {
               if (afterElement) {
-                this.insertBefore(card, afterElement);
+                targetBox.insertBefore(card, afterElement);
               } else {
-                this.appendChild(card);
+                targetBox.appendChild(card);
               }
             }
           }
@@ -1421,8 +1494,79 @@
       }
 
       updateSidebarPool();
-      draggedId = null;
-      dragType = null;
+    }
+
+    /* MOBİL DOKUNMATİK SÜRÜKLEME SİSTEMİ (TOUCH ENGINE) */
+    function setupTouchDrag(el, type, id) {
+      let touchTimer = null;
+      let isTouching = false;
+      const avatar = document.getElementById('touch-drag-avatar');
+
+      el.addEventListener('touchstart', (e) => {
+        if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+
+        touchTimer = setTimeout(() => {
+          isTouching = true;
+          if (navigator.vibrate) navigator.vibrate(40);
+
+          avatar.innerHTML = el.innerHTML;
+          avatar.className = el.className;
+          avatar.style.width = `${el.offsetWidth}px`;
+          avatar.style.display = 'block';
+
+          const touch = e.touches[0];
+          avatar.style.left = `${touch.clientX}px`;
+          avatar.style.top = `${touch.clientY}px`;
+          el.classList.add('is-dragging');
+        }, 220);
+      }, { passive: true });
+
+      el.addEventListener('touchmove', (e) => {
+        if (!isTouching) {
+          clearTimeout(touchTimer);
+          return;
+        }
+
+        const touch = e.touches[0];
+        avatar.style.left = `${touch.clientX}px`;
+        avatar.style.top = `${touch.clientY}px`;
+
+        const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+        const semBox = elemBelow ? elemBelow.closest('.semester-box') : null;
+
+        document.querySelectorAll('.semester-box').forEach(b => b.classList.remove('drag-over'));
+        if (semBox) semBox.classList.add('drag-over');
+
+      }, { passive: false });
+
+      el.addEventListener('touchend', (e) => {
+        clearTimeout(touchTimer);
+        if (!isTouching) return;
+
+        isTouching = false;
+        avatar.style.display = 'none';
+        el.classList.remove('is-dragging');
+
+        const touch = e.changedTouches[0];
+        const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+        const targetBox = elemBelow ? elemBelow.closest('.semester-box') : null;
+
+        document.querySelectorAll('.semester-box').forEach(b => b.classList.remove('drag-over'));
+
+        if (targetBox) {
+          const semId = targetBox.dataset.semId;
+          const afterElement = getDragAfterElement(targetBox, touch.clientY);
+          executeDropPlacement(type, id, semId, afterElement, targetBox);
+          showToast(`✓ Taşındı: Dönem ${semId}`);
+        }
+      });
+
+      el.addEventListener('touchcancel', () => {
+        clearTimeout(touchTimer);
+        isTouching = false;
+        avatar.style.display = 'none';
+        el.classList.remove('is-dragging');
+      });
     }
 
     function toggleInstancePassed(instanceId, isChecked) {
