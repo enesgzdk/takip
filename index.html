@@ -188,16 +188,16 @@
       border-bottom: 1px solid #f1f5f9;
       background: #fff;
       z-index: 5;
+      touch-action: pan-y; /* Üzerinde dokunarak kaydırmaya izin ver */
     }
 
-    /* GPA Kart Akıllı Gizlenme / Gösterilme Animasyonu */
     .dashboard-card-wrapper {
       max-height: 250px;
       opacity: 1;
       overflow: hidden;
-      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                  opacity 0.25s ease, 
-                  margin-bottom 0.3s ease;
+      transition: max-height 0.28s cubic-bezier(0.25, 1, 0.5, 1), 
+                  opacity 0.22s ease, 
+                  margin-bottom 0.28s cubic-bezier(0.25, 1, 0.5, 1);
       margin-bottom: 8px;
     }
 
@@ -429,7 +429,6 @@
       color: #1e40af;
     }
 
-    /* KART STİLLERİ */
     .course-card {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -659,7 +658,6 @@
       opacity: 1;
     }
 
-    /* MOBİL VE KÜÇÜK EKRAN DÜZELTMELERİ */
     @media (max-width: 900px) {
       .top-bar {
         padding: 8px 12px;
@@ -733,7 +731,6 @@
         cursor: default;
       }
 
-      /* Mobilde gizlenme durumu */
       .dashboard-card-wrapper.collapsed {
         max-height: 0;
         opacity: 0;
@@ -772,7 +769,7 @@
 
   <main class="app-main">
     <aside class="sidebar active-tab" id="sidebarContainer">
-      <div class="sidebar-fixed-top">
+      <div class="sidebar-fixed-top" id="sidebarFixedTop">
         <div id="dashCardWrapper" class="dashboard-card-wrapper">
           <div class="dashboard-card">
             <div class="dash-row">
@@ -1576,31 +1573,85 @@
       }
     }
 
-    /* Mobilde Akıllı Scroll ile GPA Kartını Gizleme/Gösterme Mantığı */
+    /* Mobilde Akıllı Scroll & Kart Gizleme / Gösterme Sistemi */
     let lastPoolScrollTop = 0;
+    let isTogglingCard = false;
     const poolScrollEl = document.getElementById('course-pool');
     const dashCardWrapper = document.getElementById('dashCardWrapper');
+    const sidebarFixedTop = document.getElementById('sidebarFixedTop');
+
+    function setCardState(shouldCollapse) {
+      if (!isMobileDevice()) return;
+      const isCurrentlyCollapsed = dashCardWrapper.classList.contains('collapsed');
+      if (isCurrentlyCollapsed === shouldCollapse || isTogglingCard) return;
+
+      const previousHeight = dashCardWrapper.offsetHeight;
+      isTogglingCard = true;
+
+      if (shouldCollapse) {
+        dashCardWrapper.classList.add('collapsed');
+      } else {
+        dashCardWrapper.classList.remove('collapsed');
+      }
+
+      // Animasyon esnasında container genişlediğinde scrollTop'ın fırlamasını engelle
+      requestAnimationFrame(() => {
+        const heightDiff = previousHeight - dashCardWrapper.offsetHeight;
+        if (shouldCollapse && heightDiff > 0 && poolScrollEl.scrollTop > heightDiff) {
+          poolScrollEl.scrollTop -= (heightDiff * 0.4);
+        }
+        setTimeout(() => {
+          isTogglingCard = false;
+          lastPoolScrollTop = poolScrollEl.scrollTop;
+        }, 280);
+      });
+    }
 
     poolScrollEl.addEventListener('scroll', () => {
-      if (!isMobileDevice()) return;
+      if (!isMobileDevice() || isTogglingCard) return;
 
       const currentScroll = poolScrollEl.scrollTop;
       const scrollDiff = currentScroll - lastPoolScrollTop;
 
-      // Listenin en tepesindeysen her zaman göster
       if (currentScroll <= 15) {
-        dashCardWrapper.classList.remove('collapsed');
-      } 
-      // Aşağı kaydırırken ve en az 8px hareket edildiyse gizle
-      else if (scrollDiff > 8 && currentScroll > 60) {
-        dashCardWrapper.classList.add('collapsed');
-      } 
-      // Yukarı doğru hafif çekişte hemen geri aç
-      else if (scrollDiff < -6) {
-        dashCardWrapper.classList.remove('collapsed');
+        setCardState(false);
+      } else if (scrollDiff > 12 && currentScroll > 50) {
+        setCardState(true);
+      } else if (scrollDiff < -8) {
+        setCardState(false);
       }
 
       lastPoolScrollTop = currentScroll;
+    }, { passive: true });
+
+    // Kartın üzerinden yapılan dokunmaları havuza yönlendirme
+    let touchStartY = 0;
+    sidebarFixedTop.addEventListener('touchstart', (e) => {
+      if (!isMobileDevice()) return;
+      if (e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON') return;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    sidebarFixedTop.addEventListener('touchmove', (e) => {
+      if (!isMobileDevice() || !touchStartY) return;
+      if (e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON') return;
+
+      const touchCurrentY = e.touches[0].clientY;
+      const deltaY = touchStartY - touchCurrentY;
+
+      // Parmağı hareket ettirdikçe alttaki listeyi kaydır
+      poolScrollEl.scrollTop += deltaY;
+      touchStartY = touchCurrentY;
+
+      if (deltaY > 6) {
+        setCardState(true);
+      } else if (deltaY < -6) {
+        setCardState(false);
+      }
+    }, { passive: true });
+
+    sidebarFixedTop.addEventListener('touchend', () => {
+      touchStartY = 0;
     }, { passive: true });
 
     window.addEventListener('resize', () => {
