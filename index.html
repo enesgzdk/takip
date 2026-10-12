@@ -123,6 +123,127 @@
       background: #ffffff;
     }
 
+    .minor-select-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .minor-btn {
+      padding: 5px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: 1px solid #c7d2fe;
+      background: #eef2ff;
+      color: #4338ca;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .minor-btn:hover {
+      background: #e0e7ff;
+      border-color: #a5b4fc;
+      color: #3730a3;
+    }
+
+    .minor-btn.has-minor {
+      background: #f5f3ff;
+      border-color: #ddd6fe;
+      color: #6d28d9;
+    }
+
+    .minor-btn.has-minor:hover {
+      background: #ede9fe;
+      border-color: #c4b5fd;
+    }
+
+    .minor-remove-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      background: rgba(109, 40, 217, 0.12);
+      color: #6d28d9;
+      border-radius: 50%;
+      font-size: 0.72rem;
+      font-weight: 800;
+      margin-left: 2px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .minor-remove-btn:hover {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    .top-bar-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .topbar-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.82rem;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      color: #334155;
+    }
+
+    .topbar-btn:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      color: var(--accent-color);
+    }
+
+    .topbar-btn.export-btn {
+      background: #f0fdf4;
+      border-color: #86efac;
+      color: #166534;
+    }
+
+    .topbar-btn.export-btn:hover {
+      background: #dcfce7;
+      border-color: #4ade80;
+    }
+
+    .topbar-btn.import-btn {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+      color: #0369a1;
+    }
+
+    .topbar-btn.import-btn:hover {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+    }
+
+    .topbar-btn.feedback-btn {
+      background: #eef2ff;
+      border-color: #c7d2fe;
+      color: #3730a3;
+    }
+
+    .topbar-btn.feedback-btn:hover {
+      background: #e0e7ff;
+      border-color: #a5b4fc;
+      color: #312e81;
+    }
+
     .reset-btn {
       padding: 6px 12px;
       background-color: #ef4444;
@@ -485,6 +606,29 @@
       border-color: var(--failed-border);
     }
 
+    .course-card.minor-card {
+      border-left-color: #7c3aed !important;
+      background: #faf5ff;
+      border-color: #e9d5ff;
+    }
+
+    .course-card.minor-card.status-passed {
+      border-left-color: #059669 !important;
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+
+    .minor-badge {
+      font-size: 0.65rem;
+      background: #ede9fe;
+      color: #6d28d9;
+      border: 1px solid #ddd6fe;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
     .course-card.locked {
       cursor: not-allowed !important;
       opacity: 0.95;
@@ -536,6 +680,36 @@
       border-radius: 4px;
       align-self: flex-start;
       margin-top: 1px;
+    }
+
+    .course-desc-link-wrap {
+      margin-top: 2px;
+    }
+
+    .course-desc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.69rem;
+      font-weight: 600;
+      color: #0369a1;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      line-height: 1.3;
+      align-self: flex-start;
+    }
+
+    .course-desc-link:hover {
+      background: #e0f2fe;
+      color: #0284c7;
+      border-color: #7dd3fc;
+      text-decoration: underline;
     }
 
     .grade-selector-wrap {
@@ -671,6 +845,229 @@
       opacity: 1;
     }
 
+    /* Modal Backdrop & Dialog */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-dialog {
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.06);
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.96) translateY(8px);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-backdrop.open .modal-dialog {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      line-height: 1;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .modal-close-btn:hover {
+      color: #0f172a;
+      background: #f1f5f9;
+    }
+
+    .modal-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 8px 11px;
+      border: 1px solid var(--border-color);
+      border-radius: 7px;
+      font-size: 0.86rem;
+      color: #1e293b;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 85px;
+      line-height: 1.45;
+    }
+
+    .form-checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: #475569;
+      cursor: pointer;
+      line-height: 1.35;
+      background: #f8fafc;
+      padding: 8px 11px;
+      border-radius: 7px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .form-checkbox-label input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    .modal-footer {
+      padding: 12px 18px;
+      border-top: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      background: #f8fafc;
+    }
+
+    .btn-submit-issue {
+      background: var(--accent-color);
+      color: #ffffff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 7px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: opacity 0.15s ease;
+    }
+
+    .btn-submit-issue:hover {
+      opacity: 0.9;
+    }
+
+    .btn-cancel-issue {
+      background: #ffffff;
+      color: #64748b;
+      border: 1px solid var(--border-color);
+      padding: 7px 12px;
+      border-radius: 7px;
+      font-weight: 600;
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-cancel-issue:hover {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .minor-preview-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: #334155;
+    }
+
+    .minor-preview-header {
+      font-weight: 700;
+      color: #4338ca;
+      font-size: 0.86rem;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .minor-courses-list {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .minor-course-tag {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.74rem;
+      color: #1e293b;
+    }
+
     @media (max-width: 900px) {
       .top-bar {
         padding: 8px 12px;
@@ -683,6 +1080,28 @@
         align-items: center;
         gap: 8px;
         width: 100%;
+        flex-wrap: wrap;
+      }
+      .minor-select-container {
+        flex: 0 0 auto;
+      }
+      .minor-btn {
+        padding: 4px 10px;
+        font-size: 0.78rem;
+      }
+      .top-bar-btn-group {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .top-bar-btn-group .topbar-btn,
+      .top-bar-btn-group .reset-btn {
+        flex: 1 1 calc(50% - 6px);
+        justify-content: center;
+        padding: 6px 8px;
+        font-size: 0.78rem;
       }
       .top-bar h1 {
         font-size: 1.1rem;
@@ -767,7 +1186,24 @@
         <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
         </select>
       </div>
-      <button class="reset-btn" onclick="resetCurrentDept()">Sıfırla</button>
+      <div class="minor-select-container">
+        <button id="minorBtn" class="minor-btn" onclick="openMinorModal()" title="Yandal Programı Seç / Düzenle">
+          🎓 Yandal Ekle
+        </button>
+      </div>
+      <div class="top-bar-btn-group">
+        <button class="topbar-btn export-btn" onclick="exportDataAsJSON()" title="Mevcut ders planınızı ve notlarınızı JSON dosyası olarak indirin">
+          📥 JSON İndir
+        </button>
+        <button class="topbar-btn import-btn" onclick="document.getElementById('jsonFileInput').click()" title="Daha önce indirdiğiniz JSON planını yükleyin">
+          📤 JSON Yükle
+        </button>
+        <button class="topbar-btn feedback-btn" onclick="openFeedbackModal()" title="Hata Bildir veya Öneri Paylaş">
+          💬 Hata / Öneri
+        </button>
+        <button class="reset-btn" onclick="resetCurrentDept()" title="Bölüm planını sıfırla">Sıfırla</button>
+      </div>
+      <input type="file" id="jsonFileInput" accept=".json,application/json" style="display: none;" onchange="importDataFromJSON(event)">
     </div>
   </header>
 
@@ -791,7 +1227,7 @@
                 <span id="gpa-display" class="dash-val">0.00</span>
               </div>
               <div class="dash-item" style="text-align: right;">
-                <span class="dash-label">Kalan Ders</span>
+                <span class="dash-label">Kalan / Toplam</span>
                 <span id="remaining-count" class="dash-val">0</span>
               </div>
             </div>
@@ -821,7 +1257,7 @@
         </div>
 
         <div class="sidebar-title">
-          <span>Ders Havuzu</span>
+          <span id="sidebarPoolTitle">Ders Havuzu</span>
           <span style="font-size: 0.74rem; font-weight: normal; color: var(--text-muted);">Dönem Blokları</span>
         </div>
       </div>
@@ -835,6 +1271,86 @@
   <div id="global-tooltip"></div>
   <div id="toast" class="toast-msg"></div>
 
+  <!-- Hata Bildir / Öneri Paylaş Modalı -->
+  <div id="feedbackModal" class="modal-backdrop" onclick="handleFeedbackBackdropClick(event)">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle">
+      <div class="modal-header">
+        <h3 id="feedbackModalTitle">💬 Hata Bildir / Öneri Paylaş</h3>
+        <button type="button" class="modal-close-btn" onclick="closeFeedbackModal()" aria-label="Kapat">✕</button>
+      </div>
+      <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="feedbackTitle">Konu Başlığı <span style="color:#ef4444;">*</span></label>
+            <input type="text" id="feedbackTitle" class="form-control" placeholder="Örn: MATH 101 önkoşulu hatalı / Yandal butonu kaydı" required maxlength="120">
+          </div>
+
+          <div class="form-group">
+            <label for="feedbackCategory">Kategori</label>
+            <select id="feedbackCategory" class="form-control" style="cursor: pointer;">
+              <option value="Önkoşul / Ders Hatası">Önkoşul / Ders Hatası</option>
+              <option value="Hesaplama / GPA Hatası">Hesaplama / GPA Hatası</option>
+              <option value="Arayüz / Tasarım">Arayüz / Tasarım</option>
+              <option value="Yeni Özellik Önerisi">Yeni Özellik Önerisi</option>
+              <option value="Diğer">Diğer</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="feedbackDesc">Açıklama <span style="color:#ef4444;">*</span></label>
+            <textarea id="feedbackDesc" class="form-control" placeholder="Karşılaştığın sorunu veya önerini buraya yaz..." rows="4" required></textarea>
+          </div>
+
+          <label class="form-checkbox-label">
+            <input type="checkbox" id="feedbackIncludeSystem" checked>
+            <span>
+              <strong>Sistem Bilgisini Ekle</strong>
+              <span style="display:block; font-size:0.72rem; color:#64748b; margin-top:2px;">
+                Aktif bölüm, planlanan ders sayısı ve tarayıcı bilgisi GitHub sorun açıklamasına eklenir.
+              </span>
+            </span>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel-issue" onclick="closeFeedbackModal()">İptal</button>
+          <button type="submit" class="btn-submit-issue">
+            <span>GitHub'da Bildir ↗</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Yandal Programı Seçim Modalı -->
+  <div id="minorModal" class="modal-backdrop" onclick="handleMinorBackdropClick(event)">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="minorModalTitle">
+      <div class="modal-header">
+        <h3 id="minorModalTitle">🎓 Yandal Programı Seçimi</h3>
+        <button type="button" class="modal-close-btn" onclick="closeMinorModal()" aria-label="Kapat">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="minorSelect">Yandal Programı Seçin</label>
+          <select id="minorSelect" class="form-control" onchange="handleMinorSelectChange(this.value)" style="cursor: pointer;">
+            <option value="">(Yandal Yok / İptal Et)</option>
+          </select>
+        </div>
+
+        <div id="minorPreviewBox" class="minor-preview-box">
+          <div style="color: #64748b; font-style: italic;">Lütfen incelemek istediğiniz bir yandal programı seçin.</div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel-issue" onclick="closeMinorModal()">Vazgeç</button>
+        <button type="button" class="btn-submit-issue" onclick="handleApplyMinorFromModal()">
+          <span>Yandalı Uygula</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const isMobileDevice = () => window.innerWidth <= 900;
 
@@ -842,6 +1358,34 @@
       'AA': 4.0, 'BA': 3.5, 'BB': 3.0, 'CB': 2.5,
       'CC': 2.0, 'DC': 1.5, 'DD': 1.0, 'F': 0.0, 'P': null
     };
+
+    function getBounCourseUrl(courseCode, term = "2025/2026-2") {
+      if (!courseCode || typeof courseCode !== 'string') return null;
+      const sanitized = courseCode.trim().toUpperCase();
+
+      // Birden fazla seçenek, alternatif veya belirsizlik içeren durumları ele
+      if (sanitized.includes('/') || sanitized.includes('\\') || sanitized.includes('|') ||
+          sanitized.includes('--') || sanitized.includes('*') || sanitized.includes('?') ||
+          /\b(OR|VEYA)\b/.test(sanitized) ||
+          sanitized.includes('SEÇMELİ') || sanitized.includes('SECMELI') ||
+          sanitized.includes('ELECTIVE') || sanitized.includes('ELECT')) {
+        return null;
+      }
+
+      // Sadece net tekil ders kodu: 2-4 harfli önek, isteğe bağlı boşluk, 3 basamaklı ders numarası (opsiyonel harf/ek ile)
+      const match = sanitized.match(/^([A-Z]{2,4})\s*(\d{3}[A-Z0-9\.]*)$/);
+      if (!match) return null;
+
+      const prefix = match[1];
+      const number = match[2];
+      const formattedCourse = prefix.padEnd(4, ' ') + number;
+
+      const encodedCourse = encodeURIComponent(formattedCourse);
+      const encodedTerm = encodeURIComponent(term);
+      const section = "01";
+
+      return `https://registration.boun.edu.tr/scripts/schedule/coursedescription.asp?course=${encodedCourse}&section=${section}&term=${encodedTerm}`;
+    }
 
     const yearStructure = [
       { yearLabel: '0. Yıl (Hazırlık / Erken Dönem)', isExtended: false, sems: ['0.1', '0.2', '0.3 (Yaz)'] },
@@ -855,21 +1399,58 @@
     ];
 
     let departmentsData = {};
+    let minorsData = {};
     let currentDept = localStorage.getItem('boun_active_dept') || 'math';
     let globalState = JSON.parse(localStorage.getItem('boun_multi_dept_gpa_state')) || {};
 
     async function loadCurriculum() {
       try {
-        const response = await fetch('./curriculum.json');
-        if (!response.ok) throw new Error(`HTTP Hata: ${response.status}`);
-        departmentsData = await response.json();
+        const [currResp, minorsResp] = await Promise.all([
+          fetch('./curriculum.json'),
+          fetch('./minors.json')
+        ]);
+
+        if (!currResp.ok) throw new Error(`HTTP Hata: ${currResp.status}`);
+        departmentsData = await currResp.json();
+
+        if (minorsResp.ok) {
+          try {
+            minorsData = await minorsResp.json();
+          } catch (mErr) {
+            console.warn("minors.json okunamadı:", mErr);
+          }
+        }
 
         const availableKeys = Object.keys(departmentsData);
         if (!departmentsData[currentDept]) {
           currentDept = availableKeys[0] || 'math';
         }
 
+        // Bir kerelik geçiş temizliği: Sadece eski otomatik atama sürümünden kalan yandal kayıtlarını temizler
+        const LEGACY_CLEANUP_KEY = 'boun_legacy_auto_minor_cleaned_v1';
+        if (!localStorage.getItem(LEGACY_CLEANUP_KEY)) {
+          let cleanedAutoMinors = false;
+          Object.keys(globalState).forEach(k => {
+            if (globalState[k] && Array.isArray(globalState[k].instances)) {
+              const beforeCount = globalState[k].instances.length;
+              globalState[k].instances = globalState[k].instances.filter(inst => {
+                // Yalnızca eski otomatik atamadan kalmış (inst_minor_) ve not verilmemiş kayıtları temizle
+                const isLegacyAuto = inst.instanceId && String(inst.instanceId).startsWith('inst_minor_') && !inst.passed;
+                return !isLegacyAuto;
+              });
+              if (globalState[k].instances.length !== beforeCount) {
+                cleanedAutoMinors = true;
+              }
+            }
+          });
+          if (cleanedAutoMinors) {
+            saveGlobalState();
+          }
+          localStorage.setItem(LEGACY_CLEANUP_KEY, 'true');
+        }
+
         populateDepartmentSelect();
+        populateMinorModalOptions();
         initUI();
       } catch (err) {
         console.error("Müfredat JSON dosyası yüklenemedi:", err);
@@ -914,11 +1495,60 @@
       });
     }
 
+    function populateMinorModalOptions() {
+      const select = document.getElementById('minorSelect');
+      if (!select) return;
+      select.innerHTML = '<option value="">(Yandal Yok / İptal Et)</option>';
+
+      const faculties = {};
+      Object.keys(minorsData).forEach(minorKey => {
+        const m = minorsData[minorKey];
+        const fac = m.faculty || "Diğer Fakülteler";
+        if (!faculties[fac]) faculties[fac] = [];
+        faculties[fac].push({ key: minorKey, name: m.name });
+      });
+
+      Object.keys(faculties).forEach(facultyName => {
+        const group = document.createElement('optgroup');
+        group.label = facultyName;
+        faculties[facultyName].forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m.key;
+          opt.textContent = m.name;
+          group.appendChild(opt);
+        });
+        select.appendChild(group);
+      });
+    }
+
     function getDeptState(deptKey) {
       if (!globalState[deptKey]) {
-        globalState[deptKey] = { instances: [] };
+        globalState[deptKey] = { instances: [], selectedMinorId: null };
+      }
+      if (globalState[deptKey].selectedMinorId === undefined) {
+        globalState[deptKey].selectedMinorId = null;
       }
       return globalState[deptKey];
+    }
+
+    function findCourseById(courseId) {
+      if (!courseId) return null;
+      const majorCourse = departmentsData[currentDept]?.courses?.find(c => c.id === courseId);
+      if (majorCourse) return majorCourse;
+      const minorCourses = getActiveMinorCourseList();
+      const minorCourse = minorCourses.find(c => c.id === courseId);
+      if (minorCourse) return minorCourse;
+      for (const dKey of Object.keys(departmentsData)) {
+        const c = departmentsData[dKey].courses?.find(c => c.id === courseId);
+        if (c) return c;
+      }
+      return null;
+    }
+
+    function getCourseForInstance(inst) {
+      if (!inst) return null;
+      if (inst.minorCourse) return inst.minorCourse;
+      return findCourseById(inst.courseId);
     }
 
     function saveGlobalState() {
@@ -994,6 +1624,8 @@
     function calculateAverages() {
       const state = getDeptState(currentDept);
       const courses = departmentsData[currentDept]?.courses || [];
+      const activeMinorCourses = getActiveMinorCourseList();
+      const allRequiredCourses = [...courses, ...activeMinorCourses];
 
       const semesterStats = {};
       const allSems = [];
@@ -1006,7 +1638,7 @@
       let selectedCreditsTotal = 0;
 
       state.instances.forEach(inst => {
-        const course = courses.find(c => c.id === inst.courseId);
+        const course = getCourseForInstance(inst);
         if (course) {
           selectedCourseIds.add(inst.courseId);
           selectedCreditsTotal += (Number(course.crd) || 0);
@@ -1067,7 +1699,7 @@
       state.instances.forEach(inst => {
         if (inst.passed) {
           passedCourseIds.add(inst.courseId);
-          const course = courses.find(c => c.id === inst.courseId);
+          const course = getCourseForInstance(inst);
           if (course) {
             bestCourseGrades[inst.courseId] = {
               grade: inst.grade || 'AA',
@@ -1097,16 +1729,29 @@
       document.getElementById('selected-credits').innerText = `${selectedCreditsTotal} Cr`;
       document.getElementById('completed-credits').innerText = `${completedCreditsTotal} Cr (${passedCourseIds.size} Ders)`;
 
-      const totalRequiredCredits = courses.reduce((sum, c) => sum + (Number(c.crd) || 0), 0);
+      const totalRequiredCredits = allRequiredCourses.reduce((sum, c) => sum + (Number(c.crd) || 0), 0);
       document.getElementById('total-credits').innerText = `${totalRequiredCredits} Cr`;
 
-      const remaining = courses.length - passedCourseIds.size;
-      document.getElementById('remaining-count').innerText = remaining;
+      const passedRequiredCount = allRequiredCourses.filter(c => passedCourseIds.has(c.id)).length;
+      const remaining = Math.max(0, allRequiredCourses.length - passedRequiredCount);
+      const remainingEl = document.getElementById('remaining-count');
+      if (remainingEl) {
+        remainingEl.innerHTML = `${remaining} <span style="font-size: 0.72rem; font-weight: 600; opacity: 0.85;">/ ${allRequiredCourses.length}</span>`;
+        remainingEl.title = `Kalan: ${remaining} Ders, Toplam: ${allRequiredCourses.length} Ders`;
+      }
     }
 
     function updateSidebarPool() {
       const state = getDeptState(currentDept);
-      const courses = departmentsData[currentDept]?.courses || [];
+      const majorCourses = departmentsData[currentDept]?.courses || [];
+      const activeMinorCourses = getActiveMinorCourseList();
+      const allRequiredCourses = [...majorCourses, ...activeMinorCourses];
+
+      const poolTitleEl = document.getElementById('sidebarPoolTitle');
+      if (poolTitleEl) {
+        poolTitleEl.innerText = `Ders Havuzu (${allRequiredCourses.length} Ders)`;
+      }
+
       const pool = document.getElementById('course-pool');
       pool.innerHTML = '';
 
@@ -1122,7 +1767,15 @@
         'other': []
       };
 
-      courses.forEach(course => {
+      majorCourses.forEach(course => {
+        if (course.sem && groups[course.sem]) {
+          groups[course.sem].push(course);
+        } else {
+          groups['other'].push(course);
+        }
+      });
+
+      activeMinorCourses.forEach(course => {
         if (course.sem && groups[course.sem]) {
           groups[course.sem].push(course);
         } else {
@@ -1164,10 +1817,12 @@
           const courseInstances = state.instances.filter(inst => inst.courseId === course.id);
           const hasPassed = courseInstances.some(inst => inst.passed === true);
           const hasFailedOnly = courseInstances.length > 0 && !hasPassed;
+          const isPlaced = courseInstances.length > 0 && !hasPassed && !hasFailedOnly;
+          const isMinor = !!course.isMinor;
 
           const poolCard = document.createElement('div');
           const isLocked = hasPassed;
-          poolCard.className = `course-card ${hasPassed ? 'status-passed pool-locked' : (hasFailedOnly ? 'status-failed' : '')}`;
+          poolCard.className = `course-card ${isMinor ? 'minor-card' : ''} ${hasPassed ? 'status-passed pool-locked' : (hasFailedOnly ? 'status-failed' : '')}`;
           poolCard.draggable = !isLocked && !isMobile;
           poolCard.dataset.courseId = course.id;
 
@@ -1178,15 +1833,35 @@
             statusBadge = `<span class="status-badge locked">🔒 Verildi ${gradeText}</span>`;
           } else if (hasFailedOnly) {
             statusBadge = '<span class="status-badge failed">✕ Verilmedi</span>';
+          } else if (isPlaced) {
+            statusBadge = '<span class="status-badge pending" style="color: #0284c7; font-weight: 600;">• Döneme Eklendi</span>';
           }
+
+          const poolCourseUrl = getBounCourseUrl(course.code);
 
           poolCard.innerHTML = `
             <div class="course-header">
-              <span class="course-title">${course.code}</span>
+              <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
+                <span class="course-title">${course.code}</span>
+                ${isMinor ? '<span class="minor-badge">🎓 Yandal</span>' : ''}
+              </div>
               <span class="course-credits">${course.crd} Cr</span>
             </div>
             <div class="course-name">${course.name}</div>
             ${course.prereq ? `<div class="course-prereq">${course.prereq}</div>` : ''}
+            ${poolCourseUrl ? `
+              <div class="course-desc-link-wrap">
+                <a href="${poolCourseUrl}" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="course-desc-link" 
+                   draggable="false"
+                   onclick="event.stopPropagation();" 
+                   title="${course.code} için Boğaziçi Registration ders tanımı ve önkoşul sayfası (yeni sekmede açılır)">
+                  🔗 Ders Tanımı &amp; Önkoşul
+                </a>
+              </div>
+            ` : ''}
             <div class="course-controls" style="margin-top: 4px;">
               ${statusBadge}
             </div>
@@ -1219,19 +1894,24 @@
       if (!targetSem) return;
 
       const state = getDeptState(currentDept);
+      const course = findCourseById(courseId);
+      if (!course) return;
+
+      const isMinor = !!course.isMinor;
       const newInst = {
-        instanceId: 'inst_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+        instanceId: 'inst_' + (isMinor ? 'user_minor_' : '') + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
         courseId: courseId,
         semId: targetSem,
         passed: false,
         grade: 'AA',
-        customText: ''
+        customText: '',
+        isMinor: isMinor,
+        minorCourse: isMinor ? course : undefined
       };
 
       state.instances.push(newInst);
       saveGlobalState();
 
-      const course = departmentsData[currentDept].courses.find(c => c.id === courseId);
       const card = createSemesterCourseCard(newInst, course);
       const targetBox = document.querySelector(`[data-sem-id="${targetSem}"]`);
       if (targetBox) {
@@ -1240,7 +1920,7 @@
 
       if (selectEl) selectEl.value = "";
 
-      calculateAverages();
+      updateSidebarPool();
       showToast(`✓ ${course.code} → Dönem ${targetSem}'e eklendi`);
     }
 
@@ -1309,7 +1989,7 @@
       });
 
       state.instances.forEach(inst => {
-        const course = activeDeptData.courses.find(c => c.id === inst.courseId);
+        const course = getCourseForInstance(inst);
         if (course) {
           const semBox = document.querySelector(`[data-sem-id="${inst.semId}"]`);
           if (semBox) {
@@ -1320,14 +2000,16 @@
       });
 
       updateSidebarPool();
+      updateMinorButtonUI();
     }
 
     function createSemesterCourseCard(inst, course) {
       const card = document.createElement('div');
       const isPassed = !!inst.passed;
       const isMobile = isMobileDevice();
+      const isMinor = !!inst.isMinor || !!course.isMinor;
 
-      card.className = `course-card ${isPassed ? 'status-passed locked' : 'status-failed'}`;
+      card.className = `course-card ${isMinor ? 'minor-card' : ''} ${isPassed ? 'status-passed locked' : 'status-failed'}`;
       card.id = `inst-${inst.instanceId}`;
       card.draggable = !isPassed && !isMobile;
       card.dataset.instanceId = inst.instanceId;
@@ -1339,9 +2021,15 @@
         return `<option value="${g}" ${currentGrade === g ? 'selected' : ''}>${g} ${valText}</option>`;
       }).join('');
 
+      const effectiveCode = (course.isElective && inst.customText) ? inst.customText : course.code;
+      const courseUrl = getBounCourseUrl(effectiveCode);
+
       card.innerHTML = `
         <div class="course-header">
-          <span class="course-title">${course.code}</span>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="course-title">${course.code}</span>
+            ${isMinor ? '<span class="minor-badge">🎓 Yandal</span>' : ''}
+          </div>
           <div style="display:flex; align-items:center; gap:6px;">
             ${isPassed ? `
               <div class="grade-selector-wrap" title="Harf Notu">
@@ -1352,12 +2040,26 @@
             ` : ''}
             <span class="course-credits">${course.crd} Cr</span>
             ${!isPassed ? `
-              <button class="delete-btn" onclick="removeInstance('${inst.instanceId}')" title="Bu dönemden kaldır">✕</button>
+              <button class="delete-btn" onclick="removeInstance('${inst.instanceId}')" title="${isMinor ? 'Bu yandal dersini kaldır' : 'Bu dönemden kaldır'}">✕</button>
             ` : ''}
           </div>
         </div>
         <div class="course-name">${course.name}</div>
         ${course.prereq ? `<div class="course-prereq">${course.prereq}</div>` : ''}
+        
+        <div class="course-desc-link-wrap" style="${courseUrl ? '' : 'display:none;'}">
+          ${courseUrl ? `
+            <a href="${courseUrl}" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="course-desc-link" 
+               draggable="false"
+               onclick="event.stopPropagation();" 
+               title="${effectiveCode} için Boğaziçi Registration ders tanımı ve önkoşul sayfası (yeni sekmede açılır)">
+              🔗 Ders Tanımı &amp; Önkoşul
+            </a>
+          ` : ''}
+        </div>
         
         ${course.isElective ? `
           <input type="text" 
@@ -1481,13 +2183,19 @@
       const afterElement = getDragAfterElement(this, e.clientY);
 
       if (dragType === 'pool') {
+        const course = findCourseById(draggedId);
+        if (!course) return;
+
+        const isMinor = !!course.isMinor;
         const newInst = {
-          instanceId: 'inst_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+          instanceId: 'inst_' + (isMinor ? 'user_minor_' : '') + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
           courseId: draggedId,
           semId: semId,
           passed: false,
           grade: 'AA',
-          customText: ''
+          customText: '',
+          isMinor: isMinor,
+          minorCourse: isMinor ? course : undefined
         };
 
         const targetIndex = afterElement 
@@ -1502,7 +2210,6 @@
 
         saveGlobalState();
 
-        const course = departmentsData[currentDept].courses.find(c => c.id === draggedId);
         const card = createSemesterCourseCard(newInst, course);
         if (afterElement) {
           this.insertBefore(card, afterElement);
@@ -1558,7 +2265,7 @@
         saveGlobalState();
 
         const oldCard = document.getElementById(`inst-${instanceId}`);
-        const course = departmentsData[currentDept].courses.find(c => c.id === inst.courseId);
+        const course = getCourseForInstance(inst);
         const newCard = createSemesterCourseCard(inst, course);
         oldCard.parentElement.replaceChild(newCard, oldCard);
 
@@ -1582,6 +2289,33 @@
       if (inst) {
         inst.customText = text;
         saveGlobalState();
+
+        const card = document.getElementById(`inst-${instanceId}`);
+        if (card) {
+          const linkWrap = card.querySelector('.course-desc-link-wrap');
+          if (linkWrap) {
+            const course = getCourseForInstance(inst);
+            const effectiveCode = (course && course.isElective && text.trim()) ? text.trim() : (course ? course.code : text.trim());
+            const newUrl = getBounCourseUrl(effectiveCode);
+            if (newUrl) {
+              linkWrap.innerHTML = `
+                <a href="${newUrl}" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="course-desc-link" 
+                   draggable="false"
+                   onclick="event.stopPropagation();" 
+                   title="${effectiveCode} için Boğaziçi Registration ders tanımı ve önkoşul sayfası (yeni sekmede açılır)">
+                  🔗 Ders Tanımı &amp; Önkoşul
+                </a>
+              `;
+              linkWrap.style.display = 'block';
+            } else {
+              linkWrap.innerHTML = '';
+              linkWrap.style.display = 'none';
+            }
+          }
+        }
       }
     }
 
@@ -1599,10 +2333,542 @@
     function resetCurrentDept() {
       const deptName = departmentsData[currentDept]?.name || currentDept;
       if (confirm(`Yalnızca "${deptName}" bölümü planlamanız sıfırlanacak. Emin misiniz?`)) {
-        globalState[currentDept] = { instances: [] };
+        globalState[currentDept] = { instances: [], selectedMinorId: null };
         saveGlobalState();
         initUI();
       }
+    }
+
+    function exportDataAsJSON() {
+      try {
+        const activeDeptData = departmentsData[currentDept];
+        const currentDeptState = getDeptState(currentDept);
+
+        const exportPayload = {
+          app: "boun-program-tracker",
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          activeDept: currentDept,
+          activeDeptName: activeDeptData?.name || currentDept,
+          selectedMinorId: currentDeptState.selectedMinorId || null,
+          summary: {
+            plannedCoursesCount: currentDeptState.instances.length,
+            passedCoursesCount: currentDeptState.instances.filter(i => i.passed).length,
+            selectedMinorId: currentDeptState.selectedMinorId || null
+          },
+          globalState: globalState
+        };
+
+        const jsonString = JSON.stringify(exportPayload, null, 2);
+        const blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+
+        const safeDept = currentDept.replace(/[^a-zA-Z0-9_-]/g, '_');
+        const dateStr = new Date().toISOString().slice(0, 10);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `boun_plan_${safeDept}_${dateStr}.json`;
+        document.body.appendChild(link);
+        link.click();
+
+        setTimeout(() => {
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }, 200);
+
+        showToast("✓ Plan başarıyla JSON olarak indirildi!");
+      } catch (err) {
+        console.error("Dışa aktarma hatası:", err);
+        alert("Dışa aktarma sırasında bir hata oluştu: " + err.message);
+      }
+    }
+
+    function importDataFromJSON(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const rawText = e.target.result;
+          let parsed;
+          try {
+            parsed = JSON.parse(rawText);
+          } catch (jsonErr) {
+            throw new Error("Dosya geçerli bir JSON formatında değil.");
+          }
+
+          if (!parsed || typeof parsed !== 'object') {
+            throw new Error("Geçersiz veya boş veri formatı.");
+          }
+
+          let candidateState = null;
+          let targetDept = null;
+
+          // 1. Standart app formatı: { globalState: { ... }, activeDept: '...' } veya { state: { ... } }
+          const stateObj = parsed.globalState || parsed.state;
+          if (stateObj && typeof stateObj === 'object' && !Array.isArray(stateObj)) {
+            candidateState = stateObj;
+            if (parsed.activeDept && departmentsData[parsed.activeDept]) {
+              targetDept = parsed.activeDept;
+            }
+          } 
+          // 2. Tek bir bölümün instances nesnesi: { instances: [...] }
+          else if (Array.isArray(parsed.instances)) {
+            candidateState = { ...globalState };
+            candidateState[currentDept] = { 
+              instances: parsed.instances,
+              selectedMinorId: parsed.selectedMinorId || null
+            };
+          }
+          // 3. Doğrudan instances dizisi: [ { courseId, semId, ... } ]
+          else if (Array.isArray(parsed)) {
+            candidateState = { ...globalState };
+            candidateState[currentDept] = { instances: parsed, selectedMinorId: null };
+          }
+          // 4. Doğrudan ham globalState nesnesi: { phys: { instances: [...] }, math: { ... } }
+          else if (typeof parsed === 'object') {
+            const hasDeptInstances = Object.keys(parsed).some(k => parsed[k] && Array.isArray(parsed[k].instances));
+            if (hasDeptInstances) {
+              candidateState = parsed;
+              if (parsed.activeDept && departmentsData[parsed.activeDept]) {
+                targetDept = parsed.activeDept;
+              }
+            }
+          }
+
+          if (!candidateState) {
+            throw new Error("JSON dosyasında geçerli bir ders planı veya dönem kaydı bulunamadı.");
+          }
+
+          // Güvenlik ve veri temizleme: her bölümün instances'ının dizi olduğundan emin ol
+          Object.keys(candidateState).forEach(k => {
+            if (!candidateState[k] || !Array.isArray(candidateState[k].instances)) {
+              candidateState[k] = { instances: [], selectedMinorId: candidateState[k]?.selectedMinorId || null };
+            } else {
+              candidateState[k].instances = candidateState[k].instances.filter(inst => inst && inst.courseId && inst.semId);
+              if (candidateState[k].selectedMinorId === undefined) {
+                candidateState[k].selectedMinorId = null;
+              }
+            }
+          });
+
+          if (parsed.selectedMinorId !== undefined && candidateState[targetDept || currentDept]) {
+            candidateState[targetDept || currentDept].selectedMinorId = parsed.selectedMinorId;
+          }
+
+          // Mevcut verisi varsa kullanıcıya nazikçe onay sor
+          const activeCurrentInstances = (globalState[currentDept]?.instances || []).length;
+          if (activeCurrentInstances > 0) {
+            const confirmOverwrite = confirm("Yüklemek istediğiniz plan mevcut planınızın üzerine yazılacak. Devam etmek istiyor musunuz?");
+            if (!confirmOverwrite) {
+              event.target.value = '';
+              return;
+            }
+          }
+
+          globalState = candidateState;
+          if (targetDept && departmentsData[targetDept]) {
+            currentDept = targetDept;
+          }
+
+          saveGlobalState();
+
+          const deptSelect = document.getElementById('deptSelect');
+          if (deptSelect) deptSelect.value = currentDept;
+
+          initUI();
+          showToast("✓ Plan başarıyla yüklendi!");
+        } catch (err) {
+          console.error("İçe aktarma hatası:", err);
+          alert("Hata: JSON dosyası yüklenemedi!\n" + err.message);
+        } finally {
+          event.target.value = '';
+        }
+      };
+
+      reader.onerror = function() {
+        alert("Dosya okunamadı. Lütfen tekrar deneyin.");
+        event.target.value = '';
+      };
+
+      reader.readAsText(file, "UTF-8");
+    }
+
+    /* ============================================================
+       Yandal Programı (Minor Program) Yönetimi
+       ============================================================ */
+    function findCourseByCode(code) {
+      if (!code) return null;
+      const clean = code.replace(/\s+/g, '').toUpperCase();
+      for (const dKey of Object.keys(departmentsData)) {
+        const list = departmentsData[dKey].courses || [];
+        const found = list.find(c => c.code && c.code.replace(/\s+/g, '').toUpperCase() === clean);
+        if (found) return found;
+      }
+      return null;
+    }
+
+    function getMinorCourseList(minorKey) {
+      if (!minorKey || !minorsData[minorKey]) return [];
+      const minor = minorsData[minorKey];
+      const result = [];
+      const addedCodes = new Set();
+
+      // 1. Zorunlu dersler
+      if (Array.isArray(minor.compulsoryCourses)) {
+        minor.compulsoryCourses.forEach(c => {
+          const cleanCode = (c.code || '').trim();
+          if (!cleanCode || addedCodes.has(cleanCode.toUpperCase())) return;
+          addedCodes.add(cleanCode.toUpperCase());
+          const ref = findCourseByCode(cleanCode);
+          result.push({
+            id: `minor_${minorKey}_${cleanCode.replace(/[^a-zA-Z0-9]/g, '_')}`,
+            code: cleanCode,
+            name: c.name || (ref ? ref.name : cleanCode),
+            crd: Number(c.crd) || (ref ? Number(ref.crd) : 3),
+            isMinor: true,
+            isElective: false
+          });
+        });
+      }
+
+      // 2. Seçmeli havuzları (electivePools)
+      if (Array.isArray(minor.electivePools)) {
+        minor.electivePools.forEach(pool => {
+          const firstOpt = (pool.options || []).find(opt => !addedCodes.has(opt.trim().toUpperCase()));
+          const optCode = firstOpt || (pool.poolName || 'Seçmeli');
+          addedCodes.add(optCode.toUpperCase());
+          const ref = findCourseByCode(optCode);
+          result.push({
+            id: `minor_${minorKey}_${optCode.replace(/[^a-zA-Z0-9]/g, '_')}`,
+            code: optCode,
+            name: (ref ? ref.name : `${pool.poolName || 'Yandal Seçmeli Dersi'}`),
+            crd: (ref ? Number(ref.crd) : 3),
+            isMinor: true,
+            isElective: true
+          });
+        });
+      }
+
+      // 3. Seçmeli opsiyon listesi (electiveOptions)
+      const targetTotal = minor.requirements?.totalCourses || 6;
+      if (Array.isArray(minor.electiveOptions)) {
+        for (const optCode of minor.electiveOptions) {
+          if (result.length >= targetTotal) break;
+          const cleanCode = (optCode || '').trim();
+          if (!cleanCode || addedCodes.has(cleanCode.toUpperCase())) continue;
+          addedCodes.add(cleanCode.toUpperCase());
+          const ref = findCourseByCode(cleanCode);
+          result.push({
+            id: `minor_${minorKey}_${cleanCode.replace(/[^a-zA-Z0-9]/g, '_')}`,
+            code: cleanCode,
+            name: ref ? ref.name : `${cleanCode} (Yandal Seçmeli)`,
+            crd: ref ? Number(ref.crd) : 3,
+            isMinor: true,
+            isElective: true
+          });
+        }
+      }
+
+      // 4. Eğer hala hedef ders sayısına ulaşılmadıysa genel seçmeli yuvası oluştur
+      let tagMatch = minor.name.match(/\(([A-Z]+)\)/);
+      let tag = tagMatch ? tagMatch[1] : (minorKey.split('_')[0] || 'Yandal').toUpperCase();
+      let elecCounter = 1;
+      while (result.length < targetTotal) {
+        const codeName = `${tag} Seçmeli ${elecCounter}`;
+        result.push({
+          id: `minor_${minorKey}_elec_${elecCounter}`,
+          code: codeName,
+          name: `${minor.name} Seçmeli Dersi`,
+          crd: 3,
+          isMinor: true,
+          isElective: true
+        });
+        elecCounter++;
+      }
+
+      return result;
+    }
+
+    function getActiveMinorCourseList() {
+      const state = getDeptState(currentDept);
+      const minorKey = state.selectedMinorId;
+      if (!minorKey || !minorsData[minorKey]) return [];
+      const allMinorCourses = getMinorCourseList(minorKey);
+
+      // Ana dal müfredatındaki ders kodlarını topla (Ortak dersleri atlamak için)
+      const majorCourses = departmentsData[currentDept]?.courses || [];
+      const majorCodes = new Set();
+      majorCourses.forEach(c => {
+        if (c.code) majorCodes.add(c.code.replace(/\s+/g, '').toUpperCase());
+      });
+
+      // Ana dalda olanları filtrele (duplication check)
+      const filtered = allMinorCourses.filter(mc => {
+        const normalized = mc.code.replace(/\s+/g, '').toUpperCase();
+        return !majorCodes.has(normalized);
+      });
+
+      // 3. yarıyıldan (2.1) başlayarak dönem bloklarına yerleştir: 2.1, 2.2, 3.1, 3.2, 4.1, 4.2
+      const targetSemesters = ['2.1', '2.2', '3.1', '3.2', '4.1', '4.2'];
+      filtered.forEach((course, idx) => {
+        course.sem = idx < targetSemesters.length ? targetSemesters[idx] : '4.2';
+        course.isMinor = true;
+      });
+
+      return filtered;
+    }
+
+    function applyMinor(minorKey) {
+      if (!minorKey || !minorsData[minorKey]) {
+        removeCurrentMinor(true);
+        return;
+      }
+
+      // Önceki yandal derslerini temizle (kullanıcının ana dalına ve notlarına dokunmadan)
+      removeCurrentMinor(false);
+
+      const state = getDeptState(currentDept);
+      const minor = minorsData[minorKey];
+
+      // Yandal ID'sini kaydet: dersler doğrudan dönemlere değil, soldaki ders havuzunda ilgili dönem bloklarına eklenir
+      state.selectedMinorId = minorKey;
+      saveGlobalState();
+      initUI();
+
+      const minorCourses = getActiveMinorCourseList();
+      showToast(`✓ ${minor.name} seçildi (${minorCourses.length} ders). Dersler sol paneldeki ilgili dönem bloklarına eklendi!`);
+    }
+
+    function removeCurrentMinor(shouldSave = true) {
+      const state = getDeptState(currentDept);
+      state.instances = (state.instances || []).filter(inst => {
+        const isMinorInst = inst.isMinor || inst.minorCourse || 
+          (inst.courseId && String(inst.courseId).startsWith('minor_')) || 
+          (inst.instanceId && String(inst.instanceId).startsWith('inst_minor_'));
+        return !isMinorInst;
+      });
+      state.selectedMinorId = null;
+      if (shouldSave) {
+        saveGlobalState();
+        initUI();
+        showToast("Yandal programı kaldırıldı.");
+      }
+    }
+
+    function removeMinor(event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      if (confirm("Mevcut yandal programını ve dönemlerdeki yandal derslerini kaldırmak istediğinize emin misiniz?")) {
+        removeCurrentMinor(true);
+      }
+    }
+
+    function updateMinorButtonUI() {
+      const minorBtn = document.getElementById('minorBtn');
+      if (!minorBtn) return;
+      const state = getDeptState(currentDept);
+      const minorId = state.selectedMinorId;
+
+      if (minorId && minorsData[minorId]) {
+        const minor = minorsData[minorId];
+        const match = minor.name.match(/\(([^)]+)\)/);
+        const shortName = match ? match[1] : minor.name.replace(/Yandalı?/i, '').trim();
+        minorBtn.className = 'minor-btn has-minor';
+        minorBtn.innerHTML = `🎓 Yandal: ${shortName} <span class="minor-remove-btn" onclick="removeMinor(event)" title="Yandalı Kaldır">✕</span>`;
+        minorBtn.title = `${minor.name} (Kaldırmak için ✕ butonuna tıklayın)`;
+      } else {
+        minorBtn.className = 'minor-btn';
+        minorBtn.innerHTML = `🎓 Yandal Ekle`;
+        minorBtn.title = "Yandal Programı Seç ve Dönemlere Ekle";
+      }
+    }
+
+    function openMinorModal() {
+      const modal = document.getElementById('minorModal');
+      if (!modal) return;
+      const select = document.getElementById('minorSelect');
+      const state = getDeptState(currentDept);
+      if (select) {
+        select.value = state.selectedMinorId || "";
+        handleMinorSelectChange(select.value);
+      }
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMinorModal() {
+      const modal = document.getElementById('minorModal');
+      if (modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function handleMinorBackdropClick(event) {
+      if (event.target && event.target.id === 'minorModal') {
+        closeMinorModal();
+      }
+    }
+
+    function handleMinorSelectChange(minorKey) {
+      const previewBox = document.getElementById('minorPreviewBox');
+      if (!previewBox) return;
+
+      if (!minorKey || !minorsData[minorKey]) {
+        previewBox.innerHTML = `
+          <div style="color: #64748b; font-style: italic;">
+            (Yandal seçilmedi veya mevcut yandal iptal edilecek.)
+          </div>
+        `;
+        return;
+      }
+
+      const minor = minorsData[minorKey];
+      const req = minor.requirements || {};
+      let reqHtml = '';
+      if (req.totalCourses) reqHtml += `<span>📚 Toplam Ders: <strong>${req.totalCourses}</strong></span>`;
+      if (req.totalCredits) reqHtml += `<span>🎯 Kredi: <strong>${req.totalCredits} Cr</strong></span>`;
+      if (req.gpa) reqHtml += `<span>⭐ Başvuru GPA: <strong>${req.gpa.toFixed(2)}</strong></span>`;
+      if (req.applicationPrereq && req.applicationPrereq.length > 0) {
+        reqHtml += `<span>📋 Önkoşul: <strong>${req.applicationPrereq.join(', ')}</strong></span>`;
+      }
+
+      const courseList = getMinorCourseList(minorKey);
+      const coursesPreview = courseList.map(c => `<code>${c.code}</code> (${c.crd} Cr)`).join(', ');
+
+      previewBox.innerHTML = `
+        <div class="minor-preview-title">${minor.name}</div>
+        <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 8px;">🏛️ ${minor.faculty || ''}</div>
+        ${reqHtml ? `<div class="minor-preview-reqs">${reqHtml}</div>` : ''}
+        <div style="margin-top: 8px; font-size: 0.82rem; color: #334155;">
+          <strong>Örnek Ders Dağılımı:</strong><br>
+          <span style="font-size: 0.78rem; color: #475569;">${coursesPreview}</span>
+        </div>
+        ${minor.notes ? `<div style="margin-top: 6px; font-size: 0.75rem; color: #94a3b8; font-style: italic;">ℹ️ ${minor.notes}</div>` : ''}
+      `;
+    }
+
+    function handleApplyMinorFromModal() {
+      const select = document.getElementById('minorSelect');
+      const selectedKey = select ? select.value : "";
+
+      if (!selectedKey) {
+        removeCurrentMinor(true);
+        closeMinorModal();
+        return;
+      }
+
+      applyMinor(selectedKey);
+      closeMinorModal();
+    }
+
+    /* ============================================================
+       GitHub Issue & Geri Bildirim / Öneri Mekanizması
+       ============================================================ */
+    const GITHUB_REPO = "enesgzdk/takip";
+
+    const FEEDBACK_LABEL_MAP = {
+      "Önkoşul / Ders Hatası": "bug,course-data",
+      "Hesaplama / GPA Hatası": "bug,calculation",
+      "Arayüz / Tasarım": "ui,bug",
+      "Yeni Özellik Önerisi": "enhancement",
+      "Diğer": "feedback"
+    };
+
+    function openFeedbackModal() {
+      const modal = document.getElementById('feedbackModal');
+      if (modal) {
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          const titleInput = document.getElementById('feedbackTitle');
+          if (titleInput) titleInput.focus();
+        }, 120);
+      }
+    }
+
+    function closeFeedbackModal() {
+      const modal = document.getElementById('feedbackModal');
+      if (modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function handleFeedbackBackdropClick(event) {
+      if (event.target && event.target.id === 'feedbackModal') {
+        closeFeedbackModal();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const feedbackModal = document.getElementById('feedbackModal');
+        if (feedbackModal && feedbackModal.classList.contains('open')) {
+          closeFeedbackModal();
+        }
+        const minorModal = document.getElementById('minorModal');
+        if (minorModal && minorModal.classList.contains('open')) {
+          closeMinorModal();
+        }
+      }
+    });
+
+    function handleFeedbackSubmit(event) {
+      event.preventDefault();
+
+      const titleInput = document.getElementById('feedbackTitle');
+      const categorySelect = document.getElementById('feedbackCategory');
+      const descInput = document.getElementById('feedbackDesc');
+      const includeSystemCheckbox = document.getElementById('feedbackIncludeSystem');
+
+      const title = (titleInput ? titleInput.value : "").trim();
+      const category = (categorySelect ? categorySelect.value : "Diğer");
+      const description = (descInput ? descInput.value : "").trim();
+      const includeSystem = includeSystemCheckbox ? includeSystemCheckbox.checked : true;
+
+      if (!title || !description) {
+        alert("Lütfen konu başlığı ve açıklama alanlarını eksiksiz doldurun.");
+        return;
+      }
+
+      // Markdown formatında issue gövdesi oluştur
+      let bodyMarkdown = `### 📌 Kategori\n${category}\n\n### 📝 Açıklama\n${description}\n`;
+
+      if (includeSystem) {
+        const state = getDeptState(currentDept);
+        const deptData = departmentsData[currentDept];
+        const deptName = deptData?.name || currentDept;
+        const plannedCourses = state.instances || [];
+        const passedCount = plannedCourses.filter(i => i.passed).length;
+        const gpaDisplay = document.getElementById('gpa-display')?.innerText || "0.00";
+        const now = new Date().toLocaleString('tr-TR');
+
+        bodyMarkdown += `\n---\n### 💻 Sistem Bilgileri\n`;
+        bodyMarkdown += `- **Aktif Bölüm:** ${deptName} (\`${currentDept}\`)\n`;
+        bodyMarkdown += `- **Planlanan Ders Sayısı:** ${plannedCourses.length} (Geçilen: ${passedCount})\n`;
+        bodyMarkdown += `- **Hesaplanan GPA:** ${gpaDisplay}\n`;
+        bodyMarkdown += `- **Tarayıcı / Ortam:** \`${navigator.userAgent}\`\n`;
+        bodyMarkdown += `- **Tarih:** ${now}\n`;
+      }
+
+      const issueTitle = `[${category}] ${title}`;
+      const labels = FEEDBACK_LABEL_MAP[category] || "feedback";
+
+      const issueUrl = `https://github.com/${GITHUB_REPO}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(bodyMarkdown)}&labels=${encodeURIComponent(labels)}`;
+
+      window.open(issueUrl, '_blank', 'noopener,noreferrer');
+
+      // Formu sıfırla ve modalı kapat
+      if (titleInput) titleInput.value = '';
+      if (descInput) descInput.value = '';
+      closeFeedbackModal();
+
+      showToast("✓ GitHub Issue sayfası yeni sekmede açıldı!");
     }
 
     /* Mobilde Akıllı Scroll & Kart Gizleme / Gösterme Sistemi */
