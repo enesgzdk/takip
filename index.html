@@ -999,19 +999,40 @@
       background: var(--accent-color);
       color: #ffffff;
       border: none;
-      padding: 7px 14px;
+      padding: 7px 15px;
       border-radius: 7px;
       font-weight: 700;
       font-size: 0.84rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      transition: opacity 0.15s ease;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      min-width: 80px;
     }
 
-    .btn-submit-issue:hover {
+    .btn-submit-issue:hover:not(:disabled) {
       opacity: 0.9;
+    }
+
+    .btn-submit-issue:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .issue-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: spinIssue 0.75s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spinIssue {
+      to { transform: rotate(360deg); }
     }
 
     .btn-cancel-issue {
@@ -1275,47 +1296,36 @@
   <div id="feedbackModal" class="modal-backdrop" onclick="handleFeedbackBackdropClick(event)">
     <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle">
       <div class="modal-header">
-        <h3 id="feedbackModalTitle">💬 Hata Bildir / Öneri Paylaş</h3>
+        <h3 id="feedbackModalTitle">💬 Hata / Öneri Bildir</h3>
         <button type="button" class="modal-close-btn" onclick="closeFeedbackModal()" aria-label="Kapat">✕</button>
       </div>
       <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)">
         <div class="modal-body">
           <div class="form-group">
-            <label for="feedbackTitle">Konu Başlığı <span style="color:#ef4444;">*</span></label>
-            <input type="text" id="feedbackTitle" class="form-control" placeholder="Örn: MATH 101 önkoşulu hatalı / Yandal butonu kaydı" required maxlength="120">
+            <label for="feedbackTitle">Başlık <span style="color:#ef4444;">*</span></label>
+            <input type="text" id="feedbackTitle" class="form-control" placeholder="Örn: CMPE 250 önkoşulu hatalı" required maxlength="120">
           </div>
 
           <div class="form-group">
             <label for="feedbackCategory">Kategori</label>
             <select id="feedbackCategory" class="form-control" style="cursor: pointer;">
-              <option value="Önkoşul / Ders Hatası">Önkoşul / Ders Hatası</option>
-              <option value="Hesaplama / GPA Hatası">Hesaplama / GPA Hatası</option>
-              <option value="Arayüz / Tasarım">Arayüz / Tasarım</option>
+              <option value="Hatalı Ders/Önkoşul">Hatalı Ders/Önkoşul</option>
               <option value="Yeni Özellik Önerisi">Yeni Özellik Önerisi</option>
+              <option value="Arayüz/Hesaplama Hatası">Arayüz/Hesaplama Hatası</option>
               <option value="Diğer">Diğer</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="feedbackDesc">Açıklama <span style="color:#ef4444;">*</span></label>
-            <textarea id="feedbackDesc" class="form-control" placeholder="Karşılaştığın sorunu veya önerini buraya yaz..." rows="4" required></textarea>
+            <textarea id="feedbackDesc" class="form-control" placeholder="Detaylı açıklama..." rows="4" required></textarea>
           </div>
-
-          <label class="form-checkbox-label">
-            <input type="checkbox" id="feedbackIncludeSystem" checked>
-            <span>
-              <strong>Sistem Bilgisini Ekle</strong>
-              <span style="display:block; font-size:0.72rem; color:#64748b; margin-top:2px;">
-                Aktif bölüm, planlanan ders sayısı ve tarayıcı bilgisi GitHub sorun açıklamasına eklenir.
-              </span>
-            </span>
-          </label>
         </div>
 
         <div class="modal-footer">
           <button type="button" class="btn-cancel-issue" onclick="closeFeedbackModal()">İptal</button>
-          <button type="submit" class="btn-submit-issue">
-            <span>GitHub'da Bildir ↗</span>
+          <button type="submit" id="feedbackSubmitBtn" class="btn-submit-issue">
+            <span>Gönder</span>
           </button>
         </div>
       </form>
@@ -2767,17 +2777,9 @@
     }
 
     /* ============================================================
-       GitHub Issue & Geri Bildirim / Öneri Mekanizması
+       Geri Bildirim / Issue Bildir Mekanizması
        ============================================================ */
-    const GITHUB_REPO = "enesgzdk/takip";
-
-    const FEEDBACK_LABEL_MAP = {
-      "Önkoşul / Ders Hatası": "bug,course-data",
-      "Hesaplama / GPA Hatası": "bug,calculation",
-      "Arayüz / Tasarım": "ui,bug",
-      "Yeni Özellik Önerisi": "enhancement",
-      "Diğer": "feedback"
-    };
+    const FEEDBACK_API_URL = "https://takip-phi.vercel.app/api/issue";
 
     function openFeedbackModal() {
       const modal = document.getElementById('feedbackModal');
@@ -2818,57 +2820,71 @@
       }
     });
 
-    function handleFeedbackSubmit(event) {
+    async function handleFeedbackSubmit(event) {
       event.preventDefault();
 
       const titleInput = document.getElementById('feedbackTitle');
       const categorySelect = document.getElementById('feedbackCategory');
       const descInput = document.getElementById('feedbackDesc');
-      const includeSystemCheckbox = document.getElementById('feedbackIncludeSystem');
+      const submitBtn = document.getElementById('feedbackSubmitBtn');
 
       const title = (titleInput ? titleInput.value : "").trim();
       const category = (categorySelect ? categorySelect.value : "Diğer");
       const description = (descInput ? descInput.value : "").trim();
-      const includeSystem = includeSystemCheckbox ? includeSystemCheckbox.checked : true;
 
       if (!title || !description) {
-        alert("Lütfen konu başlığı ve açıklama alanlarını eksiksiz doldurun.");
+        alert("Lütfen başlık ve açıklama alanlarını eksiksiz doldurun.");
         return;
       }
 
-      // Markdown formatında issue gövdesi oluştur
-      let bodyMarkdown = `### 📌 Kategori\n${category}\n\n### 📝 Açıklama\n${description}\n`;
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : "<span>Gönder</span>";
 
-      if (includeSystem) {
-        const state = getDeptState(currentDept);
-        const deptData = departmentsData[currentDept];
-        const deptName = deptData?.name || currentDept;
-        const plannedCourses = state.instances || [];
-        const passedCount = plannedCourses.filter(i => i.passed).length;
-        const gpaDisplay = document.getElementById('gpa-display')?.innerText || "0.00";
-        const now = new Date().toLocaleString('tr-TR');
-
-        bodyMarkdown += `\n---\n### 💻 Sistem Bilgileri\n`;
-        bodyMarkdown += `- **Aktif Bölüm:** ${deptName} (\`${currentDept}\`)\n`;
-        bodyMarkdown += `- **Planlanan Ders Sayısı:** ${plannedCourses.length} (Geçilen: ${passedCount})\n`;
-        bodyMarkdown += `- **Hesaplanan GPA:** ${gpaDisplay}\n`;
-        bodyMarkdown += `- **Tarayıcı / Ortam:** \`${navigator.userAgent}\`\n`;
-        bodyMarkdown += `- **Tarih:** ${now}\n`;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+          <span class="issue-spinner"></span>
+          <span>Gönderiliyor...</span>
+        `;
       }
 
-      const issueTitle = `[${category}] ${title}`;
-      const labels = FEEDBACK_LABEL_MAP[category] || "feedback";
+      try {
+        const response = await fetch(FEEDBACK_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title: title,
+            category: category,
+            description: description
+          })
+        });
 
-      const issueUrl = `https://github.com/${GITHUB_REPO}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(bodyMarkdown)}&labels=${encodeURIComponent(labels)}`;
+        if (!response.ok) {
+          let errorMsg = `Sunucu hatası (${response.status})`;
+          try {
+            const data = await response.json();
+            if (data && (data.error || data.message)) {
+              errorMsg = data.error || data.message;
+            }
+          } catch (_) {}
+          throw new Error(errorMsg);
+        }
 
-      window.open(issueUrl, '_blank', 'noopener,noreferrer');
-
-      // Formu sıfırla ve modalı kapat
-      if (titleInput) titleInput.value = '';
-      if (descInput) descInput.value = '';
-      closeFeedbackModal();
-
-      showToast("✓ GitHub Issue sayfası yeni sekmede açıldı!");
+        // Başarılı
+        if (titleInput) titleInput.value = '';
+        if (descInput) descInput.value = '';
+        closeFeedbackModal();
+        showToast("✓ Bildiriminiz başarıyla iletildi, teşekkürler!");
+      } catch (err) {
+        console.error("Geri bildirim hatası:", err);
+        alert(`Bildirim gönderilirken bir hata oluştu: ${err.message || "Lütfen tekrar deneyin."}`);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
+      }
     }
 
     /* Mobilde Akıllı Scroll & Kart Gizleme / Gösterme Sistemi */
