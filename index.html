@@ -108,6 +108,19 @@
       cursor: pointer;
       background-color: #fff;
       font-weight: 600;
+      color: #0f172a;
+    }
+
+    select.dept-select optgroup {
+      font-weight: 800;
+      color: var(--accent-color);
+      background: #f8fafc;
+    }
+
+    select.dept-select option {
+      font-weight: 600;
+      color: #1e293b;
+      background: #ffffff;
     }
 
     .reset-btn {
@@ -188,7 +201,7 @@
       border-bottom: 1px solid #f1f5f9;
       background: #fff;
       z-index: 5;
-      touch-action: pan-y; /* Üzerinde dokunarak kaydırmaya izin ver */
+      touch-action: pan-y;
     }
 
     .dashboard-card-wrapper {
@@ -870,15 +883,34 @@
       }
     }
 
+    /* Fakültelere Göre optgroup Üreten Gelişmiş Seçim Menüsü */
     function populateDepartmentSelect() {
       const select = document.getElementById('deptSelect');
       select.innerHTML = '';
+
+      const faculties = {};
       Object.keys(departmentsData).forEach(deptKey => {
-        const opt = document.createElement('option');
-        opt.value = deptKey;
-        opt.textContent = departmentsData[deptKey].name;
-        if (deptKey === currentDept) opt.selected = true;
-        select.appendChild(opt);
+        const dept = departmentsData[deptKey];
+        const facultyName = dept.faculty || "Diğer Lisans Programları";
+        if (!faculties[facultyName]) {
+          faculties[facultyName] = [];
+        }
+        faculties[facultyName].push({ key: deptKey, name: dept.name });
+      });
+
+      Object.keys(faculties).forEach(facultyName => {
+        const group = document.createElement('optgroup');
+        group.label = facultyName;
+
+        faculties[facultyName].forEach(dept => {
+          const opt = document.createElement('option');
+          opt.value = dept.key;
+          opt.textContent = dept.name;
+          if (dept.key === currentDept) opt.selected = true;
+          group.appendChild(opt);
+        });
+
+        select.appendChild(group);
       });
     }
 
@@ -1594,7 +1626,6 @@
         dashCardWrapper.classList.remove('collapsed');
       }
 
-      // Animasyon esnasında container genişlediğinde scrollTop'ın fırlamasını engelle
       requestAnimationFrame(() => {
         const heightDiff = previousHeight - dashCardWrapper.offsetHeight;
         if (shouldCollapse && heightDiff > 0 && poolScrollEl.scrollTop > heightDiff) {
@@ -1624,7 +1655,6 @@
       lastPoolScrollTop = currentScroll;
     }, { passive: true });
 
-    // Kartın üzerinden yapılan dokunmaları havuza yönlendirme
     let touchStartY = 0;
     sidebarFixedTop.addEventListener('touchstart', (e) => {
       if (!isMobileDevice()) return;
@@ -1639,7 +1669,6 @@
       const touchCurrentY = e.touches[0].clientY;
       const deltaY = touchStartY - touchCurrentY;
 
-      // Parmağı hareket ettirdikçe alttaki listeyi kaydır
       poolScrollEl.scrollTop += deltaY;
       touchStartY = touchCurrentY;
 
