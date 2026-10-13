@@ -61,7 +61,8 @@
       border-bottom: 1px solid var(--border-color);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       z-index: 50;
-      gap: 16px;
+      gap: 8px;
+      flex-wrap:nowrap;
     }
 
     .top-bar h1 {
@@ -74,12 +75,14 @@
       align-items: center;
       gap: 8px;
       white-space: nowrap;
+      flex-shrink:0;
     }
 
     .top-bar-controls {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-shrink:0;
     }
 
     .dept-select-container {
@@ -90,6 +93,8 @@
       padding: 5px 12px;
       border-radius: 9999px;
       border: 1px solid var(--border-color);
+      max-width: 220px;
+      min-width: 0;
     }
 
     .dept-select-container label {
@@ -109,6 +114,10 @@
       background-color: #fff;
       font-weight: 600;
       color: #0f172a;
+      max-width: 150px;
+      text-overflow: ellipsis;
+      white-space:nowrap;
+      overflow:hidden;
     }
 
     select.dept-select optgroup {
@@ -185,20 +194,21 @@
     .top-bar-btn-group {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
+      flex-wrap:nowrap;
     }
 
     .topbar-btn {
-      padding: 6px 12px;
+      padding: 5px 8px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       transition: all 0.15s ease;
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       border: 1px solid var(--border-color);
       background: #ffffff;
       color: #334155;
@@ -245,14 +255,14 @@
     }
 
     .reset-btn {
-      padding: 6px 12px;
+      padding: 4px 8px;
       background-color: #ef4444;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       transition: background-color 0.15s;
       white-space: nowrap;
     }
