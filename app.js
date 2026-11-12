@@ -437,15 +437,15 @@ function getBounCourseUrl(courseCode, term = DEFAULT_TERM) {
 
   const prefix = match[1];
   const number = match[2];
-  const cleanCode = prefix + number;
+  const compactCode = `${prefix}${number}`;
+  const encodedTerm = encodeURIComponent(term);
   const bolum = BOUN_BOLUM_MAP[prefix];
 
   if (bolum) {
-    const focus = `${cleanCode}.01`;
-    return `https://registration.bogazici.edu.tr/login/?term=${encodeURIComponent(term)}&kisaadi=${encodeURIComponent(prefix)}&bolum=${bolum}&focus=${encodeURIComponent(focus)}`;
+    return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodedTerm}&q=${compactCode.toLowerCase()}&term=${encodedTerm}&kisaadi=${prefix}&bolum=${bolum}&focus=${compactCode}.01`;
   }
 
-  return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodeURIComponent(term)}&q=${cleanCode.toLowerCase()}`;
+  return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodedTerm}&q=${compactCode.toLowerCase()}`;
 }
 
 const yearStructure = [
@@ -1004,7 +1004,9 @@ function updateSidebarPool() {
     pool.appendChild(groupContainer);
   });
 
-  positionDashboardCard();
+  if (dashCardWrapper) {
+    pool.prepend(dashCardWrapper);
+  }
   calculateAverages();
 }
 
@@ -2013,26 +2015,9 @@ async function handleFeedbackSubmit(event) {
   }
 }
 
-/* Mobil & Masaüstü GPA Kartı Konumlandırma */
-const poolScrollEl = document.getElementById('course-pool');
 const dashCardWrapper = document.getElementById('dashCardWrapper');
-const sidebarFixedTop = document.getElementById('sidebarFixedTop');
-
-function positionDashboardCard() {
-  if (!dashCardWrapper || !poolScrollEl || !sidebarFixedTop) return;
-  if (isMobileDevice()) {
-    if (poolScrollEl.firstElementChild !== dashCardWrapper) {
-      poolScrollEl.prepend(dashCardWrapper);
-    }
-  } else {
-    if (sidebarFixedTop.firstElementChild !== dashCardWrapper) {
-      sidebarFixedTop.prepend(dashCardWrapper);
-    }
-  }
-}
 
 window.addEventListener('resize', () => {
-  positionDashboardCard();
   initUI();
 });
 

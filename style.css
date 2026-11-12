@@ -83,8 +83,10 @@ html, body {
   padding: 5px 12px;
   border-radius: 9999px;
   border: 1px solid var(--border-color);
-  max-width: 220px;
+  max-width: 245px;
   min-width: 0;
+  overflow: hidden;
+  flex-shrink: 1;
 }
 
 .dept-select-container label {
@@ -92,6 +94,7 @@ html, body {
   color: var(--accent-color);
   font-size: 0.85rem;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 select.dept-select {
@@ -104,7 +107,9 @@ select.dept-select {
   background-color: #fff;
   font-weight: 600;
   color: #0f172a;
-  max-width: 150px;
+  width: 100%;
+  max-width: 145px;
+  min-width: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -341,7 +346,7 @@ select.dept-select option {
 
 .sidebar-fixed-top {
   flex: 0 0 auto;
-  padding: 12px 14px 6px 14px;
+  padding: 10px 14px;
   border-bottom: 1px solid #f1f5f9;
   background: #fff;
   z-index: 5;
@@ -349,7 +354,7 @@ select.dept-select option {
 
 .dashboard-card-wrapper {
   flex-shrink: 0;
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 
 .dashboard-card {
