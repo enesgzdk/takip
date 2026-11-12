@@ -31,6 +31,9 @@ const translations = {
     importBtnTitle: "Daha önce indirdiğiniz JSON planını yükleyin",
     feedbackBtn: "💬 Hata / Öneri",
     feedbackBtnTitle: "Hata Bildir veya Öneri Paylaş",
+    supportBtn: "☕ Destek Ol",
+    supportBtnTitle: "Projeye Destek Ol",
+    toastSupportSoon: "☕ Destek bağlantısı yakında eklenecek!",
     resetBtn: "Sıfırla",
     resetBtnTitle: "Bölüm planını sıfırla",
     tabPool: "📋 Ders Havuzu",
@@ -158,6 +161,9 @@ const translations = {
     importBtnTitle: "Load a previously exported JSON plan",
     feedbackBtn: "💬 Feedback",
     feedbackBtnTitle: "Report an Issue or Share Feedback",
+    supportBtn: "☕ Support",
+    supportBtnTitle: "Support the Project",
+    toastSupportSoon: "☕ Support link coming soon!",
     resetBtn: "Reset",
     resetBtnTitle: "Reset department plan",
     tabPool: "📋 Course Pool",
@@ -316,6 +322,8 @@ function applyStaticTranslations() {
   setAttr('importBtn', 'title', t('importBtnTitle'));
   setText('feedbackBtn', t('feedbackBtn'));
   setAttr('feedbackBtn', 'title', t('feedbackBtnTitle'));
+  setText('supportBtn', t('supportBtn'));
+  setAttr('supportBtn', 'title', t('supportBtnTitle'));
   setText('resetBtn', t('resetBtn'));
   setAttr('resetBtn', 'title', t('resetBtnTitle'));
 
@@ -2243,10 +2251,22 @@ document.addEventListener('click', (e) => {
   closeToolsDropdown();
 });
 
+function handleSupportClick(event) {
+  const el = event ? event.currentTarget : document.getElementById('supportBtn');
+  const href = el ? (el.getAttribute('href') || '').trim() : '';
+  if (!href || href === '#') {
+    if (event) event.preventDefault();
+    showToast(t('toastSupportSoon'));
+    return;
+  }
+  if (event) event.preventDefault();
+  window.open(href, '_blank', 'noopener,noreferrer');
+}
+
 const toolsDropdownEl = document.getElementById('toolsDropdown');
 if (toolsDropdownEl) {
   toolsDropdownEl.addEventListener('click', (e) => {
-    if (e.target.closest('button')) {
+    if (e.target.closest('button, a')) {
       closeToolsDropdown();
     }
   });
