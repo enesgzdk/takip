@@ -56,6 +56,9 @@ const translations = {
     openCoursePage: "🔗 Ders Sayfasını Aç",
     coursePageTooltip: "için Boğaziçi BUIS ders arama sayfası (yeni sekmede açılır)",
     addToTermPlaceholder: "➕ Döneme Ekle...",
+    addToTermBtn: "➕ Döneme Ekle",
+    selectTermPrompt: "Eklemek istediğiniz dönemi seçin",
+    mobileMenuTitle: "Araçlar",
     electiveInputPlaceholder: "Seçilen Ders Adı/Kodu...",
     gradeTooltip: "Harf Notu",
     removeMinorCourseTitle: "Bu yandal dersini kaldır",
@@ -180,6 +183,9 @@ const translations = {
     openCoursePage: "🔗 Open Course Page",
     coursePageTooltip: "Boğaziçi BUIS course search page (opens in new tab)",
     addToTermPlaceholder: "➕ Add to Term...",
+    addToTermBtn: "➕ Add to Term",
+    selectTermPrompt: "Select a term to add",
+    mobileMenuTitle: "Tools",
     electiveInputPlaceholder: "Selected Course Name/Code...",
     gradeTooltip: "Letter Grade",
     removeMinorCourseTitle: "Remove this minor course",
@@ -313,12 +319,15 @@ function applyStaticTranslations() {
   setText('resetBtn', t('resetBtn'));
   setAttr('resetBtn', 'title', t('resetBtnTitle'));
 
+  const langHtml = currentLang === 'tr'
+    ? '<span class="lang-active">TR</span> <span class="lang-muted">| EN</span>'
+    : '<span class="lang-muted">TR |</span> <span class="lang-active">EN</span>';
   const langLabel = document.getElementById('langToggleLabel');
-  if (langLabel) {
-    langLabel.innerHTML = currentLang === 'tr'
-      ? '<span class="lang-active">TR</span> <span class="lang-muted">| EN</span>'
-      : '<span class="lang-muted">TR |</span> <span class="lang-active">EN</span>';
-  }
+  if (langLabel) langLabel.innerHTML = langHtml;
+  const mobileLangLabel = document.getElementById('mobileLangToggleLabel');
+  if (mobileLangLabel) mobileLangLabel.innerHTML = langHtml;
+  setAttr('mobileMenuBtn', 'title', t('mobileMenuTitle'));
+  setText('termPickerSubtitle', t('selectTermPrompt'));
 
   setText('tabBtnPool', t('tabPool'));
   setText('tabBtnSemesters', t('tabSemesters'));
@@ -425,7 +434,7 @@ const BOUN_BOLUM_MAP = {
   HUM: "HUMANITIES+COURSES+COORDINATORSHIP",
   HTR: "ATATURK+INSTITUTE+FOR+MODERN+TURKISH+HISTORY",
   TK: "TURKISH+COURSES+COORDINATOR",
-  AE: "SCHOOL+OF+FOREIGN+LANGUAGES",
+  AE: { bolum: "SCHOOL+OF+FOREIGN+LANGUAGES", kisaadi: "YADYOK" },
   ESC: "ENVIRONMENTAL+SCIENCES",
   ENGG: "ENGINEERING",
   OHS: "OCCUPATIONAL+HEALTH+AND+SAFETY",
@@ -510,10 +519,12 @@ function getBounCourseUrl(courseCode, term = FALL_TERM) {
   const compactCode = `${prefix}${number}`;
   const focusCourse = prefix.length <= 2 ? `${prefix}+${number}.01` : `${prefix}${number}.01`;
   const encodedTerm = encodeURIComponent(term);
-  const bolum = BOUN_BOLUM_MAP[prefix];
+  const entry = BOUN_BOLUM_MAP[prefix];
 
-  if (bolum) {
-    return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodedTerm}&q=${compactCode.toLowerCase()}&term=${encodedTerm}&kisaadi=${prefix}&bolum=${bolum}&focus=${focusCourse}`;
+  if (entry) {
+    const bolumName = typeof entry === "string" ? entry : entry.bolum;
+    const kisaAdi = (typeof entry === "object" && entry.kisaadi) ? entry.kisaadi : prefix;
+    return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodedTerm}&q=${compactCode.toLowerCase()}&term=${encodedTerm}&kisaadi=${kisaAdi}&bolum=${bolumName}&focus=${focusCourse}`;
   }
 
   return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodedTerm}&q=${compactCode.toLowerCase()}`;
@@ -1039,10 +1050,6 @@ function updateSidebarPool() {
   }
   pool.innerHTML = '';
 
-  const allSems = [];
-  yearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
-  const semOptions = allSems.map(s => `<option value="${s}">${escapeHTML(formatSemLabel(s))}</option>`).join('');
-
   const groups = {
     '1.1': [], '1.2': [],
     '2.1': [], '2.2': [],
@@ -1143,16 +1150,12 @@ function updateSidebarPool() {
         ` : ''}
         <div class="course-controls" style="margin-top: 4px;">
           ${statusBadge}
+          ${!isLocked ? `
+            <button type="button" class="mobile-term-pick-btn" onclick="openTermPickerModal('${escapeHTML(course.id)}'); event.stopPropagation();">
+              ${escapeHTML(t('addToTermBtn'))}
+            </button>
+          ` : ''}
         </div>
-        
-        ${!isLocked ? `
-          <div class="mobile-add-wrap">
-            <select class="mobile-add-select" onchange="handleMobileAddCourse('${escapeHTML(course.id)}', this.value, this)">
-              <option value="">${escapeHTML(t('addToTermPlaceholder'))}</option>
-              ${semOptions}
-            </select>
-          </div>
-        ` : ''}
       `;
 
       if (!isLocked && !isMobile) {
@@ -2214,7 +2217,157 @@ function toggleDashPin() {
   applyDashCardPosition();
 }
 
+// --- Mobil Açılır Araç Menüsü (#toolsDropdown) ---
+function toggleToolsDropdown(event) {
+  if (event) event.stopPropagation();
+  const dropdown = document.getElementById('toolsDropdown');
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  if (!dropdown) return;
+  const willOpen = !dropdown.classList.contains('open');
+  dropdown.classList.toggle('open', willOpen);
+  if (menuBtn) menuBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+}
+
+function closeToolsDropdown() {
+  const dropdown = document.getElementById('toolsDropdown');
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  if (dropdown) dropdown.classList.remove('open');
+  if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+}
+
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('toolsDropdown');
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  if (!dropdown || !dropdown.classList.contains('open')) return;
+  if (dropdown.contains(e.target) || (menuBtn && menuBtn.contains(e.target))) return;
+  closeToolsDropdown();
+});
+
+const toolsDropdownEl = document.getElementById('toolsDropdown');
+if (toolsDropdownEl) {
+  toolsDropdownEl.addEventListener('click', (e) => {
+    if (e.target.closest('button')) {
+      closeToolsDropdown();
+    }
+  });
+}
+
+// --- Mobil Dönem Seçim Modalı (Bottom Sheet) ---
+let selectedTermPickerCourseId = null;
+
+function openTermPickerModal(courseId) {
+  const modal = document.getElementById('termPickerModal');
+  const titleEl = document.getElementById('termPickerTitle');
+  const subtitleEl = document.getElementById('termPickerSubtitle');
+  const bodyEl = document.getElementById('termPickerBody');
+  const course = findCourseById(courseId);
+  if (!modal || !bodyEl || !course) return;
+
+  selectedTermPickerCourseId = courseId;
+  if (subtitleEl) subtitleEl.textContent = t('selectTermPrompt');
+  if (titleEl) titleEl.textContent = `${course.code} - ${course.name}`;
+
+  const yearLabelMap = t('yearLabels');
+  bodyEl.innerHTML = yearStructure.map(y => `
+    <div class="term-picker-year-group">
+      <div class="term-picker-year-label">${escapeHTML(yearLabelMap[y.yearLabel] || y.yearLabel)}</div>
+      <div class="term-picker-grid">
+        ${y.sems.map(semId => `
+          <button type="button" class="term-picker-btn" onclick="selectTermFromPicker('${escapeHTML(semId)}')">
+            ${escapeHTML(formatSemLabel(semId))}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTermPickerModal() {
+  const modal = document.getElementById('termPickerModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  selectedTermPickerCourseId = null;
+}
+
+function handleTermPickerBackdropClick(event) {
+  if (event.target && event.target.id === 'termPickerModal') {
+    closeTermPickerModal();
+  }
+}
+
+function selectTermFromPicker(semId) {
+  if (selectedTermPickerCourseId && semId) {
+    handleMobileAddCourse(selectedTermPickerCourseId, semId, null);
+  }
+  closeTermPickerModal();
+}
+
+// --- Mobil Swipe (Sağa / Sola Kaydırma) Sekme Geçişi ---
+(function initMobileSwipeTabs() {
+  const appMain = document.querySelector('.app-main');
+  if (!appMain) return;
+
+  let swipeStartX = 0;
+  let swipeStartY = 0;
+  let swipeValid = false;
+
+  const isHorizontallyScrollable = (target) => {
+    let el = target;
+    while (el && el !== appMain) {
+      const style = window.getComputedStyle(el);
+      const overflowX = style ? style.overflowX : '';
+      if ((overflowX === 'auto' || overflowX === 'scroll') && el.scrollWidth > el.clientWidth + 2) {
+        return true;
+      }
+      el = el.parentElement;
+    }
+    return false;
+  };
+
+  appMain.addEventListener('touchstart', (e) => {
+    if (window.innerWidth > 900 || e.touches.length !== 1) {
+      swipeValid = false;
+      return;
+    }
+    const target = e.target;
+    if (target.closest('select, input, textarea') || isHorizontallyScrollable(target)) {
+      swipeValid = false;
+      return;
+    }
+    swipeStartX = e.touches[0].clientX;
+    swipeStartY = e.touches[0].clientY;
+    swipeValid = true;
+  }, { passive: true });
+
+  appMain.addEventListener('touchend', (e) => {
+    if (!swipeValid || window.innerWidth > 900 || !e.changedTouches || e.changedTouches.length === 0) {
+      swipeValid = false;
+      return;
+    }
+    swipeValid = false;
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - swipeStartX;
+    const deltaY = touch.clientY - swipeStartY;
+
+    if (Math.abs(deltaX) > 65 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+      if (deltaX < 0) {
+        switchMobileTab('semesters');
+      } else {
+        switchMobileTab('pool');
+      }
+    }
+  }, { passive: true });
+})();
+
 window.addEventListener('resize', () => {
+  if (window.innerWidth > 900) {
+    closeToolsDropdown();
+  }
   initUI();
 });
 

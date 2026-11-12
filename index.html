@@ -11,10 +11,20 @@
 <body>
 
   <header class="top-bar">
-    <h1>
-      <span>🎓 Boğaziçi Tracker</span>
-      <span id="appSubtitle" style="font-weight: 400; font-size: 1.05rem; color: #64748b;">| Ders & GPA Takip</span>
-    </h1>
+    <div class="top-bar-brand-row">
+      <h1>
+        <span>🎓 Boğaziçi Tracker</span>
+        <span id="appSubtitle" style="font-weight: 400; font-size: 1.05rem; color: #64748b;">| Ders & GPA Takip</span>
+      </h1>
+      <div class="mobile-header-actions">
+        <button type="button" id="mobileLangBtn" class="topbar-btn lang-btn" onclick="toggleLanguage()" title="Dil Değiştir / Switch Language">
+          🌐 <span id="mobileLangToggleLabel">TR | EN</span>
+        </button>
+        <button type="button" id="mobileMenuBtn" class="topbar-btn mobile-menu-btn" onclick="toggleToolsDropdown(event)" aria-expanded="false" aria-controls="toolsDropdown" title="Araçlar / Tools">
+          ⚙️
+        </button>
+      </div>
+    </div>
     
     <div class="top-bar-controls">
       <div class="dept-select-container">
@@ -27,7 +37,7 @@
           🎓 Yandal Ekle
         </button>
       </div>
-      <div class="top-bar-btn-group">
+      <div id="toolsDropdown" class="top-bar-btn-group">
         <button id="exportBtn" class="topbar-btn export-btn" onclick="exportDataAsJSON()" title="Mevcut ders planınızı ve notlarınızı JSON dosyası olarak indirin">
           📥 JSON İndir
         </button>
@@ -177,6 +187,20 @@
           <span>Yandalı Uygula</span>
         </button>
       </div>
+    </div>
+  </div>
+
+  <div id="termPickerModal" class="bottom-sheet-backdrop" onclick="handleTermPickerBackdropClick(event)">
+    <div class="bottom-sheet-dialog" role="dialog" aria-modal="true" aria-labelledby="termPickerTitle">
+      <div class="bottom-sheet-handle"></div>
+      <div class="bottom-sheet-header">
+        <div class="bottom-sheet-title-wrap">
+          <div id="termPickerSubtitle" class="bottom-sheet-subtitle">Eklemek istediğiniz dönemi seçin</div>
+          <h3 id="termPickerTitle" class="bottom-sheet-title"></h3>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeTermPickerModal()" aria-label="Kapat">✕</button>
+      </div>
+      <div id="termPickerBody" class="bottom-sheet-body"></div>
     </div>
   </div>
 
