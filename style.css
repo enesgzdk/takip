@@ -65,7 +65,7 @@ html, body {
 }
 
 .mobile-header-actions {
-  display: none;
+  display: none !important;
 }
 
 .mobile-menu-btn {
@@ -866,7 +866,7 @@ select.dept-select option {
 .delete-btn:hover { color: #ef4444; }
 
 .mobile-term-pick-btn {
-  display: none;
+  display: none !important;
   align-items: center;
   gap: 4px;
   padding: 4px 8px;
@@ -888,22 +888,27 @@ select.dept-select option {
 }
 
 /* Bottom Sheet Term Picker Modal */
+#termPickerModal,
 .bottom-sheet-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.48);
   backdrop-filter: blur(2px);
   z-index: 10000;
-  display: flex;
+  display: none;
   align-items: flex-end;
   justify-content: center;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transition: opacity 0.22s ease;
 }
 
+#termPickerModal.open,
 .bottom-sheet-backdrop.open {
+  display: flex;
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
@@ -1320,7 +1325,7 @@ textarea.form-control {
     width: 100%;
   }
   .mobile-header-actions {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 6px;
     flex-shrink: 0;
@@ -1424,7 +1429,7 @@ textarea.form-control {
     min-height: 100px;
   }
   .mobile-term-pick-btn {
-    display: inline-flex;
+    display: inline-flex !important;
   }
   .sidebar-scroll-pool, .main-content {
     padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
