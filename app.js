@@ -7,6 +7,365 @@ const GRADE_POINTS = {
   'CC': 2.0, 'DC': 1.5, 'DD': 1.0, 'F': 0.0, 'P': null
 };
 
+const savedLang = localStorage.getItem('boun_lang');
+let currentLang = (savedLang === 'tr' || savedLang === 'en')
+  ? savedLang
+  : ((navigator.language || '').toLowerCase().startsWith('tr') ? 'tr' : 'en');
+
+const translations = {
+  tr: {
+    appSubtitle: "| Ders & GPA Takip",
+    deptLabel: "Bölüm:",
+    addMinor: "🎓 Yandal Ekle",
+    minorBtnTitle: "Yandal Programı Seç / Düzenle",
+    minorLabelPrefix: "Yandal",
+    minorRemoveTooltip: "Yandalı Kaldır",
+    minorHasTitleSuffix: "(Kaldırmak için ✕ butonuna tıklayın)",
+    exportBtn: "📥 JSON İndir",
+    exportBtnTitle: "Mevcut ders planınızı ve notlarınızı JSON dosyası olarak indirin",
+    importBtn: "📤 JSON Yükle",
+    importBtnTitle: "Daha önce indirdiğiniz JSON planını yükleyin",
+    feedbackBtn: "💬 Hata / Öneri",
+    feedbackBtnTitle: "Hata Bildir veya Öneri Paylaş",
+    resetBtn: "Sıfırla",
+    resetBtnTitle: "Bölüm planını sıfırla",
+    tabPool: "📋 Ders Havuzu",
+    tabSemesters: "📅 Dönemler & Plan",
+    remainingTotal: "Kalan / Toplam",
+    selectedCourses: "Seçilen Ders",
+    selectedCredits: "Seçilen Kredi",
+    completed: "Tamamlanan",
+    targetCredits: "Hedef Kredi",
+    courseUnit: "Ders",
+    coursePool: "Ders Havuzu",
+    termBlocks: "Dönem Blokları",
+    termPrefix: "Dönem",
+    summerLabel: "Yaz",
+    notTaken: "• Alınmadı",
+    passedStatus: "🔒 Verildi",
+    failedStatus: "✕ Verilmedi",
+    plannedStatus: "• Döneme Eklendi",
+    passedCheck: "Verdim",
+    completedBadge: "✓ Geçildi",
+    repeatBadge: "🔁 Tekrar",
+    minorBadge: "🎓 Yandal",
+    openCoursePage: "🔗 Ders Sayfasını Aç",
+    coursePageTooltip: "için Boğaziçi BUIS ders arama sayfası (yeni sekmede açılır)",
+    addToTermPlaceholder: "➕ Döneme Ekle...",
+    electiveInputPlaceholder: "Seçilen Ders Adı/Kodu...",
+    gradeTooltip: "Harf Notu",
+    removeMinorCourseTitle: "Bu yandal dersini kaldır",
+    removeFromTermTitle: "Bu dönemden kaldır",
+    otherFaculties: "Diğer Fakülteler",
+    otherPrograms: "Diğer Lisans Programları",
+    remainingTooltip: (rem, tot) => `Kalan: ${rem} Ders, Toplam: ${tot} Ders`,
+    toastAddedToTerm: (code, semLabel) => `✓ ${code} → ${semLabel} eklendi`,
+    toastExportSuccess: "✓ Plan başarıyla JSON olarak indirildi!",
+    toastImportSuccess: "✓ Plan başarıyla yüklendi!",
+    toastMinorApplied: (name, count) => `✓ ${name} seçildi (${count} ders). Dersler sol paneldeki ilgili dönem bloklarına eklendi!`,
+    toastMinorRemoved: "Yandal programı kaldırıldı.",
+    toastFeedbackSuccess: "✓ Bildiriminiz başarıyla iletildi, teşekkürler!",
+    confirmReset: (deptName) => `Yalnızca "${deptName}" bölümü planlamanız sıfırlanacak. Emin misiniz?`,
+    confirmOverwriteImport: "Yüklemek istediğiniz plan mevcut planınızın üzerine yazılacak. Devam etmek istiyor musunuz?",
+    confirmRemoveMinor: "Mevcut yandal programını ve dönemlerdeki yandal derslerini kaldırmak istediğinize emin misiniz?",
+    alertExportError: "Dışa aktarma sırasında bir hata oluştu: ",
+    alertImportError: "Hata: JSON dosyası yüklenemedi!\n",
+    alertFileReadError: "Dosya okunamadı. Lütfen tekrar deneyin.",
+    alertFeedbackRequired: "Lütfen başlık ve açıklama alanlarını eksiksiz doldurun.",
+    alertFeedbackError: "Bildirim gönderilirken bir hata oluştu: ",
+    tryAgain: "Lütfen tekrar deneyin.",
+    serverError: "Sunucu hatası",
+    errInvalidJson: "Dosya geçerli bir JSON formatında değil.",
+    errEmptyData: "Geçersiz veya boş veri formatı.",
+    errNoPlanFound: "JSON dosyasında geçerli bir ders planı veya dönem kaydı bulunamadı.",
+    feedbackModalTitle: "💬 Hata / Öneri Bildir",
+    feedbackTitleLabel: "Başlık",
+    feedbackTitlePlaceholder: "Örn: CMPE 250 önkoşulu hatalı",
+    feedbackCategoryLabel: "Kategori",
+    feedbackCategories: {
+      "Hatalı Ders/Önkoşul": "Hatalı Ders/Önkoşul",
+      "Yeni Özellik Önerisi": "Yeni Özellik Önerisi",
+      "Arayüz/Hesaplama Hatası": "Arayüz/Hesaplama Hatası",
+      "Diğer": "Diğer"
+    },
+    feedbackDescLabel: "Açıklama",
+    feedbackDescPlaceholder: "Detaylı açıklama...",
+    cancel: "İptal",
+    submit: "Gönder",
+    submitting: "Gönderiliyor...",
+    minorModalTitle: "🎓 Yandal Programı Seçimi",
+    minorSelectLabel: "Yandal Programı Seçin",
+    minorNoSelectionOption: "(Yandal Yok / İptal Et)",
+    minorPreviewPlaceholder: "Lütfen incelemek istediğiniz bir yandal programı seçin.",
+    minorPreviewRemoved: "(Yandal seçilmedi veya mevcut yandal iptal edilecek.)",
+    minorTotalCourses: "Toplam Ders:",
+    minorCredits: "Kredi:",
+    minorAppGpa: "Başvuru GPA:",
+    minorPrereq: "Önkoşul:",
+    minorSampleDist: "Örnek Ders Dağılımı:",
+    minorElectiveLabel: "Seçmeli",
+    minorElectiveCourseSuffix: "Seçmeli Dersi",
+    minorElectiveTag: "(Yandal Seçmeli)",
+    minorPoolDefaultName: "Yandal Seçmeli Dersi",
+    minorCancelBtn: "Vazgeç",
+    minorApplyBtn: "Yandalı Uygula",
+    semGroupLabels: {
+      '1.1': '1. Dönem (1. Yıl Güz)',
+      '1.2': '2. Dönem (1. Yıl Bahar)',
+      '2.1': '3. Dönem (2. Yıl Güz)',
+      '2.2': '4. Dönem (2. Yıl Bahar)',
+      '3.1': '5. Dönem (3. Yıl Güz)',
+      '3.2': '6. Dönem (3. Yıl Bahar)',
+      '4.1': '7. Dönem (4. Yıl Güz)',
+      '4.2': '8. Dönem (4. Yıl Bahar)',
+      'other': 'Diğer / Genel Seçmeliler'
+    },
+    yearLabels: {
+      '0. Yıl (Hazırlık / Erken Dönem)': '0. Yıl (Hazırlık / Erken Dönem)',
+      '1. Yıl': '1. Yıl',
+      '2. Yıl': '2. Yıl',
+      '3. Yıl': '3. Yıl',
+      '4. Yıl (Normal Mezuniyet)': '4. Yıl (Normal Mezuniyet)',
+      '5. Yıl (1. Uzatma)': '5. Yıl (1. Uzatma)',
+      '6. Yıl (2. Uzatma)': '6. Yıl (2. Uzatma)',
+      '7. Yıl (Azami Yasal Süre)': '7. Yıl (Azami Yasal Süre)'
+    },
+    limitTag: "YÖK Sınır",
+    loadErrorTitle: "Müfredat Verisi Yüklenemedi!",
+    loadErrorDesc: "<code>curriculum.json</code> dosyasının <code>index.html</code> ile aynı klasörde olduğundan ve sayfayı yerel bir sunucu (Live Server vb.) üzerinden açtığınızdan emin olun.",
+    loadErrorDetail: "Hata detayı:"
+  },
+  en: {
+    appSubtitle: "| Course & GPA Tracker",
+    deptLabel: "Department:",
+    addMinor: "🎓 Add Minor",
+    minorBtnTitle: "Select / Edit Minor Program",
+    minorLabelPrefix: "Minor",
+    minorRemoveTooltip: "Remove Minor",
+    minorHasTitleSuffix: "(Click ✕ to remove)",
+    exportBtn: "📥 Export JSON",
+    exportBtnTitle: "Download your current course plan and grades as a JSON file",
+    importBtn: "📤 Import JSON",
+    importBtnTitle: "Load a previously exported JSON plan",
+    feedbackBtn: "💬 Feedback",
+    feedbackBtnTitle: "Report an Issue or Share Feedback",
+    resetBtn: "Reset",
+    resetBtnTitle: "Reset department plan",
+    tabPool: "📋 Course Pool",
+    tabSemesters: "📅 Semesters & Plan",
+    remainingTotal: "Remaining / Total",
+    selectedCourses: "Selected Courses",
+    selectedCredits: "Selected Credits",
+    completed: "Completed",
+    targetCredits: "Target Credits",
+    courseUnit: "Courses",
+    coursePool: "Course Pool",
+    termBlocks: "Term Blocks",
+    termPrefix: "Term",
+    summerLabel: "Summer",
+    notTaken: "• Not Taken",
+    passedStatus: "🔒 Passed",
+    failedStatus: "✕ Failed",
+    plannedStatus: "• Planned",
+    passedCheck: "Passed",
+    completedBadge: "✓ Completed",
+    repeatBadge: "🔁 Repeat",
+    minorBadge: "🎓 Minor",
+    openCoursePage: "🔗 Open Course Page",
+    coursePageTooltip: "Boğaziçi BUIS course search page (opens in new tab)",
+    addToTermPlaceholder: "➕ Add to Term...",
+    electiveInputPlaceholder: "Selected Course Name/Code...",
+    gradeTooltip: "Letter Grade",
+    removeMinorCourseTitle: "Remove this minor course",
+    removeFromTermTitle: "Remove from this term",
+    otherFaculties: "Other Faculties",
+    otherPrograms: "Other Undergraduate Programs",
+    remainingTooltip: (rem, tot) => `Remaining: ${rem} Courses, Total: ${tot} Courses`,
+    toastAddedToTerm: (code, semLabel) => `✓ ${code} → Added to ${semLabel}`,
+    toastExportSuccess: "✓ Plan successfully exported as JSON!",
+    toastImportSuccess: "✓ Plan successfully imported!",
+    toastMinorApplied: (name, count) => `✓ ${name} selected (${count} courses). Courses added to the corresponding term blocks on the left!`,
+    toastMinorRemoved: "Minor program removed.",
+    toastFeedbackSuccess: "✓ Your feedback has been submitted, thank you!",
+    confirmReset: (deptName) => `Only your "${deptName}" department plan will be reset. Are you sure?`,
+    confirmOverwriteImport: "The plan you are importing will overwrite your current plan. Do you want to continue?",
+    confirmRemoveMinor: "Are you sure you want to remove the current minor program and its courses from your terms?",
+    alertExportError: "An error occurred while exporting: ",
+    alertImportError: "Error: Could not import JSON file!\n",
+    alertFileReadError: "Could not read file. Please try again.",
+    alertFeedbackRequired: "Please fill in both title and description fields.",
+    alertFeedbackError: "An error occurred while submitting feedback: ",
+    tryAgain: "Please try again.",
+    serverError: "Server error",
+    errInvalidJson: "The file is not in valid JSON format.",
+    errEmptyData: "Invalid or empty data format.",
+    errNoPlanFound: "No valid course plan or term records found in the JSON file.",
+    feedbackModalTitle: "💬 Report Issue / Feedback",
+    feedbackTitleLabel: "Title",
+    feedbackTitlePlaceholder: "e.g., CMPE 250 prerequisite is incorrect",
+    feedbackCategoryLabel: "Category",
+    feedbackCategories: {
+      "Hatalı Ders/Önkoşul": "Course / Prerequisite Error",
+      "Yeni Özellik Önerisi": "Feature Request",
+      "Arayüz/Hesaplama Hatası": "UI / Calculation Bug",
+      "Diğer": "Other"
+    },
+    feedbackDescLabel: "Description",
+    feedbackDescPlaceholder: "Detailed description...",
+    cancel: "Cancel",
+    submit: "Submit",
+    submitting: "Submitting...",
+    minorModalTitle: "🎓 Minor Program Selection",
+    minorSelectLabel: "Select Minor Program",
+    minorNoSelectionOption: "(No Minor / Remove)",
+    minorPreviewPlaceholder: "Please select a minor program to preview.",
+    minorPreviewRemoved: "(No minor selected or current minor will be removed.)",
+    minorTotalCourses: "Total Courses:",
+    minorCredits: "Credits:",
+    minorAppGpa: "Min. Application GPA:",
+    minorPrereq: "Prerequisites:",
+    minorSampleDist: "Sample Course Distribution:",
+    minorElectiveLabel: "Elective",
+    minorElectiveCourseSuffix: "Elective Course",
+    minorElectiveTag: "(Minor Elective)",
+    minorPoolDefaultName: "Minor Elective Course",
+    minorCancelBtn: "Cancel",
+    minorApplyBtn: "Apply Minor",
+    semGroupLabels: {
+      '1.1': 'Term 1 (Year 1 Fall)',
+      '1.2': 'Term 2 (Year 1 Spring)',
+      '2.1': 'Term 3 (Year 2 Fall)',
+      '2.2': 'Term 4 (Year 2 Spring)',
+      '3.1': 'Term 5 (Year 3 Fall)',
+      '3.2': 'Term 6 (Year 3 Spring)',
+      '4.1': 'Term 7 (Year 4 Fall)',
+      '4.2': 'Term 8 (Year 4 Spring)',
+      'other': 'Other / General Electives'
+    },
+    yearLabels: {
+      '0. Yıl (Hazırlık / Erken Dönem)': 'Year 0 (Prep / Early Term)',
+      '1. Yıl': 'Year 1',
+      '2. Yıl': 'Year 2',
+      '3. Yıl': 'Year 3',
+      '4. Yıl (Normal Mezuniyet)': 'Year 4 (Regular Graduation)',
+      '5. Yıl (1. Uzatma)': 'Year 5 (Extension 1)',
+      '6. Yıl (2. Uzatma)': 'Year 6 (Extension 2)',
+      '7. Yıl (Azami Yasal Süre)': 'Year 7 (Max Legal Duration)'
+    },
+    limitTag: "Max Limit",
+    loadErrorTitle: "Failed to Load Curriculum Data!",
+    loadErrorDesc: "Make sure <code>curriculum.json</code> is in the same folder as <code>index.html</code> and that you are serving the page over a local HTTP server (e.g., Live Server).",
+    loadErrorDetail: "Error details:"
+  }
+};
+
+function t(key) {
+  return translations[currentLang][key] ?? translations.tr[key] ?? key;
+}
+
+function formatSemLabel(semId) {
+  const displaySem = currentLang === 'en'
+    ? String(semId).replace('(Yaz)', `(${t('summerLabel')})`)
+    : String(semId);
+  return `${t('termPrefix')} ${displaySem}`;
+}
+
+function translatePrereq(prereqStr) {
+  if (!prereqStr || currentLang === 'tr') return prereqStr;
+  return String(prereqStr)
+    .replace(/Önkoşul:/g, 'Prerequisite:')
+    .replace(/Eş koşul:/g, 'Corequisite:')
+    .replace(/Hoca Onayı/g, 'Instructor Consent')
+    .replace(/Son Sınıf Şartı/g, 'Senior Standing')
+    .replace(/İngilizce Yeterlilik \(BUEPT\)/g, 'English Proficiency (BUEPT)')
+    .replace(/ veya /g, ' or ')
+    .replace(/ ve /g, ' and ');
+}
+
+function applyStaticTranslations() {
+  document.documentElement.lang = currentLang;
+
+  const setText = (id, text) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = text;
+  };
+  const setAttr = (id, attr, val) => {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute(attr, val);
+  };
+
+  setText('appSubtitle', t('appSubtitle'));
+  setText('deptLabel', t('deptLabel'));
+  setText('exportBtn', t('exportBtn'));
+  setAttr('exportBtn', 'title', t('exportBtnTitle'));
+  setText('importBtn', t('importBtn'));
+  setAttr('importBtn', 'title', t('importBtnTitle'));
+  setText('feedbackBtn', t('feedbackBtn'));
+  setAttr('feedbackBtn', 'title', t('feedbackBtnTitle'));
+  setText('resetBtn', t('resetBtn'));
+  setAttr('resetBtn', 'title', t('resetBtnTitle'));
+
+  const langLabel = document.getElementById('langToggleLabel');
+  if (langLabel) {
+    langLabel.innerHTML = currentLang === 'tr'
+      ? '<span class="lang-active">TR</span> <span class="lang-muted">| EN</span>'
+      : '<span class="lang-muted">TR |</span> <span class="lang-active">EN</span>';
+  }
+
+  setText('tabBtnPool', t('tabPool'));
+  setText('tabBtnSemesters', t('tabSemesters'));
+  setText('labelRemainingTotal', t('remainingTotal'));
+  setText('labelSelectedCourses', t('selectedCourses'));
+  setText('labelSelectedCredits', t('selectedCredits'));
+  setText('labelCompleted', t('completed'));
+  setText('labelTargetCredits', t('targetCredits'));
+  setText('sidebarPoolSubtitle', t('termBlocks'));
+
+  // Feedback modal
+  setText('feedbackModalTitle', t('feedbackModalTitle'));
+  setText('feedbackTitleLabel', t('feedbackTitleLabel'));
+  setAttr('feedbackTitle', 'placeholder', t('feedbackTitlePlaceholder'));
+  setText('feedbackCategoryLabel', t('feedbackCategoryLabel'));
+  setText('feedbackDescLabel', t('feedbackDescLabel'));
+  setAttr('feedbackDesc', 'placeholder', t('feedbackDescPlaceholder'));
+  setText('feedbackCancelBtn', t('cancel'));
+  const fbSubmitBtn = document.getElementById('feedbackSubmitBtn');
+  if (fbSubmitBtn && !fbSubmitBtn.disabled) {
+    fbSubmitBtn.innerHTML = `<span>${escapeHTML(t('submit'))}</span>`;
+  }
+  const catSelect = document.getElementById('feedbackCategory');
+  if (catSelect) {
+    const catMap = t('feedbackCategories');
+    Array.from(catSelect.options).forEach(opt => {
+      if (catMap[opt.value]) opt.textContent = catMap[opt.value];
+    });
+  }
+
+  // Minor modal
+  setText('minorModalTitle', t('minorModalTitle'));
+  setText('minorSelectLabel', t('minorSelectLabel'));
+  setText('minorCancelBtn', t('minorCancelBtn'));
+  const minorApplyBtn = document.getElementById('minorApplyBtn');
+  if (minorApplyBtn) {
+    minorApplyBtn.innerHTML = `<span>${escapeHTML(t('minorApplyBtn'))}</span>`;
+  }
+}
+
+function toggleLanguage() {
+  currentLang = currentLang === 'tr' ? 'en' : 'tr';
+  localStorage.setItem('boun_lang', currentLang);
+  applyStaticTranslations();
+  populateDepartmentSelect();
+  populateMinorModalOptions();
+  const minorSelect = document.getElementById('minorSelect');
+  if (minorSelect) {
+    const state = getDeptState(currentDept);
+    minorSelect.value = state.selectedMinorId || '';
+    handleMinorSelectChange(minorSelect.value);
+  }
+  initUI();
+}
+
 function escapeHTML(str) {
   if (str === null || str === undefined) return '';
   return String(str)
@@ -16,6 +375,48 @@ function escapeHTML(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
+
+const BOUN_BOLUM_MAP = {
+  PHYS: "PHYSICS",
+  CHEM: "CHEMISTRY",
+  MATH: "MATHEMATICS",
+  BIO: "MOLECULAR+BIOLOGY+AND+GENETICS",
+  CET: "COMPUTER+EDUCATION+AND+EDUCATIONAL+TECHNOLOGY",
+  ED: "EDUCATIONAL+SCIENCES",
+  PRED: "PRIMARY+EDUCATION",
+  SCED: "MATHEMATICS+AND+SCIENCE+EDUCATION",
+  FLED: "FOREIGN+LANGUAGE+EDUCATION",
+  LAW: "LAW",
+  EC: "ECONOMICS",
+  AD: "MANAGEMENT",
+  POLS: "POLITICAL+SCIENCE+AND+INTERNATIONAL+RELATIONS",
+  TRM: "TOURISM+ADMINISTRATION",
+  INTT: "INTERNATIONAL+TRADE",
+  MIS: "MANAGEMENT+INFORMATION+SYSTEMS",
+  CMPE: "COMPUTER+ENGINEERING",
+  EE: "ELECTRICAL+AND+ELECTRONICS+ENGINEERING",
+  IE: "INDUSTRIAL+ENGINEERING",
+  CE: "CIVIL+ENGINEERING",
+  CHE: "CHEMICAL+ENGINEERING",
+  ME: "MECHANICAL+ENGINEERING",
+  SOC: "SOCIOLOGY",
+  PSY: "PSYCHOLOGY",
+  HIST: "HISTORY",
+  TKL: "TURKISH+LANGUAGE+AND+LITERATURE",
+  TR: "TRANSLATION+AND+INTERPRETING+STUDIES",
+  INT: "TRANSLATION+AND+INTERPRETING+STUDIES",
+  LING: "LINGUISTICS",
+  PHIL: "PHILOSOPHY",
+  EL: "WESTERN+LANGUAGES+AND+LITERATURES",
+  AL: "WESTERN+LANGUAGES+AND+LITERATURES",
+  CL: "WESTERN+LANGUAGES+AND+LITERATURES",
+  DRA: "WESTERN+LANGUAGES+AND+LITERATURES",
+  ENGL: "WESTERN+LANGUAGES+AND+LITERATURES",
+  HUM: "HUMANITIES+COURSES+COORDINATORSHIP",
+  HTR: "ATATURK+INSTITUTE+FOR+MODERN+TURKISH+HISTORY",
+  TK: "TURKISH+COURSES+COORDINATORSHIP",
+  AE: "SCHOOL+OF+FOREIGN+LANGUAGES"
+};
 
 function getBounCourseUrl(courseCode, term = DEFAULT_TERM) {
   if (!courseCode || typeof courseCode !== 'string') return null;
@@ -34,7 +435,16 @@ function getBounCourseUrl(courseCode, term = DEFAULT_TERM) {
   const match = sanitized.match(/^([A-Z]{2,4})\s*(\d{3}[A-Z0-9\.]*)$/);
   if (!match) return null;
 
-  const cleanCode = match[1] + match[2];
+  const prefix = match[1];
+  const number = match[2];
+  const cleanCode = prefix + number;
+  const bolum = BOUN_BOLUM_MAP[prefix];
+
+  if (bolum) {
+    const focus = `${cleanCode}.01`;
+    return `https://registration.bogazici.edu.tr/login/?term=${encodeURIComponent(term)}&kisaadi=${encodeURIComponent(prefix)}&bolum=${bolum}&focus=${encodeURIComponent(focus)}`;
+  }
+
   return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodeURIComponent(term)}&q=${cleanCode.toLowerCase()}`;
 }
 
@@ -94,8 +504,10 @@ function refreshRepeatBadges() {
     if (shouldShowRepeat && !badge) {
       badge = document.createElement('span');
       badge.className = 'repeat-badge';
-      badge.textContent = '🔁 Tekrar';
+      badge.textContent = t('repeatBadge');
       titleGroup.appendChild(badge);
+    } else if (shouldShowRepeat && badge) {
+      badge.textContent = t('repeatBadge');
     } else if (!shouldShowRepeat && badge) {
       badge.remove();
     }
@@ -153,6 +565,7 @@ async function loadCurriculum() {
       localStorage.setItem(LEGACY_CLEANUP_KEY, 'true');
     }
 
+    applyStaticTranslations();
     populateDepartmentSelect();
     populateMinorModalOptions();
     initUI();
@@ -160,9 +573,9 @@ async function loadCurriculum() {
     console.error("Müfredat JSON dosyası yüklenemedi:", err);
     document.body.innerHTML = `
       <div style="padding: 24px; font-family: sans-serif; color: #b91c1c; text-align: center;">
-        <h2>Müfredat Verisi Yüklenemedi!</h2>
-        <p><code>curriculum.json</code> dosyasının <code>index.html</code> ile aynı klasörde olduğundan ve sayfayı yerel bir sunucu (Live Server vb.) üzerinden açtığınızdan emin olun.</p>
-        <p style="color: #64748b; font-size: 0.85rem;">Hata detayı: ${escapeHTML(err.message)}</p>
+        <h2>${t('loadErrorTitle')}</h2>
+        <p>${t('loadErrorDesc')}</p>
+        <p style="color: #64748b; font-size: 0.85rem;">${escapeHTML(t('loadErrorDetail'))} ${escapeHTML(err.message)}</p>
       </div>
     `;
   }
@@ -176,7 +589,7 @@ function populateDepartmentSelect() {
   const faculties = {};
   Object.keys(departmentsData).forEach(deptKey => {
     const dept = departmentsData[deptKey];
-    const facultyName = dept.faculty || "Diğer Lisans Programları";
+    const facultyName = dept.faculty || t('otherPrograms');
     if (!faculties[facultyName]) {
       faculties[facultyName] = [];
     }
@@ -202,12 +615,12 @@ function populateDepartmentSelect() {
 function populateMinorModalOptions() {
   const select = document.getElementById('minorSelect');
   if (!select) return;
-  select.innerHTML = '<option value="">(Yandal Yok / İptal Et)</option>';
+  select.innerHTML = `<option value="">${escapeHTML(t('minorNoSelectionOption'))}</option>`;
 
   const faculties = {};
   Object.keys(minorsData).forEach(minorKey => {
     const m = minorsData[minorKey];
-    const fac = m.faculty || "Diğer Fakülteler";
+    const fac = m.faculty || t('otherFaculties');
     if (!faculties[fac]) faculties[fac] = [];
     faculties[fac].push({ key: minorKey, name: m.name });
   });
@@ -431,9 +844,9 @@ function calculateAverages() {
   const gpa = cumCredits > 0 ? (cumPoints / cumCredits).toFixed(2) : "0.00";
   document.getElementById('gpa-display').innerText = gpa;
 
-  document.getElementById('selected-courses-count').innerText = `${selectedCourseIds.size} Ders`;
+  document.getElementById('selected-courses-count').innerText = `${selectedCourseIds.size} ${t('courseUnit')}`;
   document.getElementById('selected-credits').innerText = `${selectedCreditsTotal} Cr`;
-  document.getElementById('completed-credits').innerText = `${completedCreditsTotal} Cr (${passedCourseIds.size} Ders)`;
+  document.getElementById('completed-credits').innerText = `${completedCreditsTotal} Cr (${passedCourseIds.size} ${t('courseUnit')})`;
 
   const totalRequiredCredits = allRequiredCourses.reduce((sum, c) => sum + (Number(c.crd) || 0), 0);
   document.getElementById('total-credits').innerText = `${totalRequiredCredits} Cr`;
@@ -443,7 +856,7 @@ function calculateAverages() {
   const remainingEl = document.getElementById('remaining-count');
   if (remainingEl) {
     remainingEl.innerHTML = `${remaining} <span style="font-size: 0.72rem; font-weight: 600; opacity: 0.85;">/ ${allRequiredCourses.length}</span>`;
-    remainingEl.title = `Kalan: ${remaining} Ders, Toplam: ${allRequiredCourses.length} Ders`;
+    remainingEl.title = t('remainingTooltip')(remaining, allRequiredCourses.length);
   }
 }
 
@@ -455,15 +868,18 @@ function updateSidebarPool() {
 
   const poolTitleEl = document.getElementById('sidebarPoolTitle');
   if (poolTitleEl) {
-    poolTitleEl.innerText = `Ders Havuzu (${allRequiredCourses.length} Ders)`;
+    poolTitleEl.innerText = `${t('coursePool')} (${allRequiredCourses.length} ${t('courseUnit')})`;
   }
 
   const pool = document.getElementById('course-pool');
+  if (dashCardWrapper && dashCardWrapper.parentNode === pool) {
+    dashCardWrapper.remove();
+  }
   pool.innerHTML = '';
 
   const allSems = [];
   yearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
-  const semOptions = allSems.map(s => `<option value="${s}">Dönem ${s}</option>`).join('');
+  const semOptions = allSems.map(s => `<option value="${s}">${escapeHTML(formatSemLabel(s))}</option>`).join('');
 
   const groups = {
     '1.1': [], '1.2': [],
@@ -489,18 +905,7 @@ function updateSidebarPool() {
     }
   });
 
-  const semesterLabels = {
-    '1.1': '1. Dönem (1. Yıl Güz)',
-    '1.2': '2. Dönem (1. Yıl Bahar)',
-    '2.1': '3. Dönem (2. Yıl Güz)',
-    '2.2': '4. Dönem (2. Yıl Bahar)',
-    '3.1': '5. Dönem (3. Yıl Güz)',
-    '3.2': '6. Dönem (3. Yıl Bahar)',
-    '4.1': '7. Dönem (4. Yıl Güz)',
-    '4.2': '8. Dönem (4. Yıl Bahar)',
-    'other': 'Diğer / Genel Seçmeliler'
-  };
-
+  const semesterLabels = t('semGroupLabels');
   const isMobile = isMobileDevice();
 
   Object.keys(groups).forEach(semKey => {
@@ -514,8 +919,8 @@ function updateSidebarPool() {
     const groupHeader = document.createElement('div');
     groupHeader.className = 'pool-sem-header';
     groupHeader.innerHTML = `
-      <span>${semesterLabels[semKey] || ('Dönem ' + semKey)}</span>
-      <span>${groupCourses.length} Ders</span>
+      <span>${escapeHTML(semesterLabels[semKey] || formatSemLabel(semKey))}</span>
+      <span>${groupCourses.length} ${escapeHTML(t('courseUnit'))}</span>
     `;
     groupContainer.appendChild(groupHeader);
 
@@ -532,30 +937,30 @@ function updateSidebarPool() {
       poolCard.draggable = !isLocked && !isMobile;
       poolCard.dataset.courseId = course.id;
 
-      let statusBadge = '<span class="status-badge pending">• Alınmadı</span>';
+      let statusBadge = `<span class="status-badge pending">${escapeHTML(t('notTaken'))}</span>`;
       if (hasPassed) {
         const sortedPassed = [...courseInstances]
           .filter(inst => inst.passed && inst.grade !== 'F')
           .sort((a, b) => compareSemesters(a.semId, b.semId));
         const passedInst = sortedPassed[sortedPassed.length - 1];
         const gradeText = passedInst ? `(${escapeHTML(passedInst.grade || 'AA')})` : '';
-        statusBadge = `<span class="status-badge locked">🔒 Verildi ${gradeText}</span>`;
+        statusBadge = `<span class="status-badge locked">${escapeHTML(t('passedStatus'))} ${gradeText}</span>`;
       } else if (hasFailedOnly) {
-        statusBadge = '<span class="status-badge failed">✕ Verilmedi</span>';
+        statusBadge = `<span class="status-badge failed">${escapeHTML(t('failedStatus'))}</span>`;
       } else if (isPlaced) {
-        statusBadge = '<span class="status-badge pending" style="color: #0284c7; font-weight: 600;">• Döneme Eklendi</span>';
+        statusBadge = `<span class="status-badge pending" style="color: #0284c7; font-weight: 600;">${escapeHTML(t('plannedStatus'))}</span>`;
       }
 
       const poolCourseUrl = getBounCourseUrl(course.code);
       const safeCode = escapeHTML(course.code);
       const safeName = escapeHTML(course.name);
-      const safePrereq = course.prereq ? escapeHTML(course.prereq) : '';
+      const safePrereq = course.prereq ? escapeHTML(translatePrereq(course.prereq)) : '';
 
       poolCard.innerHTML = `
         <div class="course-header">
           <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
             <span class="course-title">${safeCode}</span>
-            ${isMinor ? '<span class="minor-badge">🎓 Yandal</span>' : ''}
+            ${isMinor ? `<span class="minor-badge">${escapeHTML(t('minorBadge'))}</span>` : ''}
           </div>
           <span class="course-credits">${course.crd} Cr</span>
         </div>
@@ -569,8 +974,8 @@ function updateSidebarPool() {
                class="course-desc-link" 
                draggable="false"
                onclick="event.stopPropagation();" 
-               title="${safeCode} için Boğaziçi BUIS ders arama sayfası (yeni sekmede açılır)">
-              🔗 Ders Sayfasını Aç
+               title="${safeCode} ${escapeHTML(t('coursePageTooltip'))}">
+              ${escapeHTML(t('openCoursePage'))}
             </a>
           </div>
         ` : ''}
@@ -581,7 +986,7 @@ function updateSidebarPool() {
         ${!isLocked ? `
           <div class="mobile-add-wrap">
             <select class="mobile-add-select" onchange="handleMobileAddCourse('${escapeHTML(course.id)}', this.value, this)">
-              <option value="">➕ Döneme Ekle...</option>
+              <option value="">${escapeHTML(t('addToTermPlaceholder'))}</option>
               ${semOptions}
             </select>
           </div>
@@ -599,6 +1004,7 @@ function updateSidebarPool() {
     pool.appendChild(groupContainer);
   });
 
+  positionDashboardCard();
   calculateAverages();
 }
 
@@ -634,7 +1040,7 @@ function handleMobileAddCourse(courseId, targetSem, selectEl) {
 
   refreshRepeatBadges();
   updateSidebarPool();
-  showToast(`✓ ${course.code} → Dönem ${targetSem}'e eklendi`);
+  showToast(t('toastAddedToTerm')(course.code, formatSemLabel(targetSem)));
 }
 
 function initUI() {
@@ -647,6 +1053,8 @@ function initUI() {
   const yearsGrid = document.getElementById('years-grid');
   yearsGrid.innerHTML = '';
 
+  const yearLabelMap = t('yearLabels');
+
   yearStructure.forEach(y => {
     const row = document.createElement('div');
     row.className = `year-row ${y.isExtended ? 'extended' : ''}`;
@@ -654,8 +1062,8 @@ function initUI() {
     const title = document.createElement('div');
     title.className = 'year-title';
     title.innerHTML = `
-      <span>${y.yearLabel}</span>
-      ${y.tag ? `<span class="limit-tag">${y.tag}</span>` : ''}
+      <span>${escapeHTML(yearLabelMap[y.yearLabel] || y.yearLabel)}</span>
+      ${y.tag ? `<span class="limit-tag">${escapeHTML(t('limitTag'))}</span>` : ''}
     `;
     row.appendChild(title);
 
@@ -669,11 +1077,12 @@ function initUI() {
 
       const safeSemId = semId.replace(/[^a-zA-Z0-9]/g, '_');
       const curriculumInfo = activeDeptData.curriculumMap ? activeDeptData.curriculumMap[semId] : null;
+      const semDisplay = formatSemLabel(semId);
 
       box.innerHTML = `
         <div class="semester-header">
           <div style="display:flex; align-items:center;">
-            <span>Dönem ${semId}</span>
+            <span>${escapeHTML(semDisplay)}</span>
             ${curriculumInfo ? `<span class="info-btn" id="info-btn-${safeSemId}">i</span>` : ''}
           </div>
           <div class="sem-header-badges">
@@ -685,7 +1094,7 @@ function initUI() {
 
       if (curriculumInfo) {
         const listStr = curriculumInfo.map(c => `• ${escapeHTML(c)}`).join('<br>');
-        const tooltipContent = `<strong>${escapeHTML(activeDeptData.name)} (${escapeHTML(semId)}):</strong><br>${listStr}`;
+        const tooltipContent = `<strong>${escapeHTML(activeDeptData.name)} (${escapeHTML(semDisplay)}):</strong><br>${listStr}`;
         const infoBtn = box.querySelector(`#info-btn-${safeSemId}`);
         if (infoBtn) attachGlobalTooltip(infoBtn, tooltipContent);
       }
@@ -742,7 +1151,7 @@ function createSemesterCourseCard(inst, course) {
 
   const safeCode = escapeHTML(course.code);
   const safeName = escapeHTML(course.name);
-  const safePrereq = course.prereq ? escapeHTML(course.prereq) : '';
+  const safePrereq = course.prereq ? escapeHTML(translatePrereq(course.prereq)) : '';
   const safeCustomText = escapeHTML(inst.customText || '');
   const safeEffectiveCode = escapeHTML(effectiveCode);
 
@@ -750,12 +1159,12 @@ function createSemesterCourseCard(inst, course) {
     <div class="course-header">
       <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; min-width:0;">
         <span class="course-title">${safeCode}</span>
-        ${isMinor ? '<span class="minor-badge">🎓 Yandal</span>' : ''}
-        ${isRepeat ? '<span class="repeat-badge">🔁 Tekrar</span>' : ''}
+        ${isMinor ? `<span class="minor-badge">${escapeHTML(t('minorBadge'))}</span>` : ''}
+        ${isRepeat ? `<span class="repeat-badge">${escapeHTML(t('repeatBadge'))}</span>` : ''}
       </div>
       <div style="display:flex; align-items:center; gap:6px;">
         ${isPassed ? `
-          <div class="grade-selector-wrap" title="Harf Notu">
+          <div class="grade-selector-wrap" title="${escapeHTML(t('gradeTooltip'))}">
             <select class="grade-select" onchange="handleGradeChange('${inst.instanceId}', this.value)">
               ${gradeOptions}
             </select>
@@ -763,7 +1172,7 @@ function createSemesterCourseCard(inst, course) {
         ` : ''}
         <span class="course-credits">${course.crd} Cr</span>
         ${!isPassed ? `
-          <button class="delete-btn" onclick="removeInstance('${inst.instanceId}')" title="${isMinor ? 'Bu yandal dersini kaldır' : 'Bu dönemden kaldır'}">✕</button>
+          <button class="delete-btn" onclick="removeInstance('${inst.instanceId}')" title="${escapeHTML(isMinor ? t('removeMinorCourseTitle') : t('removeFromTermTitle'))}">✕</button>
         ` : ''}
       </div>
     </div>
@@ -778,8 +1187,8 @@ function createSemesterCourseCard(inst, course) {
            class="course-desc-link" 
            draggable="false"
            onclick="event.stopPropagation();" 
-           title="${safeEffectiveCode} için Boğaziçi BUIS ders arama sayfası (yeni sekmede açılır)">
-          🔗 Ders Sayfasını Aç
+           title="${safeEffectiveCode} ${escapeHTML(t('coursePageTooltip'))}">
+          ${escapeHTML(t('openCoursePage'))}
         </a>
       ` : ''}
     </div>
@@ -787,7 +1196,7 @@ function createSemesterCourseCard(inst, course) {
     ${course.isElective ? `
       <input type="text" 
              class="custom-input" 
-             placeholder="Seçilen Ders Adı/Kodu..." 
+             placeholder="${escapeHTML(t('electiveInputPlaceholder'))}" 
              value="${safeCustomText}" 
              ${isPassed ? 'disabled style="background:#f1f5f9; cursor:not-allowed;"' : ''}
              oninput="handleInstanceInput('${inst.instanceId}', this.value)">
@@ -796,10 +1205,10 @@ function createSemesterCourseCard(inst, course) {
     <div class="course-controls">
       <label style="cursor:pointer; display:flex; align-items:center; gap:5px; font-weight:600;">
         <input type="checkbox" ${isPassed ? 'checked' : ''} onchange="toggleInstancePassed('${inst.instanceId}', this.checked)">
-        Verdim
+        ${escapeHTML(t('passedCheck'))}
       </label>
       <span class="status-badge ${isPassed ? 'locked' : 'failed'}">
-        ${isPassed ? '✓ Geçildi' : '✕ Verilmedi'}
+        ${escapeHTML(isPassed ? t('completedBadge') : t('failedStatus'))}
       </span>
     </div>
   `;
@@ -1031,8 +1440,8 @@ function handleInstanceInput(instanceId, text) {
                class="course-desc-link" 
                draggable="false"
                onclick="event.stopPropagation();" 
-               title="${safeEffectiveCode} için Boğaziçi BUIS ders arama sayfası (yeni sekmede açılır)">
-              🔗 Ders Sayfasını Aç
+               title="${safeEffectiveCode} ${escapeHTML(t('coursePageTooltip'))}">
+              ${escapeHTML(t('openCoursePage'))}
             </a>
           `;
           linkWrap.style.display = 'block';
@@ -1059,7 +1468,7 @@ function removeInstance(instanceId) {
 
 function resetCurrentDept() {
   const deptName = departmentsData[currentDept]?.name || currentDept;
-  if (confirm(`Yalnızca "${deptName}" bölümü planlamanız sıfırlanacak. Emin misiniz?`)) {
+  if (confirm(t('confirmReset')(deptName))) {
     globalState[currentDept] = { instances: [], selectedMinorId: null };
     saveGlobalState();
     initUI();
@@ -1103,10 +1512,10 @@ function exportDataAsJSON() {
       URL.revokeObjectURL(url);
     }, 200);
 
-    showToast("✓ Plan başarıyla JSON olarak indirildi!");
+    showToast(t('toastExportSuccess'));
   } catch (err) {
     console.error("Dışa aktarma hatası:", err);
-    alert("Dışa aktarma sırasında bir hata oluştu: " + err.message);
+    alert(t('alertExportError') + err.message);
   }
 }
 
@@ -1122,11 +1531,11 @@ function importDataFromJSON(event) {
       try {
         parsed = JSON.parse(rawText);
       } catch (jsonErr) {
-        throw new Error("Dosya geçerli bir JSON formatında değil.");
+        throw new Error(t('errInvalidJson'));
       }
 
       if (!parsed || typeof parsed !== 'object') {
-        throw new Error("Geçersiz veya boş veri formatı.");
+        throw new Error(t('errEmptyData'));
       }
 
       let candidateState = null;
@@ -1165,7 +1574,7 @@ function importDataFromJSON(event) {
       }
 
       if (!candidateState) {
-        throw new Error("JSON dosyasında geçerli bir ders planı veya dönem kaydı bulunamadı.");
+        throw new Error(t('errNoPlanFound'));
       }
 
       // Güvenlik ve veri temizleme: her bölümün instances'ının dizi olduğundan emin ol
@@ -1187,7 +1596,7 @@ function importDataFromJSON(event) {
       // Mevcut verisi varsa kullanıcıya nazikçe onay sor
       const activeCurrentInstances = (globalState[currentDept]?.instances || []).length;
       if (activeCurrentInstances > 0) {
-        const confirmOverwrite = confirm("Yüklemek istediğiniz plan mevcut planınızın üzerine yazılacak. Devam etmek istiyor musunuz?");
+        const confirmOverwrite = confirm(t('confirmOverwriteImport'));
         if (!confirmOverwrite) {
           event.target.value = '';
           return;
@@ -1205,17 +1614,17 @@ function importDataFromJSON(event) {
       if (deptSelect) deptSelect.value = currentDept;
 
       initUI();
-      showToast("✓ Plan başarıyla yüklendi!");
+      showToast(t('toastImportSuccess'));
     } catch (err) {
       console.error("İçe aktarma hatası:", err);
-      alert("Hata: JSON dosyası yüklenemedi!\n" + err.message);
+      alert(t('alertImportError') + err.message);
     } finally {
       event.target.value = '';
     }
   };
 
   reader.onerror = function() {
-    alert("Dosya okunamadı. Lütfen tekrar deneyin.");
+    alert(t('alertFileReadError'));
     event.target.value = '';
   };
 
@@ -1365,7 +1774,7 @@ function applyMinor(minorKey) {
   initUI();
 
   const minorCourses = getActiveMinorCourseList();
-  showToast(`✓ ${minor.name} seçildi (${minorCourses.length} ders). Dersler sol paneldeki ilgili dönem bloklarına eklendi!`);
+  showToast(t('toastMinorApplied')(minor.name, minorCourses.length));
 }
 
 function removeCurrentMinor(shouldSave = true) {
@@ -1380,7 +1789,7 @@ function removeCurrentMinor(shouldSave = true) {
   if (shouldSave) {
     saveGlobalState();
     initUI();
-    showToast("Yandal programı kaldırıldı.");
+    showToast(t('toastMinorRemoved'));
   }
 }
 
@@ -1389,7 +1798,7 @@ function removeMinor(event) {
     event.stopPropagation();
     event.preventDefault();
   }
-  if (confirm("Mevcut yandal programını ve dönemlerdeki yandal derslerini kaldırmak istediğinize emin misiniz?")) {
+  if (confirm(t('confirmRemoveMinor'))) {
     removeCurrentMinor(true);
   }
 }
@@ -1405,12 +1814,12 @@ function updateMinorButtonUI() {
     const match = minor.name.match(/\(([^)]+)\)/);
     const shortName = match ? match[1] : minor.name.replace(/Yandalı?/i, '').trim();
     minorBtn.className = 'minor-btn has-minor';
-    minorBtn.innerHTML = `🎓 Yandal: ${escapeHTML(shortName)} <span class="minor-remove-btn" onclick="removeMinor(event)" title="Yandalı Kaldır">✕</span>`;
-    minorBtn.title = `${minor.name} (Kaldırmak için ✕ butonuna tıklayın)`;
+    minorBtn.innerHTML = `🎓 ${escapeHTML(t('minorLabelPrefix'))}: ${escapeHTML(shortName)} <span class="minor-remove-btn" onclick="removeMinor(event)" title="${escapeHTML(t('minorRemoveTooltip'))}">✕</span>`;
+    minorBtn.title = `${minor.name} ${t('minorHasTitleSuffix')}`;
   } else {
     minorBtn.className = 'minor-btn';
-    minorBtn.innerHTML = `🎓 Yandal Ekle`;
-    minorBtn.title = "Yandal Programı Seç ve Dönemlere Ekle";
+    minorBtn.innerHTML = escapeHTML(t('addMinor'));
+    minorBtn.title = t('minorBtnTitle');
   }
 }
 
@@ -1448,7 +1857,7 @@ function handleMinorSelectChange(minorKey) {
   if (!minorKey || !minorsData[minorKey]) {
     previewBox.innerHTML = `
       <div style="color: #64748b; font-style: italic;">
-        (Yandal seçilmedi veya mevcut yandal iptal edilecek.)
+        ${escapeHTML(t('minorPreviewRemoved'))}
       </div>
     `;
     return;
@@ -1457,11 +1866,11 @@ function handleMinorSelectChange(minorKey) {
   const minor = minorsData[minorKey];
   const req = minor.requirements || {};
   let reqHtml = '';
-  if (req.totalCourses) reqHtml += `<span>📚 Toplam Ders: <strong>${req.totalCourses}</strong></span>`;
-  if (req.totalCredits) reqHtml += `<span>🎯 Kredi: <strong>${req.totalCredits} Cr</strong></span>`;
-  if (req.gpa) reqHtml += `<span>⭐ Başvuru GPA: <strong>${req.gpa.toFixed(2)}</strong></span>`;
+  if (req.totalCourses) reqHtml += `<span>📚 ${escapeHTML(t('minorTotalCourses'))} <strong>${req.totalCourses}</strong></span>`;
+  if (req.totalCredits) reqHtml += `<span>🎯 ${escapeHTML(t('minorCredits'))} <strong>${req.totalCredits} Cr</strong></span>`;
+  if (req.gpa) reqHtml += `<span>⭐ ${escapeHTML(t('minorAppGpa'))} <strong>${req.gpa.toFixed(2)}</strong></span>`;
   if (req.applicationPrereq && req.applicationPrereq.length > 0) {
-    reqHtml += `<span>📋 Önkoşul: <strong>${escapeHTML(req.applicationPrereq.join(', '))}</strong></span>`;
+    reqHtml += `<span>📋 ${escapeHTML(t('minorPrereq'))} <strong>${escapeHTML(req.applicationPrereq.join(', '))}</strong></span>`;
   }
 
   const courseList = getMinorCourseList(minorKey);
@@ -1472,7 +1881,7 @@ function handleMinorSelectChange(minorKey) {
     <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 8px;">🏛️ ${escapeHTML(minor.faculty || '')}</div>
     ${reqHtml ? `<div class="minor-preview-reqs">${reqHtml}</div>` : ''}
     <div style="margin-top: 8px; font-size: 0.82rem; color: #334155;">
-      <strong>Örnek Ders Dağılımı:</strong><br>
+      <strong>${escapeHTML(t('minorSampleDist'))}</strong><br>
       <span style="font-size: 0.78rem; color: #475569;">${coursesPreview}</span>
     </div>
     ${minor.notes ? `<div style="margin-top: 6px; font-size: 0.75rem; color: #94a3b8; font-style: italic;">ℹ️ ${escapeHTML(minor.notes)}</div>` : ''}
@@ -1550,17 +1959,17 @@ async function handleFeedbackSubmit(event) {
   const description = (descInput ? descInput.value : "").trim();
 
   if (!title || !description) {
-    alert("Lütfen başlık ve açıklama alanlarını eksiksiz doldurun.");
+    alert(t('alertFeedbackRequired'));
     return;
   }
 
-  const originalBtnHtml = submitBtn ? submitBtn.innerHTML : "<span>Gönder</span>";
+  const originalBtnHtml = `<span>${escapeHTML(t('submit'))}</span>`;
 
   if (submitBtn) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = `
       <span class="issue-spinner"></span>
-      <span>Gönderiliyor...</span>
+      <span>${escapeHTML(t('submitting'))}</span>
     `;
   }
 
@@ -1578,7 +1987,7 @@ async function handleFeedbackSubmit(event) {
     });
 
     if (!response.ok) {
-      let errorMsg = `Sunucu hatası (${response.status})`;
+      let errorMsg = `${t('serverError')} (${response.status})`;
       try {
         const data = await response.json();
         if (data && (data.error || data.message)) {
@@ -1592,100 +2001,38 @@ async function handleFeedbackSubmit(event) {
     if (titleInput) titleInput.value = '';
     if (descInput) descInput.value = '';
     closeFeedbackModal();
-    showToast("✓ Bildiriminiz başarıyla iletildi, teşekkürler!");
+    showToast(t('toastFeedbackSuccess'));
   } catch (err) {
     console.error("Geri bildirim hatası:", err);
-    alert(`Bildirim gönderilirken bir hata oluştu: ${err.message || "Lütfen tekrar deneyin."}`);
+    alert(`${t('alertFeedbackError')}${err.message || t('tryAgain')}`);
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = originalBtnHtml;
+      submitBtn.innerHTML = `<span>${escapeHTML(t('submit'))}</span>`;
     }
   }
 }
 
-/* Mobilde Akıllı Scroll & Kart Gizleme / Gösterme Sistemi */
-let lastPoolScrollTop = 0;
-let isTogglingCard = false;
+/* Mobil & Masaüstü GPA Kartı Konumlandırma */
 const poolScrollEl = document.getElementById('course-pool');
 const dashCardWrapper = document.getElementById('dashCardWrapper');
 const sidebarFixedTop = document.getElementById('sidebarFixedTop');
 
-function setCardState(shouldCollapse) {
-  if (!isMobileDevice()) return;
-  const isCurrentlyCollapsed = dashCardWrapper.classList.contains('collapsed');
-  if (isCurrentlyCollapsed === shouldCollapse || isTogglingCard) return;
-
-  const previousHeight = dashCardWrapper.offsetHeight;
-  isTogglingCard = true;
-
-  if (shouldCollapse) {
-    dashCardWrapper.classList.add('collapsed');
-  } else {
-    dashCardWrapper.classList.remove('collapsed');
-  }
-
-  requestAnimationFrame(() => {
-    const heightDiff = previousHeight - dashCardWrapper.offsetHeight;
-    if (shouldCollapse && heightDiff > 0 && poolScrollEl.scrollTop > heightDiff) {
-      poolScrollEl.scrollTop -= (heightDiff * 0.4);
+function positionDashboardCard() {
+  if (!dashCardWrapper || !poolScrollEl || !sidebarFixedTop) return;
+  if (isMobileDevice()) {
+    if (poolScrollEl.firstElementChild !== dashCardWrapper) {
+      poolScrollEl.prepend(dashCardWrapper);
     }
-    setTimeout(() => {
-      isTogglingCard = false;
-      lastPoolScrollTop = poolScrollEl.scrollTop;
-    }, 280);
-  });
+  } else {
+    if (sidebarFixedTop.firstElementChild !== dashCardWrapper) {
+      sidebarFixedTop.prepend(dashCardWrapper);
+    }
+  }
 }
 
-poolScrollEl.addEventListener('scroll', () => {
-  if (!isMobileDevice() || isTogglingCard) return;
-
-  const currentScroll = poolScrollEl.scrollTop;
-  const scrollDiff = currentScroll - lastPoolScrollTop;
-
-  if (currentScroll <= 15) {
-    setCardState(false);
-  } else if (scrollDiff > 12 && currentScroll > 50) {
-    setCardState(true);
-  } else if (scrollDiff < -8) {
-    setCardState(false);
-  }
-
-  lastPoolScrollTop = currentScroll;
-}, { passive: true });
-
-let touchStartY = 0;
-sidebarFixedTop.addEventListener('touchstart', (e) => {
-  if (!isMobileDevice()) return;
-  if (e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON') return;
-  touchStartY = e.touches[0].clientY;
-}, { passive: true });
-
-sidebarFixedTop.addEventListener('touchmove', (e) => {
-  if (!isMobileDevice() || !touchStartY) return;
-  if (e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON') return;
-
-  const touchCurrentY = e.touches[0].clientY;
-  const deltaY = touchStartY - touchCurrentY;
-
-  poolScrollEl.scrollTop += deltaY;
-  touchStartY = touchCurrentY;
-
-  if (deltaY > 6) {
-    setCardState(true);
-  } else if (deltaY < -6) {
-    setCardState(false);
-  }
-}, { passive: true });
-
-sidebarFixedTop.addEventListener('touchend', () => {
-  touchStartY = 0;
-}, { passive: true });
-
 window.addEventListener('resize', () => {
-  if (!isMobileDevice()) {
-    dashCardWrapper.classList.remove('collapsed');
-  }
+  positionDashboardCard();
   initUI();
 });
 

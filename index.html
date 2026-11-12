@@ -13,12 +13,12 @@
   <header class="top-bar">
     <h1>
       <span>🎓 Boğaziçi Tracker</span>
-      <span style="font-weight: 400; font-size: 1.05rem; color: #64748b;">| Ders & GPA Takip</span>
+      <span id="appSubtitle" style="font-weight: 400; font-size: 1.05rem; color: #64748b;">| Ders & GPA Takip</span>
     </h1>
     
     <div class="top-bar-controls">
       <div class="dept-select-container">
-        <label for="deptSelect">Bölüm:</label>
+        <label id="deptLabel" for="deptSelect">Bölüm:</label>
         <select id="deptSelect" class="dept-select" onchange="changeDepartment(this.value)">
         </select>
       </div>
@@ -28,16 +28,19 @@
         </button>
       </div>
       <div class="top-bar-btn-group">
-        <button class="topbar-btn export-btn" onclick="exportDataAsJSON()" title="Mevcut ders planınızı ve notlarınızı JSON dosyası olarak indirin">
+        <button id="exportBtn" class="topbar-btn export-btn" onclick="exportDataAsJSON()" title="Mevcut ders planınızı ve notlarınızı JSON dosyası olarak indirin">
           📥 JSON İndir
         </button>
-        <button class="topbar-btn import-btn" onclick="document.getElementById('jsonFileInput').click()" title="Daha önce indirdiğiniz JSON planını yükleyin">
+        <button id="importBtn" class="topbar-btn import-btn" onclick="document.getElementById('jsonFileInput').click()" title="Daha önce indirdiğiniz JSON planını yükleyin">
           📤 JSON Yükle
         </button>
-        <button class="topbar-btn feedback-btn" onclick="openFeedbackModal()" title="Hata Bildir veya Öneri Paylaş">
+        <button id="feedbackBtn" class="topbar-btn feedback-btn" onclick="openFeedbackModal()" title="Hata Bildir veya Öneri Paylaş">
           💬 Hata / Öneri
         </button>
-        <button class="reset-btn" onclick="resetCurrentDept()" title="Bölüm planını sıfırla">Sıfırla</button>
+        <button id="langToggleBtn" class="topbar-btn lang-btn" onclick="toggleLanguage()" title="Dil Değiştir / Switch Language">
+          🌐 <span id="langToggleLabel">TR | EN</span>
+        </button>
+        <button id="resetBtn" class="reset-btn" onclick="resetCurrentDept()" title="Bölüm planını sıfırla">Sıfırla</button>
       </div>
       <input type="file" id="jsonFileInput" accept=".json,application/json" style="display: none;" onchange="importDataFromJSON(event)">
     </div>
@@ -63,29 +66,29 @@
                 <span id="gpa-display" class="dash-val">0.00</span>
               </div>
               <div class="dash-item" style="text-align: right;">
-                <span class="dash-label">Kalan / Toplam</span>
+                <span id="labelRemainingTotal" class="dash-label">Kalan / Toplam</span>
                 <span id="remaining-count" class="dash-val">0</span>
               </div>
             </div>
             
             <div class="dash-row" style="border-top: 1px solid rgba(255,255,255,0.18); padding-top: 5px;">
               <div class="dash-item">
-                <span class="dash-label">Seçilen Ders</span>
+                <span id="labelSelectedCourses" class="dash-label">Seçilen Ders</span>
                 <span id="selected-courses-count" class="dash-subval">0 Ders</span>
               </div>
               <div class="dash-item" style="text-align: right;">
-                <span class="dash-label">Seçilen Kredi</span>
+                <span id="labelSelectedCredits" class="dash-label">Seçilen Kredi</span>
                 <span id="selected-credits" class="dash-subval">0 Cr</span>
               </div>
             </div>
 
             <div class="dash-row" style="border-top: 1px solid rgba(255,255,255,0.18); padding-top: 5px;">
               <div class="dash-item">
-                <span class="dash-label">Tamamlanan</span>
+                <span id="labelCompleted" class="dash-label">Tamamlanan</span>
                 <span id="completed-credits" class="dash-subval">0 Cr (0 Ders)</span>
               </div>
               <div class="dash-item" style="text-align: right;">
-                <span class="dash-label">Hedef Kredi</span>
+                <span id="labelTargetCredits" class="dash-label">Hedef Kredi</span>
                 <span id="total-credits" class="dash-subval">0 Cr</span>
               </div>
             </div>
@@ -94,7 +97,7 @@
 
         <div class="sidebar-title">
           <span id="sidebarPoolTitle">Ders Havuzu</span>
-          <span style="font-size: 0.74rem; font-weight: normal; color: var(--text-muted);">Dönem Blokları</span>
+          <span id="sidebarPoolSubtitle" style="font-size: 0.74rem; font-weight: normal; color: var(--text-muted);">Dönem Blokları</span>
         </div>
       </div>
 
@@ -117,12 +120,12 @@
       <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)">
         <div class="modal-body">
           <div class="form-group">
-            <label for="feedbackTitle">Başlık <span style="color:#ef4444;">*</span></label>
+            <label for="feedbackTitle"><span id="feedbackTitleLabel">Başlık</span> <span style="color:#ef4444;">*</span></label>
             <input type="text" id="feedbackTitle" class="form-control" placeholder="Örn: CMPE 250 önkoşulu hatalı" required maxlength="120">
           </div>
 
           <div class="form-group">
-            <label for="feedbackCategory">Kategori</label>
+            <label id="feedbackCategoryLabel" for="feedbackCategory">Kategori</label>
             <select id="feedbackCategory" class="form-control" style="cursor: pointer;">
               <option value="Hatalı Ders/Önkoşul">Hatalı Ders/Önkoşul</option>
               <option value="Yeni Özellik Önerisi">Yeni Özellik Önerisi</option>
@@ -132,13 +135,13 @@
           </div>
 
           <div class="form-group">
-            <label for="feedbackDesc">Açıklama <span style="color:#ef4444;">*</span></label>
+            <label for="feedbackDesc"><span id="feedbackDescLabel">Açıklama</span> <span style="color:#ef4444;">*</span></label>
             <textarea id="feedbackDesc" class="form-control" placeholder="Detaylı açıklama..." rows="4" required></textarea>
           </div>
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn-cancel-issue" onclick="closeFeedbackModal()">İptal</button>
+          <button type="button" id="feedbackCancelBtn" class="btn-cancel-issue" onclick="closeFeedbackModal()">İptal</button>
           <button type="submit" id="feedbackSubmitBtn" class="btn-submit-issue">
             <span>Gönder</span>
           </button>
@@ -156,7 +159,7 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="minorSelect">Yandal Programı Seçin</label>
+          <label id="minorSelectLabel" for="minorSelect">Yandal Programı Seçin</label>
           <select id="minorSelect" class="form-control" onchange="handleMinorSelectChange(this.value)" style="cursor: pointer;">
             <option value="">(Yandal Yok / İptal Et)</option>
           </select>
@@ -168,8 +171,8 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn-cancel-issue" onclick="closeMinorModal()">Vazgeç</button>
-        <button type="button" class="btn-submit-issue" onclick="handleApplyMinorFromModal()">
+        <button type="button" id="minorCancelBtn" class="btn-cancel-issue" onclick="closeMinorModal()">Vazgeç</button>
+        <button type="button" id="minorApplyBtn" class="btn-submit-issue" onclick="handleApplyMinorFromModal()">
           <span>Yandalı Uygula</span>
         </button>
       </div>

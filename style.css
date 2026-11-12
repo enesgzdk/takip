@@ -244,6 +244,29 @@ select.dept-select option {
   color: #312e81;
 }
 
+.topbar-btn.lang-btn {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.topbar-btn.lang-btn:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.lang-active {
+  color: var(--accent-color);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.lang-muted {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
 .reset-btn {
   padding: 4px 8px;
   background-color: #ef4444;
@@ -322,16 +345,10 @@ select.dept-select option {
   border-bottom: 1px solid #f1f5f9;
   background: #fff;
   z-index: 5;
-  touch-action: pan-y;
 }
 
 .dashboard-card-wrapper {
-  max-height: 250px;
-  opacity: 1;
-  overflow: hidden;
-  transition: max-height 0.28s cubic-bezier(0.25, 1, 0.5, 1),
-              opacity 0.22s ease,
-              margin-bottom 0.28s cubic-bezier(0.25, 1, 0.5, 1);
+  flex-shrink: 0;
   margin-bottom: 8px;
 }
 
@@ -1195,10 +1212,7 @@ textarea.form-control {
     cursor: default;
   }
 
-  .dashboard-card-wrapper.collapsed {
-    max-height: 0;
-    opacity: 0;
+  .dashboard-card-wrapper {
     margin-bottom: 0;
-    pointer-events: none;
   }
 }
