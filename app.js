@@ -955,14 +955,16 @@ function getDeptState(deptKey) {
 
 function findCourseById(courseId) {
   if (!courseId) return null;
+  const dmCourses = getActiveDmCourseList();
+  if (dmCourses.length > 0) {
+    const dmCourse = dmCourses.find(c => c.id === courseId);
+    if (dmCourse) return dmCourse;
+  }
   const majorCourse = departmentsData[currentDept]?.courses?.find(c => c.id === courseId);
   if (majorCourse) return majorCourse;
   const minorCourses = getActiveMinorCourseList();
   const minorCourse = minorCourses.find(c => c.id === courseId);
   if (minorCourse) return minorCourse;
-  const dmCourses = getActiveDmCourseList();
-  const dmCourse = dmCourses.find(c => c.id === courseId);
-  if (dmCourse) return dmCourse;
   for (const dKey of Object.keys(departmentsData)) {
     const c = departmentsData[dKey].courses?.find(c => c.id === courseId);
     if (c) return c;
@@ -1049,10 +1051,11 @@ function attachGlobalTooltip(el, htmlContent) {
 
 function calculateAverages() {
   const state = getDeptState(currentDept);
-  const courses = departmentsData[currentDept]?.courses || [];
-  const activeMinorCourses = getActiveMinorCourseList();
   const activeDmCourses = getActiveDmCourseList();
-  const allRequiredCourses = [...courses, ...activeMinorCourses, ...activeDmCourses];
+  const majorCourses = departmentsData[currentDept]?.courses || [];
+  const baseProgramCourses = activeDmCourses.length > 0 ? activeDmCourses : majorCourses;
+  const activeMinorCourses = getActiveMinorCourseList();
+  const allRequiredCourses = [...baseProgramCourses, ...activeMinorCourses];
 
   const semesterStats = {};
   const allSems = [];
@@ -1124,6 +1127,7 @@ function calculateAverages() {
   const sortedInstances = [...state.instances].sort((a, b) => compareSemesters(a.semId, b.semId));
   const latestPassedByCourse = {};
   const passedCourseIds = new Set();
+  const passedCourseCodes = new Set();
   let completedCreditsTotal = 0;
 
   sortedInstances.forEach(inst => {
@@ -1131,6 +1135,7 @@ function calculateAverages() {
       passedCourseIds.add(inst.courseId);
       const course = getCourseForInstance(inst);
       if (course) {
+        if (course.code) passedCourseCodes.add(course.code.replace(/\s+/g, '').toUpperCase());
         latestPassedByCourse[inst.courseId] = {
           grade: inst.grade || 'AA',
           crd: Number(course.crd) || 0
@@ -1159,10 +1164,24 @@ function calculateAverages() {
   document.getElementById('selected-credits').innerText = `${selectedCreditsTotal} Cr`;
   document.getElementById('completed-credits').innerText = `${completedCreditsTotal} Cr (${passedCourseIds.size} ${t('courseUnit')})`;
 
-  const totalRequiredCredits = allRequiredCourses.reduce((sum, c) => sum + (Number(c.crd) || 0), 0);
+  let totalRequiredCredits = 0;
+  const dmKey = state.selectedDmId;
+  const dmProgram = (dmKey && dmData) ? dmData[dmKey] : null;
+  if (dmProgram && dmProgram.requirements && dmProgram.requirements.totalCredits !== null && dmProgram.requirements.totalCredits !== undefined && !isNaN(Number(dmProgram.requirements.totalCredits))) {
+    totalRequiredCredits = Number(dmProgram.requirements.totalCredits);
+  } else {
+    totalRequiredCredits = allRequiredCourses.reduce((sum, c) => sum + (Number(c.crd) || 0), 0);
+  }
   document.getElementById('total-credits').innerText = `${totalRequiredCredits} Cr`;
 
-  const passedRequiredCount = allRequiredCourses.filter(c => passedCourseIds.has(c.id)).length;
+  const passedRequiredCount = allRequiredCourses.filter(c => {
+    if (passedCourseIds.has(c.id)) return true;
+    if (c.code) {
+      const norm = c.code.replace(/\s+/g, '').toUpperCase();
+      if (passedCourseCodes.has(norm)) return true;
+    }
+    return false;
+  }).length;
   const remaining = Math.max(0, allRequiredCourses.length - passedRequiredCount);
   const remainingEl = document.getElementById('remaining-count');
   if (remainingEl) {
@@ -1173,10 +1192,11 @@ function calculateAverages() {
 
 function updateSidebarPool() {
   const state = getDeptState(currentDept);
-  const majorCourses = departmentsData[currentDept]?.courses || [];
-  const activeMinorCourses = getActiveMinorCourseList();
   const activeDmCourses = getActiveDmCourseList();
-  const allRequiredCourses = [...majorCourses, ...activeMinorCourses, ...activeDmCourses];
+  const majorCourses = departmentsData[currentDept]?.courses || [];
+  const baseProgramCourses = activeDmCourses.length > 0 ? activeDmCourses : majorCourses;
+  const activeMinorCourses = getActiveMinorCourseList();
+  const allRequiredCourses = [...baseProgramCourses, ...activeMinorCourses];
 
   const poolTitleEl = document.getElementById('sidebarPoolTitle');
   if (poolTitleEl) {
@@ -1197,7 +1217,7 @@ function updateSidebarPool() {
     'other': []
   };
 
-  majorCourses.forEach(course => {
+  baseProgramCourses.forEach(course => {
     if (course.sem && groups[course.sem]) {
       groups[course.sem].push(course);
     } else {
@@ -1206,14 +1226,6 @@ function updateSidebarPool() {
   });
 
   activeMinorCourses.forEach(course => {
-    if (course.sem && groups[course.sem]) {
-      groups[course.sem].push(course);
-    } else {
-      groups['other'].push(course);
-    }
-  });
-
-  activeDmCourses.forEach(course => {
     if (course.sem && groups[course.sem]) {
       groups[course.sem].push(course);
     } else {
@@ -1241,7 +1253,16 @@ function updateSidebarPool() {
     groupContainer.appendChild(groupHeader);
 
     groupCourses.forEach(course => {
-      const courseInstances = state.instances.filter(inst => inst.courseId === course.id);
+      const normCourseCode = course.code ? course.code.replace(/\s+/g, '').toUpperCase() : '';
+      const courseInstances = state.instances.filter(inst => {
+        if (inst.courseId === course.id) return true;
+        const instCourse = getCourseForInstance(inst);
+        if (instCourse && instCourse.code && normCourseCode) {
+          return instCourse.code.replace(/\s+/g, '').toUpperCase() === normCourseCode;
+        }
+        return false;
+      });
+
       const hasPassed = courseInstances.some(inst => inst.passed === true && inst.grade !== 'F');
       const hasFailedOnly = courseInstances.length > 0 && !hasPassed;
       const isPlaced = courseInstances.length > 0 && !hasPassed && !hasFailedOnly;
@@ -2258,21 +2279,8 @@ function getDmCourseList(dmKey) {
   const prog = dmData[dmKey];
   const courses = prog.courses || [];
 
-  // Ana dal müfredatındaki ders kodlarını topla (Ortak dersleri atlamak için)
-  const majorCourses = departmentsData[currentDept]?.courses || [];
-  const majorCodes = new Set();
-  majorCourses.forEach(c => {
-    if (c.code) majorCodes.add(c.code.replace(/\s+/g, '').toUpperCase());
-  });
-
-  const result = [];
-  courses.forEach((c, idx) => {
-    if (c.source !== 'double_major') return;
+  return courses.map((c, idx) => {
     const cleanCode = (c.code || '').trim();
-    if (!cleanCode) return;
-    const normalized = cleanCode.replace(/\s+/g, '').toUpperCase();
-    if (majorCodes.has(normalized)) return;
-
     // Null Kredi Koruması: c.crd !== null ? Number(c.crd) : (curriculum.json içinde aynı kodlu ders || 3)
     let crd = 3;
     if (c.crd !== null && c.crd !== undefined && !isNaN(Number(c.crd))) {
@@ -2284,20 +2292,21 @@ function getDmCourseList(dmKey) {
       }
     }
 
-    const safeIdCode = cleanCode.replace(/[^a-zA-Z0-9]/g, '_');
-    result.push({
-      id: c.id ? `dm_${dmKey}_${c.id}` : `dm_${dmKey}_${idx}_${safeIdCode}`,
-      code: cleanCode,
+    const safeIdCode = cleanCode ? cleanCode.replace(/[^a-zA-Z0-9]/g, '_') : 'course';
+    const isDmSource = c.source === 'double_major';
+
+    return {
+      id: c.id ? String(c.id) : `dm_${dmKey}_${idx}_${safeIdCode}`,
+      code: cleanCode || (c.name || 'Ders'),
       name: c.name || cleanCode,
       crd: crd,
       sem: c.sem || 'other',
       prereq: c.prereq || '',
       isElective: Boolean(c.isElective),
-      isDoubleMajor: true
-    });
+      source: c.source || 'major',
+      isDoubleMajor: isDmSource
+    };
   });
-
-  return result;
 }
 
 function getActiveDmCourseList() {
