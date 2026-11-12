@@ -191,7 +191,14 @@ const translations = {
     shareLoadConfirm: "Paylaşılan ders planı yüklensin mi? Mevcut planınızın üzerine yazılacaktır.",
     shareCancelBtn: "Kapat",
     shareEmptyPlan: "Görsel oluşturmak için dönemlere en az bir ders eklemelisiniz.",
-    plannedStatus: "Plan"
+    plannedStatus: "Plan",
+    sandboxBannerText: "🧪 Önizleme (Sandbox) Modu — Yaptığınız değişiklikler tarayıcınıza kaydedilmez.",
+    sandboxSaveBtn: "💾 Kendi Planıma Aktar",
+    sandboxExitBtn: "↩️ Kendi Planıma Dön",
+    sandboxSaveConfirm: "Bu plan kendi kayıtlı planınızın üzerine yazılsın mı?",
+    sandboxSavedSuccess: "✓ Plan başarıyla kendi tarayıcınıza kaydedildi!",
+    sandboxExitSuccess: "✓ Kendi kayıtlı planınıza dönüldü.",
+    sandboxDeptDisabledTooltip: "Önizleme modunda bölüm değiştirilemez."
   },
   en: {
     appSubtitle: "| Course & GPA Tracker",
@@ -367,7 +374,14 @@ const translations = {
     shareLoadConfirm: "Load the shared course plan? Your current plan for this department will be overwritten.",
     shareCancelBtn: "Close",
     shareEmptyPlan: "You need to add at least one course to semesters to generate an image.",
-    plannedStatus: "Planned"
+    plannedStatus: "Planned",
+    sandboxBannerText: "🧪 Preview (Sandbox) Mode — Changes you make are not saved to your browser.",
+    sandboxSaveBtn: "💾 Save to My Plan",
+    sandboxExitBtn: "↩️ Return to My Plan",
+    sandboxSaveConfirm: "Do you want to overwrite your saved plan with this one?",
+    sandboxSavedSuccess: "✓ Plan saved to your browser successfully!",
+    sandboxExitSuccess: "✓ Returned to your saved plan.",
+    sandboxDeptDisabledTooltip: "Department cannot be changed in Preview mode."
   }
 };
 
@@ -491,6 +505,7 @@ function applyStaticTranslations() {
   updateMinorButtonUI();
   updateDmButtonUI();
   updatePinButtonUI();
+  updateSandboxBannerUI();
 }
 
 function toggleLanguage() {
@@ -761,6 +776,11 @@ let minorsData = {};
 let dmData = {};
 let currentDept = localStorage.getItem('boun_active_dept') || 'math';
 let globalState = JSON.parse(localStorage.getItem('boun_multi_dept_gpa_state')) || {};
+
+// RAM Tabanlı Sandbox (Önizleme) Modu Değişkenleri
+let isSandboxMode = false;
+let realUserGlobalStateBackup = null;
+let realUserDeptBackup = null;
 
 // Küresel ve Bölüm Bazlı Önkoşul Haritaları
 const GLOBAL_PREREQ_MAP = {};
@@ -1083,6 +1103,9 @@ function populateDepartmentSelect() {
 
     select.appendChild(group);
   });
+
+  select.disabled = isSandboxMode;
+  select.title = isSandboxMode ? t('sandboxDeptDisabledTooltip') : '';
 }
 
 function populateMinorModalOptions() {
@@ -1151,11 +1174,16 @@ function getCourseForInstance(inst) {
 }
 
 function saveGlobalState() {
+  if (isSandboxMode) {
+    // RAM tabanlı Sandbox modu: Asla localStorage'a yazma!
+    return;
+  }
   localStorage.setItem('boun_multi_dept_gpa_state', JSON.stringify(globalState));
   localStorage.setItem('boun_active_dept', currentDept);
 }
 
 function changeDepartment(newDept) {
+  if (isSandboxMode) return;
   currentDept = newDept;
   saveGlobalState();
   initUI();
@@ -2445,64 +2473,123 @@ async function exportPlanAsPng() {
   }
 }
 
+function updateSandboxBannerUI() {
+  const banner = document.getElementById('sandboxBanner');
+  const bannerText = document.getElementById('sandboxBannerText');
+  const saveBtn = document.getElementById('sandboxSaveBtn');
+  const exitBtn = document.getElementById('sandboxExitBtn');
+  const deptSelect = document.getElementById('deptSelect');
+
+  if (deptSelect) {
+    deptSelect.disabled = isSandboxMode;
+    deptSelect.title = isSandboxMode ? t('sandboxDeptDisabledTooltip') : '';
+  }
+
+  if (!banner) return;
+
+  if (isSandboxMode) {
+    banner.style.display = 'block';
+    if (bannerText) bannerText.innerText = t('sandboxBannerText');
+    if (saveBtn) saveBtn.innerHTML = `<span>${escapeHTML(t('sandboxSaveBtn'))}</span>`;
+    if (exitBtn) exitBtn.innerHTML = `<span>${escapeHTML(t('sandboxExitBtn'))}</span>`;
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
 function loadSharedPlanFromHash() {
-  if (!window.location.hash) return;
+  if (!window.location.hash) return false;
   const hash = window.location.hash;
   const match = hash.match(/#plan=([^&]+)/);
-  if (!match) return;
+  if (!match) return false;
 
   const rawCompressed = match[1];
-  if (!rawCompressed || typeof LZString === 'undefined') return;
+  if (!rawCompressed || typeof LZString === 'undefined') return false;
 
   try {
     const decompressed = LZString.decompressFromEncodedURIComponent(rawCompressed);
-    if (!decompressed) return;
+    if (!decompressed) return false;
     const payload = JSON.parse(decompressed);
-    if (!payload || !payload.dept) return;
+    if (!payload || !payload.dept) return false;
 
     const targetDept = payload.dept;
     if (!departmentsData || !departmentsData[targetDept]) {
       console.warn("Paylaşılan bölüm sistemde bulunamadı:", targetDept);
-      return;
+      return false;
     }
 
-    const existingState = globalState[targetDept];
-    const hasExistingPlan = existingState && Array.isArray(existingState.instances) && existingState.instances.length > 0;
-
-    let shouldLoad = true;
-    if (hasExistingPlan) {
-      shouldLoad = confirm(t('shareLoadConfirm'));
+    // Kullanıcının mevcut gerçek durumunu Sandbox'a girmeden önce yedekle
+    if (!isSandboxMode) {
+      realUserGlobalStateBackup = JSON.parse(JSON.stringify(globalState));
+      realUserDeptBackup = currentDept;
     }
 
-    if (shouldLoad) {
-      currentDept = targetDept;
-      const incomingInstances = Array.isArray(payload.instances)
-        ? payload.instances
-        : (Array.isArray(payload.plan) ? payload.plan : (payload.plan?.instances || []));
+    isSandboxMode = true;
+    currentDept = targetDept;
+    const incomingInstances = Array.isArray(payload.instances)
+      ? payload.instances
+      : (Array.isArray(payload.plan) ? payload.plan : (payload.plan?.instances || []));
 
-      globalState[targetDept] = {
-        instances: incomingInstances,
-        selectedMinorId: payload.minor || null,
-        selectedDmId: payload.dm || null
-      };
+    // Deep copy ile RAM'de izole et; localStorage'a yazılmaz
+    globalState = JSON.parse(JSON.stringify(globalState));
+    globalState[targetDept] = {
+      instances: incomingInstances,
+      selectedMinorId: payload.minor || null,
+      selectedDmId: payload.dm || null
+    };
 
-      saveGlobalState();
-      showToast(t('shareLoadedSuccess'));
-    }
-
-    // URL'den hash'i temizle
-    history.replaceState(null, '', window.location.pathname + window.location.search);
+    updateSandboxBannerUI();
+    return true;
   } catch (err) {
     console.warn("Paylaşılan plan çözümlenirken hata:", err);
+    return false;
   }
+}
+
+function saveSandboxToMyPlan() {
+  if (!isSandboxMode) return;
+  if (!confirm(t('sandboxSaveConfirm'))) {
+    return;
+  }
+
+  isSandboxMode = false;
+  realUserGlobalStateBackup = null;
+  realUserDeptBackup = null;
+
+  saveGlobalState(); // Artık isSandboxMode false olduğundan localStorage'a kaydeder!
+  updateSandboxBannerUI();
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+  showToast(t('sandboxSavedSuccess'));
+}
+
+function exitSandboxMode() {
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+  isSandboxMode = false;
+
+  if (realUserGlobalStateBackup) {
+    globalState = realUserGlobalStateBackup;
+    currentDept = realUserDeptBackup || Object.keys(departmentsData)[0] || 'math';
+    realUserGlobalStateBackup = null;
+    realUserDeptBackup = null;
+  } else {
+    globalState = JSON.parse(localStorage.getItem('boun_multi_dept_gpa_state')) || {};
+    currentDept = localStorage.getItem('boun_active_dept') || Object.keys(departmentsData)[0] || 'math';
+  }
+
+  updateSandboxBannerUI();
+  populateDepartmentSelect();
+  populateMinorModalOptions();
+  populateDmModalOptions();
+  initUI();
+  showToast(t('sandboxExitSuccess'));
 }
 
 window.addEventListener('hashchange', () => {
   if (window.location.hash && window.location.hash.includes('#plan=')) {
-    loadSharedPlanFromHash();
-    const deptSelect = document.getElementById('deptSelect');
-    if (deptSelect) deptSelect.value = currentDept;
-    initUI();
+    if (loadSharedPlanFromHash()) {
+      populateDepartmentSelect();
+      initUI();
+    }
   }
 });
 
