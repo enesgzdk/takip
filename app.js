@@ -424,14 +424,14 @@ const BOUN_BOLUM_MAP = {
   ENGL: "WESTERN+LANGUAGES+AND+LITERATURES",
   HUM: "HUMANITIES+COURSES+COORDINATORSHIP",
   HTR: "ATATURK+INSTITUTE+FOR+MODERN+TURKISH+HISTORY",
-  TK: "TURKISH+COURSES+COORDINATORSHIP",
+  TK: "TURKISH+COURSES+COORDINATOR",
   AE: "SCHOOL+OF+FOREIGN+LANGUAGES",
   ESC: "ENVIRONMENTAL+SCIENCES",
   ENGG: "ENGINEERING",
   OHS: "OCCUPATIONAL+HEALTH+AND+SAFETY",
   STS: "SCIENCE+TECHNOLOGY+AND+SOCIETY",
   TID: "TURKISH+SIGN+LANGUAGE",
-  TKF: "TURKISH+COURSES+COORDINATORSHIP",
+  TKF: "TURKISH+COURSES+COORDINATOR",
   ARB: "MODERN+LANGUAGES+UNIT",
   ARM: "MODERN+LANGUAGES+UNIT",
   CHIN: "MODERN+LANGUAGES+UNIT",
@@ -458,21 +458,37 @@ function resolveCourseTerm(courseOrSem, courseCode) {
     sem = String(courseOrSem.sem).trim();
   }
 
-  if (sem.endsWith('.2')) {
-    return SPRING_TERM;
-  }
+  // Aşama 1: Geçerli müfredat dönemi (.1 veya .2) kontrolü
+  if (sem.endsWith('.2')) return SPRING_TERM;
+  if (sem.endsWith('.1')) return FALL_TERM;
 
-  if (!sem && courseCode) {
-    const matched = findCourseByCode(courseCode);
-    if (matched && matched.sem && String(matched.sem).trim().endsWith('.2')) {
-      return SPRING_TERM;
+  // sem yoksa veya yaz dönemi ise courseCode ile curriculum.json'da ara
+  const normalizedCode = (courseCode || (courseOrSem && typeof courseOrSem === 'object' ? courseOrSem.code : '') || '')
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, ' ');
+
+  if (normalizedCode) {
+    const matched = findCourseByCode(normalizedCode);
+    if (matched && matched.sem) {
+      const matchedSem = String(matched.sem).trim();
+      if (matchedSem.endsWith('.2')) return SPRING_TERM;
+      if (matchedSem.endsWith('.1')) return FALL_TERM;
+    }
+
+    // Aşama 2: Ders numarası teklik / çiftlik çıkarımı (Heuristic Fallback)
+    const numMatch = normalizedCode.match(/(\d{3})/) || normalizedCode.match(/(\d+)/);
+    if (numMatch) {
+      const digits = numMatch[1];
+      const lastDigit = parseInt(digits.charAt(digits.length - 1), 10);
+      return lastDigit % 2 === 0 ? SPRING_TERM : FALL_TERM;
     }
   }
 
   return FALL_TERM;
 }
 
-function getBounCourseUrl(courseCode, term = DEFAULT_TERM) {
+function getBounCourseUrl(courseCode, term = FALL_TERM) {
   if (!courseCode || typeof courseCode !== 'string') return null;
   const sanitized = courseCode.trim().toUpperCase();
 
@@ -492,11 +508,12 @@ function getBounCourseUrl(courseCode, term = DEFAULT_TERM) {
   const prefix = match[1];
   const number = match[2];
   const compactCode = `${prefix}${number}`;
+  const focusCourse = prefix.length <= 2 ? `${prefix}+${number}.01` : `${prefix}${number}.01`;
   const encodedTerm = encodeURIComponent(term);
   const bolum = BOUN_BOLUM_MAP[prefix];
 
   if (bolum) {
-    return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodedTerm}&q=${compactCode.toLowerCase()}&term=${encodedTerm}&kisaadi=${prefix}&bolum=${bolum}&focus=${compactCode}.01`;
+    return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodedTerm}&q=${compactCode.toLowerCase()}&term=${encodedTerm}&kisaadi=${prefix}&bolum=${bolum}&focus=${focusCourse}`;
   }
 
   return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodedTerm}&q=${compactCode.toLowerCase()}`;
