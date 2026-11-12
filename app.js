@@ -119,6 +119,7 @@ const translations = {
     minorPoolDefaultName: "Yandal Seçmeli Dersi",
     minorCancelBtn: "Vazgeç",
     minorApplyBtn: "Yandalı Uygula",
+    dmBtn: "🎓 ÇAP Ekle",
     addDm: "🎓 ÇAP Ekle",
     dmBtnTitle: "Çift Anadal Programı (ÇAP) Seç / Düzenle",
     dmLabelPrefix: "ÇAP",
@@ -443,6 +444,8 @@ function applyStaticTranslations() {
     dmApplyBtn.innerHTML = `<span>${escapeHTML(t('dmApplyBtn'))}</span>`;
   }
 
+  updateMinorButtonUI();
+  updateDmButtonUI();
   updatePinButtonUI();
 }
 
@@ -2280,6 +2283,7 @@ function removeMinor(event) {
     event.stopPropagation();
     event.preventDefault();
   }
+  closeToolsDropdown();
   if (confirm(t('confirmRemoveMinor'))) {
     removeCurrentMinor(true);
   }
@@ -2287,25 +2291,36 @@ function removeMinor(event) {
 
 function updateMinorButtonUI() {
   const minorBtn = document.getElementById('minorBtn');
-  if (!minorBtn) return;
+  const mobileMinorBtn = document.getElementById('mobileMinorBtn');
   const state = getDeptState(currentDept);
   const minorId = state.selectedMinorId;
 
-  if (minorId && minorsData[minorId]) {
-    const localizedMinorName = getLocalizedMinorName(minorId);
-    const match = localizedMinorName.match(/\(([^)]+)\)/);
-    const shortName = match ? match[1] : localizedMinorName.replace(/Yandalı?|Minor/gi, '').trim();
-    minorBtn.className = 'minor-btn has-minor';
-    minorBtn.innerHTML = `🎓 ${escapeHTML(t('minorLabelPrefix'))}: ${escapeHTML(shortName)} <span class="minor-remove-btn" onclick="removeMinor(event)" title="${escapeHTML(t('minorRemoveTooltip'))}">✕</span>`;
-    minorBtn.title = `${localizedMinorName} ${t('minorHasTitleSuffix')}`;
-  } else {
-    minorBtn.className = 'minor-btn';
-    minorBtn.innerHTML = escapeHTML(t('addMinor'));
-    minorBtn.title = t('minorBtnTitle');
-  }
+  const defaultMinorText = (translations[currentLang] && translations[currentLang].addMinor)
+    ? translations[currentLang].addMinor
+    : (currentLang === 'en' ? '🎓 Add Minor' : '🎓 Yandal Ekle');
+
+  const updateBtn = (btn, isMobile = false) => {
+    if (!btn) return;
+    if (minorId && minorsData[minorId]) {
+      const localizedMinorName = getLocalizedMinorName(minorId);
+      const match = localizedMinorName.match(/\(([^)]+)\)/);
+      const shortName = match ? match[1] : localizedMinorName.replace(/Yandalı?|Minor/gi, '').trim();
+      btn.className = isMobile ? 'topbar-btn mobile-minor-btn has-minor' : 'minor-btn has-minor';
+      btn.innerHTML = `🎓 ${escapeHTML(t('minorLabelPrefix'))}: ${escapeHTML(shortName)} <span class="minor-remove-btn" onclick="removeMinor(event)" title="${escapeHTML(t('minorRemoveTooltip'))}">✕</span>`;
+      btn.title = `${localizedMinorName} ${t('minorHasTitleSuffix')}`;
+    } else {
+      btn.className = isMobile ? 'topbar-btn mobile-minor-btn' : 'minor-btn';
+      btn.innerHTML = escapeHTML(defaultMinorText);
+      btn.title = t('minorBtnTitle');
+    }
+  };
+
+  updateBtn(minorBtn, false);
+  updateBtn(mobileMinorBtn, true);
 }
 
 function openMinorModal() {
+  closeToolsDropdown();
   const modal = document.getElementById('minorModal');
   if (!modal) return;
   const select = document.getElementById('minorSelect');
@@ -2514,6 +2529,7 @@ function removeDm(event) {
     event.stopPropagation();
     event.preventDefault();
   }
+  closeToolsDropdown();
   if (confirm(t('dmRemoveConfirm'))) {
     removeCurrentDm(true);
   }
@@ -2521,24 +2537,34 @@ function removeDm(event) {
 
 function updateDmButtonUI() {
   const dmBtn = document.getElementById('dmBtn');
-  if (!dmBtn) return;
+  const mobileDmBtn = document.getElementById('mobileDmBtn');
   const state = getDeptState(currentDept);
   const dmId = state.selectedDmId;
 
-  if (dmId && dmData[dmId]) {
-    const prog = dmData[dmId];
-    const localizedName = getDmLocalizedName(prog);
-    const match = localizedName.match(/\(([^)]+)\)/);
-    const shortName = match ? match[1] : localizedName.replace(/ÇAP|Double Major|Programı/gi, '').trim();
-    const prefix = t('dmActivePrefix') || `🎓 ${t('dmLabelPrefix')}: `;
-    dmBtn.className = 'minor-btn dm-btn has-dm';
-    dmBtn.innerHTML = `${escapeHTML(prefix)}${escapeHTML(shortName)} <span class="minor-remove-btn" onclick="removeDm(event)" title="${escapeHTML(t('dmRemoveTooltip'))}">✕</span>`;
-    dmBtn.title = `${localizedName} ${t('dmHasTitleSuffix')}`;
-  } else {
-    dmBtn.className = 'minor-btn dm-btn';
-    dmBtn.innerHTML = escapeHTML(t('dmBtn'));
-    dmBtn.title = t('dmBtnTitle');
-  }
+  const defaultDmText = (translations[currentLang] && translations[currentLang].dmBtn)
+    ? translations[currentLang].dmBtn
+    : (currentLang === 'en' ? '🎓 Add Double Major' : '🎓 ÇAP Ekle');
+
+  const updateBtn = (btn, isMobile = false) => {
+    if (!btn) return;
+    if (dmId && dmData[dmId]) {
+      const prog = dmData[dmId];
+      const localizedName = getDmLocalizedName(prog);
+      const match = localizedName.match(/\(([^)]+)\)/);
+      const shortName = match ? match[1] : localizedName.replace(/ÇAP|Double Major|Programı/gi, '').trim();
+      const prefix = t('dmActivePrefix') || (currentLang === 'en' ? '🎓 DM: ' : '🎓 ÇAP: ');
+      btn.className = isMobile ? 'topbar-btn mobile-dm-btn has-dm' : 'minor-btn dm-btn has-dm';
+      btn.innerHTML = `${escapeHTML(prefix)}${escapeHTML(shortName)} <span class="minor-remove-btn dm-remove-btn" onclick="removeDm(event)" title="${escapeHTML(t('dmRemoveTooltip'))}">✕</span>`;
+      btn.title = `${localizedName} ${t('dmHasTitleSuffix')}`;
+    } else {
+      btn.className = isMobile ? 'topbar-btn mobile-dm-btn' : 'minor-btn dm-btn';
+      btn.innerHTML = escapeHTML(defaultDmText);
+      btn.title = t('dmBtnTitle');
+    }
+  };
+
+  updateBtn(dmBtn, false);
+  updateBtn(mobileDmBtn, true);
 }
 
 function populateDmModalOptions() {
@@ -2570,6 +2596,7 @@ function populateDmModalOptions() {
 }
 
 function openDmModal() {
+  closeToolsDropdown();
   const modal = document.getElementById('dmModal');
   if (!modal) return;
   populateDmModalOptions();

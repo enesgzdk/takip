@@ -222,6 +222,11 @@ select.dept-select option {
   flex-wrap: nowrap;
 }
 
+#mobileMinorBtn,
+#mobileDmBtn {
+  display: none !important;
+}
+
 .topbar-btn {
   padding: 5px 8px;
   border-radius: 6px;
@@ -1404,11 +1409,14 @@ textarea.form-control {
     width: 100%;
     flex-wrap: wrap;
   }
-  .minor-select-container {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex: 0 0 auto;
+  .minor-select-container,
+  #minorBtn,
+  #dmBtn {
+    display: none !important;
+  }
+  #mobileMinorBtn,
+  #mobileDmBtn {
+    display: flex !important;
   }
   .minor-btn {
     padding: 5px 8px;
@@ -1419,7 +1427,7 @@ textarea.form-control {
     position: absolute;
     right: 12px;
     top: 46px;
-    width: 205px;
+    width: 220px;
     background: #ffffff;
     border: 1px solid var(--border-color);
     border-radius: 10px;
@@ -1436,6 +1444,40 @@ textarea.form-control {
   .top-bar-btn-group #langToggleBtn {
     display: none;
   }
+  .top-bar-btn-group .mobile-minor-btn {
+    background: #eef2ff;
+    border-color: #c7d2fe;
+    color: #4338ca;
+    font-weight: 700;
+  }
+  .top-bar-btn-group .mobile-minor-btn:hover {
+    background: #e0e7ff;
+  }
+  .top-bar-btn-group .mobile-minor-btn.has-minor {
+    background: #f5f3ff;
+    border-color: #ddd6fe;
+    color: #6d28d9;
+  }
+  .top-bar-btn-group .mobile-dm-btn {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #065f46;
+    font-weight: 700;
+  }
+  .top-bar-btn-group .mobile-dm-btn:hover {
+    background: #d1fae5;
+  }
+  .top-bar-btn-group .mobile-dm-btn.has-dm {
+    background: #f0fdf4;
+    border-color: #86efac;
+    color: #166534;
+  }
+  .top-bar-btn-group .minor-remove-btn {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
+  }
   .top-bar-btn-group .topbar-btn,
   .top-bar-btn-group .reset-btn {
     width: 100%;
@@ -1448,10 +1490,11 @@ textarea.form-control {
     justify-content: flex-start;
   }
   .dept-select-container {
-    flex: 1;
+    flex: 1 1 100%;
+    width: 100%;
     min-width: 0;
     max-width: none;
-    padding: 4px 8px;
+    padding: 6px 10px;
     border-radius: 8px;
   }
   select.dept-select {
