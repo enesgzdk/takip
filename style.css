@@ -1209,6 +1209,8 @@ select.dept-select:disabled {
   line-height: 1.45;
 }
 
+#toast,
+.toast,
 .toast-msg {
   position: fixed;
   bottom: calc(20px + env(safe-area-inset-bottom, 0px));
@@ -1221,12 +1223,14 @@ select.dept-select:disabled {
   font-size: 0.8rem;
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  z-index: 1000;
+  z-index: 99999 !important;
   pointer-events: none;
   opacity: 0;
   transition: all 0.25s ease;
   white-space: nowrap;
 }
+#toast.show,
+.toast.show,
 .toast-msg.show {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
@@ -1536,6 +1540,24 @@ textarea.form-control {
     justify-content: center;
     padding: 8px 6px;
     font-size: 0.76rem;
+  }
+  #toast,
+  .toast,
+  .toast-msg {
+    bottom: auto !important;
+    top: 74px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: max-content;
+    max-width: 90vw;
+    white-space: normal;
+    text-align: center;
+  }
+  #toast.show,
+  .toast.show,
+  .toast-msg.show {
+    transform: translateX(-50%) !important;
+    opacity: 1 !important;
   }
   .minor-btn {
     padding: 5px 8px;
