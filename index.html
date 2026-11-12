@@ -47,6 +47,12 @@
         <button id="mobileDmBtn" class="topbar-btn mobile-dm-btn" onclick="openDmModal()" title="Çift Anadal Programı Seç / Düzenle">
           🎓 ÇAP Ekle
         </button>
+        <button id="mobileShareBtn" class="topbar-btn mobile-share-btn" onclick="openShareModal()" title="Ders planınızı paylaşın">
+          📤 Paylaş
+        </button>
+        <button id="shareBtn" class="topbar-btn share-btn" onclick="openShareModal()" title="Ders planınızı görsel veya link olarak paylaşın">
+          📤 Paylaş
+        </button>
         <button id="exportBtn" class="topbar-btn export-btn" onclick="exportDataAsJSON()" title="Mevcut ders planınızı ve notlarınızı JSON dosyası olarak indirin">
           📥 JSON İndir
         </button>
@@ -228,6 +234,36 @@
     </div>
   </div>
 
+  <div id="shareModal" class="modal-backdrop" onclick="handleShareBackdropClick(event)">
+    <div class="modal-dialog share-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+      <div class="modal-header">
+        <h3 id="shareModalTitle">📤 Planı Paylaş</h3>
+        <button type="button" class="modal-close-btn" onclick="closeShareModal()" aria-label="Kapat">✕</button>
+      </div>
+      <div class="modal-body share-modal-body">
+        <div class="share-options-grid">
+          <button type="button" class="share-option-card" onclick="exportPlanAsPng()">
+            <div class="share-option-icon">🖼️</div>
+            <div class="share-option-content">
+              <strong id="sharePngBtn">Görsel Olarak İndir (PNG)</strong>
+              <span id="sharePngDesc">Dönemleri ve ders planınızı yüksek çözünürlüklü temiz bir özet görseli olarak indirin.</span>
+            </div>
+          </button>
+          <button type="button" class="share-option-card" onclick="copyShareLink()">
+            <div class="share-option-icon">🔗</div>
+            <div class="share-option-content">
+              <strong id="shareLinkBtn">Paylaşılabilir Linki Kopyala</strong>
+              <span id="shareLinkDesc">Mevcut ders planınızı içeren linki panoya kopyalayın, arkadaşlarınız tek tıkla açsın.</span>
+            </div>
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="shareCancelBtn" class="btn-cancel-issue" onclick="closeShareModal()">Kapat</button>
+      </div>
+    </div>
+  </div>
+
   <div id="termPickerModal" class="bottom-sheet-backdrop" onclick="handleTermPickerBackdropClick(event)">
     <div class="bottom-sheet-dialog" role="dialog" aria-modal="true" aria-labelledby="termPickerTitle">
       <div class="bottom-sheet-handle"></div>
@@ -242,6 +278,8 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="./app.js?v=2"></script>
 </body>
 </html>

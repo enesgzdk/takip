@@ -175,7 +175,23 @@ const translations = {
     loadErrorDesc: "<code>curriculum.json</code> dosyasının <code>index.html</code> ile aynı klasörde olduğundan ve sayfayı yerel bir sunucu (Live Server vb.) üzerinden açtığınızdan emin olun.",
     loadErrorDetail: "Hata detayı:",
     pinCardTitle: "Kartı Üste Sabitle",
-    unpinCardTitle: "Sabitlemeyi Kaldır"
+    unpinCardTitle: "Sabitlemeyi Kaldır",
+    shareBtn: "📤 Paylaş",
+    shareBtnTitle: "Ders planınızı görsel veya link olarak paylaşın",
+    shareModalTitle: "📤 Planı Paylaş",
+    sharePngBtn: "Görsel Olarak İndir (PNG)",
+    sharePngDesc: "Dönemleri ve ders planınızı yüksek çözünürlüklü temiz bir özet görseli olarak indirin.",
+    shareLinkBtn: "Paylaşılabilir Linki Kopyala",
+    shareLinkDesc: "Mevcut ders planınızı içeren linki panoya kopyalayın, arkadaşlarınız tek tıkla açsın.",
+    shareLinkCopied: "✅ Paylaşım linki panoya kopyalandı!",
+    shareExporting: "Görsel hazırlanıyor...",
+    shareExportSuccess: "✓ Görsel başarıyla indirildi!",
+    shareExportError: "Görsel oluşturulurken bir hata oluştu.",
+    shareLoadedSuccess: "✓ Paylaşılan ders planı başarıyla yüklendi!",
+    shareLoadConfirm: "Paylaşılan ders planı yüklensin mi? Mevcut planınızın üzerine yazılacaktır.",
+    shareCancelBtn: "Kapat",
+    shareEmptyPlan: "Görsel oluşturmak için dönemlere en az bir ders eklemelisiniz.",
+    plannedStatus: "Plan"
   },
   en: {
     appSubtitle: "| Course & GPA Tracker",
@@ -335,7 +351,23 @@ const translations = {
     loadErrorDesc: "Make sure <code>curriculum.json</code> is in the same folder as <code>index.html</code> and that you are serving the page over a local HTTP server (e.g., Live Server).",
     loadErrorDetail: "Error details:",
     pinCardTitle: "Pin Card",
-    unpinCardTitle: "Unpin Card"
+    unpinCardTitle: "Unpin Card",
+    shareBtn: "📤 Share",
+    shareBtnTitle: "Share your course plan as an image or link",
+    shareModalTitle: "📤 Share Plan",
+    sharePngBtn: "Download as Image (PNG)",
+    sharePngDesc: "Download your semesters and course plan as a clean, high-resolution summary image.",
+    shareLinkBtn: "Copy Shareable Link",
+    shareLinkDesc: "Copy a link containing your course plan to clipboard so friends can view it with one click.",
+    shareLinkCopied: "✅ Share link copied to clipboard!",
+    shareExporting: "Generating image...",
+    shareExportSuccess: "✓ Image downloaded successfully!",
+    shareExportError: "An error occurred while generating the image.",
+    shareLoadedSuccess: "✓ Shared course plan loaded successfully!",
+    shareLoadConfirm: "Load the shared course plan? Your current plan for this department will be overwritten.",
+    shareCancelBtn: "Close",
+    shareEmptyPlan: "You need to add at least one course to semesters to generate an image.",
+    plannedStatus: "Planned"
   }
 };
 
@@ -382,6 +414,10 @@ function applyStaticTranslations() {
   setAttr('importBtn', 'title', t('importBtnTitle'));
   setText('feedbackBtn', t('feedbackBtn'));
   setAttr('feedbackBtn', 'title', t('feedbackBtnTitle'));
+  setText('shareBtn', t('shareBtn'));
+  setAttr('shareBtn', 'title', t('shareBtnTitle'));
+  setText('mobileShareBtn', t('shareBtn'));
+  setAttr('mobileShareBtn', 'title', t('shareBtnTitle'));
   setText('supportBtn', t('supportBtn'));
   setAttr('supportBtn', 'title', t('supportBtnTitle'));
   setText('resetBtn', t('resetBtn'));
@@ -443,6 +479,14 @@ function applyStaticTranslations() {
   if (dmApplyBtn) {
     dmApplyBtn.innerHTML = `<span>${escapeHTML(t('dmApplyBtn'))}</span>`;
   }
+
+  // Share modal
+  setText('shareModalTitle', t('shareModalTitle'));
+  setText('sharePngBtn', t('sharePngBtn'));
+  setText('sharePngDesc', t('sharePngDesc'));
+  setText('shareLinkBtn', t('shareLinkBtn'));
+  setText('shareLinkDesc', t('shareLinkDesc'));
+  setText('shareCancelBtn', t('shareCancelBtn'));
 
   updateMinorButtonUI();
   updateDmButtonUI();
@@ -824,6 +868,7 @@ async function loadCurriculum() {
       localStorage.setItem(LEGACY_CLEANUP_KEY, 'true');
     }
 
+    loadSharedPlanFromHash();
     applyStaticTranslations();
     populateDepartmentSelect();
     populateMinorModalOptions();
@@ -2115,6 +2160,351 @@ function importDataFromJSON(event) {
 
   reader.readAsText(file, "UTF-8");
 }
+
+// --- Paylaşım Modalı & Özellikleri (Görsel PNG + URL Hash) ---
+
+function openShareModal() {
+  closeToolsDropdown();
+  const modal = document.getElementById('shareModal');
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeShareModal() {
+  const modal = document.getElementById('shareModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleShareBackdropClick(event) {
+  if (event.target && event.target.id === 'shareModal') {
+    closeShareModal();
+  }
+}
+
+function fallbackCopyText(text) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";
+  textArea.style.left = "-9999px";
+  textArea.style.top = "0";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand('copy');
+    showToast(t('shareLinkCopied'));
+  } catch (err) {
+    prompt("Paylaşım linki:", text);
+  }
+  document.body.removeChild(textArea);
+}
+
+function copyShareLink() {
+  closeShareModal();
+  try {
+    const state = getDeptState(currentDept);
+    const payload = {
+      v: 1,
+      dept: currentDept,
+      minor: state.selectedMinorId || null,
+      dm: state.selectedDmId || null,
+      plan: state.instances || []
+    };
+
+    if (typeof LZString === 'undefined') {
+      alert("LZ-String kütüphanesi henüz yüklenemedi.");
+      return;
+    }
+
+    const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(payload));
+    const shareUrl = window.location.origin + window.location.pathname + '#plan=' + compressed;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        showToast(t('shareLinkCopied'));
+      }).catch(() => {
+        fallbackCopyText(shareUrl);
+      });
+    } else {
+      fallbackCopyText(shareUrl);
+    }
+  } catch (err) {
+    console.error("Link kopyalanırken hata:", err);
+    showToast("Hata: Link kopyalanamadı.");
+  }
+}
+
+function createShareExportBoard() {
+  const state = getDeptState(currentDept);
+  const deptName = getLocalizedDeptName(currentDept);
+
+  const gpaEl = document.getElementById('gpa-display');
+  const gpa = gpaEl ? gpaEl.innerText.trim() : '0.00';
+  const completedEl = document.getElementById('completed-credits');
+  const completedText = completedEl ? completedEl.innerText.trim() : '0 Cr';
+  const selectedEl = document.getElementById('selected-credits');
+  const selectedText = selectedEl ? selectedEl.innerText.trim() : '0 Cr';
+
+  let minorBadgeHtml = '';
+  if (state.selectedMinorId && minorsData && minorsData[state.selectedMinorId]) {
+    const minorName = getLocalizedMinorName(state.selectedMinorId);
+    minorBadgeHtml = `<span class="export-tag minor">🎓 ${escapeHTML(t('minorLabelPrefix'))}: ${escapeHTML(minorName)}</span>`;
+  }
+  let dmBadgeHtml = '';
+  if (state.selectedDmId && dmData && dmData[state.selectedDmId]) {
+    const dmProg = dmData[state.selectedDmId];
+    const dmName = getDmLocalizedName(dmProg);
+    dmBadgeHtml = `<span class="export-tag dm">🎓 ${escapeHTML(t('dmLabelPrefix'))}: ${escapeHTML(dmName)}</span>`;
+  }
+
+  const activeYearStructure = getEffectiveYearStructure();
+  const allSems = [];
+  activeYearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
+
+  const nonEmptys = allSems.filter(semId => {
+    return state.instances.some(inst => inst.semId === semId);
+  });
+
+  if (nonEmptys.length === 0) {
+    return null;
+  }
+
+  const semesterStats = {};
+  nonEmptys.forEach(s => {
+    semesterStats[s] = { totalPoints: 0, totalCredits: 0, earnedCredits: 0, scheduledCredits: 0 };
+  });
+
+  state.instances.forEach(inst => {
+    if (!semesterStats[inst.semId]) return;
+    const course = getCourseForInstance(inst);
+    if (course) {
+      const crd = Number(course.crd) || 0;
+      semesterStats[inst.semId].scheduledCredits += crd;
+      if (inst.passed) {
+        semesterStats[inst.semId].earnedCredits += crd;
+        if (inst.grade && GRADE_POINTS[inst.grade] !== null && GRADE_POINTS[inst.grade] !== undefined) {
+          semesterStats[inst.semId].totalPoints += (GRADE_POINTS[inst.grade] * crd);
+          semesterStats[inst.semId].totalCredits += crd;
+        }
+      }
+    }
+  });
+
+  const board = document.createElement('div');
+  board.className = 'share-export-board';
+  board.id = 'shareExportBoard';
+
+  let semsGridHtml = '';
+  nonEmptys.forEach(semId => {
+    const semStat = semesterStats[semId];
+    const spaStr = semStat.earnedCredits > 0
+      ? (semStat.totalCredits > 0 ? (semStat.totalPoints / semStat.totalCredits).toFixed(2) : 'P')
+      : '-';
+
+    const semInstances = state.instances.filter(inst => inst.semId === semId);
+
+    let coursesHtml = '';
+    semInstances.forEach(inst => {
+      const course = getCourseForInstance(inst);
+      if (!course) return;
+
+      const isPassed = !!inst.passed;
+      const isMinor = !!inst.isMinor;
+      const isDm = !!inst.isDoubleMajor;
+      const crd = Number(course.crd) || 0;
+
+      let codeDisplay = escapeHTML(course.code || '');
+      if (inst.customText && inst.customText.trim()) {
+        codeDisplay = `${escapeHTML(inst.customText.trim())} <span class="export-sub-code">(${escapeHTML(course.code || '')})</span>`;
+      }
+
+      const gradeBadge = isPassed
+        ? `<span class="export-course-grade">${escapeHTML(inst.grade || 'AA')}</span>`
+        : `<span class="export-course-status">⏳ ${escapeHTML(t('plannedStatus'))}</span>`;
+
+      coursesHtml += `
+        <div class="export-course-item ${isPassed ? 'passed' : 'planned'}">
+          <div class="export-course-left">
+            <div class="export-course-code-line">
+              <span class="export-course-code">${codeDisplay}</span>
+              ${isMinor ? `<span class="export-mini-badge minor">${escapeHTML(t('minorBadge'))}</span>` : ''}
+              ${isDm ? `<span class="export-mini-badge dm">${escapeHTML(t('dmBadge'))}</span>` : ''}
+            </div>
+            <div class="export-course-name">${escapeHTML(course.name || '')}</div>
+          </div>
+          <div class="export-course-right">
+            <span class="export-course-crd">${crd} Cr</span>
+            ${gradeBadge}
+          </div>
+        </div>
+      `;
+    });
+
+    semsGridHtml += `
+      <div class="export-sem-box">
+        <div class="export-sem-header">
+          <span class="export-sem-title">${escapeHTML(formatSemLabel(semId))}</span>
+          <div class="export-sem-badges">
+            <span class="export-crd-badge">${semStat.scheduledCredits} Cr</span>
+            <span class="export-spa-badge ${spaStr !== '-' ? 'active' : ''}">SPA: ${spaStr}</span>
+          </div>
+        </div>
+        <div class="export-sem-courses">
+          ${coursesHtml}
+        </div>
+      </div>
+    `;
+  });
+
+  board.innerHTML = `
+    <div class="export-board-header">
+      <div class="export-header-left">
+        <div class="export-logo">🎓 Boğaziçi Tracker</div>
+        <div class="export-dept-title">${escapeHTML(deptName)}</div>
+        <div class="export-badges-row">
+          ${minorBadgeHtml}
+          ${dmBadgeHtml}
+        </div>
+      </div>
+      <div class="export-header-right">
+        <div class="export-stat-card gpa-card">
+          <div class="export-stat-label">GPA / GNO</div>
+          <div class="export-stat-val gpa">${gpa}</div>
+        </div>
+        <div class="export-stat-card">
+          <div class="export-stat-label">${escapeHTML(t('completed'))}</div>
+          <div class="export-stat-val">${escapeHTML(completedText)}</div>
+        </div>
+        <div class="export-stat-card">
+          <div class="export-stat-label">${escapeHTML(t('selectedCredits'))}</div>
+          <div class="export-stat-val">${escapeHTML(selectedText)}</div>
+        </div>
+      </div>
+    </div>
+    <div class="export-sems-grid">
+      ${semsGridHtml}
+    </div>
+    <div class="export-board-footer">
+      <span>Boğaziçi Tracker • Ders & GPA Takip</span>
+      <span>${new Date().toLocaleDateString()}</span>
+    </div>
+  `;
+
+  return board;
+}
+
+async function exportPlanAsPng() {
+  if (typeof html2canvas === 'undefined') {
+    alert("html2canvas kütüphanesi henüz yüklenmedi.");
+    return;
+  }
+
+  const board = createShareExportBoard();
+  if (!board) {
+    showToast(t('shareEmptyPlan'));
+    return;
+  }
+
+  closeShareModal();
+  showToast(t('shareExporting'));
+
+  document.body.appendChild(board);
+
+  try {
+    await new Promise(resolve => setTimeout(resolve, 150));
+
+    const canvas = await html2canvas(board, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#f8fafc',
+      logging: false
+    });
+
+    const dataUrl = canvas.toDataURL('image/png');
+    const cleanDept = (currentDept || 'Plan').replace(/[^a-zA-Z0-9_-]/g, '_');
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = `${cleanDept}_Ders_Plani.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    showToast(t('shareExportSuccess'));
+  } catch (err) {
+    console.error("Görsel dışa aktarılırken hata:", err);
+    showToast(t('shareExportError'));
+  } finally {
+    if (board && board.parentNode) {
+      board.parentNode.removeChild(board);
+    }
+  }
+}
+
+function loadSharedPlanFromHash() {
+  if (!window.location.hash) return;
+  const hash = window.location.hash;
+  const match = hash.match(/#plan=([^&]+)/);
+  if (!match) return;
+
+  const rawCompressed = match[1];
+  if (!rawCompressed || typeof LZString === 'undefined') return;
+
+  try {
+    const decompressed = LZString.decompressFromEncodedURIComponent(rawCompressed);
+    if (!decompressed) return;
+    const payload = JSON.parse(decompressed);
+    if (!payload || !payload.dept) return;
+
+    const targetDept = payload.dept;
+    if (!departmentsData || !departmentsData[targetDept]) {
+      console.warn("Paylaşılan bölüm sistemde bulunamadı:", targetDept);
+      return;
+    }
+
+    const existingState = globalState[targetDept];
+    const hasExistingPlan = existingState && Array.isArray(existingState.instances) && existingState.instances.length > 0;
+
+    let shouldLoad = true;
+    if (hasExistingPlan) {
+      shouldLoad = confirm(t('shareLoadConfirm'));
+    }
+
+    if (shouldLoad) {
+      currentDept = targetDept;
+      const incomingInstances = Array.isArray(payload.instances)
+        ? payload.instances
+        : (Array.isArray(payload.plan) ? payload.plan : (payload.plan?.instances || []));
+
+      globalState[targetDept] = {
+        instances: incomingInstances,
+        selectedMinorId: payload.minor || null,
+        selectedDmId: payload.dm || null
+      };
+
+      saveGlobalState();
+      showToast(t('shareLoadedSuccess'));
+    }
+
+    // URL'den hash'i temizle
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  } catch (err) {
+    console.warn("Paylaşılan plan çözümlenirken hata:", err);
+  }
+}
+
+window.addEventListener('hashchange', () => {
+  if (window.location.hash && window.location.hash.includes('#plan=')) {
+    loadSharedPlanFromHash();
+    const deptSelect = document.getElementById('deptSelect');
+    if (deptSelect) deptSelect.value = currentDept;
+    initUI();
+  }
+});
 
 /* ============================================================
    Yandal Programı (Minor Program) Yönetimi
