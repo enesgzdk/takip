@@ -1,6 +1,10 @@
 const isMobileDevice = () => window.innerWidth <= 900;
 
-const DEFAULT_TERM = "2026/2027-1";
+const FALL_TERM = "2026/2027-1";
+const SPRING_TERM = "2025/2026-2";
+const DEFAULT_TERM = FALL_TERM;
+
+let isDashPinned = localStorage.getItem('boun_pin_dash_card') === 'true';
 
 const GRADE_POINTS = {
   'AA': 4.0, 'BA': 3.5, 'BB': 3.0, 'CB': 2.5,
@@ -133,7 +137,9 @@ const translations = {
     limitTag: "YÖK Sınır",
     loadErrorTitle: "Müfredat Verisi Yüklenemedi!",
     loadErrorDesc: "<code>curriculum.json</code> dosyasının <code>index.html</code> ile aynı klasörde olduğundan ve sayfayı yerel bir sunucu (Live Server vb.) üzerinden açtığınızdan emin olun.",
-    loadErrorDetail: "Hata detayı:"
+    loadErrorDetail: "Hata detayı:",
+    pinCardTitle: "Kartı Üste Sabitle",
+    unpinCardTitle: "Sabitlemeyi Kaldır"
   },
   en: {
     appSubtitle: "| Course & GPA Tracker",
@@ -255,7 +261,9 @@ const translations = {
     limitTag: "Max Limit",
     loadErrorTitle: "Failed to Load Curriculum Data!",
     loadErrorDesc: "Make sure <code>curriculum.json</code> is in the same folder as <code>index.html</code> and that you are serving the page over a local HTTP server (e.g., Live Server).",
-    loadErrorDetail: "Error details:"
+    loadErrorDetail: "Error details:",
+    pinCardTitle: "Pin Card",
+    unpinCardTitle: "Unpin Card"
   }
 };
 
@@ -349,6 +357,8 @@ function applyStaticTranslations() {
   if (minorApplyBtn) {
     minorApplyBtn.innerHTML = `<span>${escapeHTML(t('minorApplyBtn'))}</span>`;
   }
+
+  updatePinButtonUI();
 }
 
 function toggleLanguage() {
@@ -415,8 +425,52 @@ const BOUN_BOLUM_MAP = {
   HUM: "HUMANITIES+COURSES+COORDINATORSHIP",
   HTR: "ATATURK+INSTITUTE+FOR+MODERN+TURKISH+HISTORY",
   TK: "TURKISH+COURSES+COORDINATORSHIP",
-  AE: "SCHOOL+OF+FOREIGN+LANGUAGES"
+  AE: "SCHOOL+OF+FOREIGN+LANGUAGES",
+  ESC: "ENVIRONMENTAL+SCIENCES",
+  ENGG: "ENGINEERING",
+  OHS: "OCCUPATIONAL+HEALTH+AND+SAFETY",
+  STS: "SCIENCE+TECHNOLOGY+AND+SOCIETY",
+  TID: "TURKISH+SIGN+LANGUAGE",
+  TKF: "TURKISH+COURSES+COORDINATORSHIP",
+  ARB: "MODERN+LANGUAGES+UNIT",
+  ARM: "MODERN+LANGUAGES+UNIT",
+  CHIN: "MODERN+LANGUAGES+UNIT",
+  FR: "MODERN+LANGUAGES+UNIT",
+  GER: "MODERN+LANGUAGES+UNIT",
+  GR: "MODERN+LANGUAGES+UNIT",
+  HUNG: "MODERN+LANGUAGES+UNIT",
+  ITA: "MODERN+LANGUAGES+UNIT",
+  JP: "MODERN+LANGUAGES+UNIT",
+  KR: "MODERN+LANGUAGES+UNIT",
+  LAT: "WESTERN+LANGUAGES+AND+LITERATURES",
+  PER: "MODERN+LANGUAGES+UNIT",
+  POR: "MODERN+LANGUAGES+UNIT",
+  RUS: "MODERN+LANGUAGES+UNIT",
+  SPA: "MODERN+LANGUAGES+UNIT",
+  CAU: "CAUCASIAN+LANGUAGES+AND+CULTURES"
 };
+
+function resolveCourseTerm(courseOrSem, courseCode) {
+  let sem = '';
+  if (typeof courseOrSem === 'string') {
+    sem = courseOrSem.trim();
+  } else if (courseOrSem && typeof courseOrSem === 'object' && courseOrSem.sem) {
+    sem = String(courseOrSem.sem).trim();
+  }
+
+  if (sem.endsWith('.2')) {
+    return SPRING_TERM;
+  }
+
+  if (!sem && courseCode) {
+    const matched = findCourseByCode(courseCode);
+    if (matched && matched.sem && String(matched.sem).trim().endsWith('.2')) {
+      return SPRING_TERM;
+    }
+  }
+
+  return FALL_TERM;
+}
 
 function getBounCourseUrl(courseCode, term = DEFAULT_TERM) {
   if (!courseCode || typeof courseCode !== 'string') return null;
@@ -581,6 +635,97 @@ async function loadCurriculum() {
   }
 }
 
+const FACULTY_EN_MAP = {
+  "Fen Fakültesi": "Faculty of Arts and Sciences",
+  "Eğitim Fakültesi": "Faculty of Education",
+  "Hukuk Fakültesi": "Faculty of Law",
+  "İktisadi ve İdari Bilimler Fakültesi": "Faculty of Economics and Administrative Sciences",
+  "Mühendislik Fakültesi": "Faculty of Engineering",
+  "İnsan ve Toplum Bilimleri Fakültesi": "Faculty of Humanities and Social Sciences",
+  "Uygulamalı Bilimler Fakültesi": "School of Applied Disciplines",
+  "Diğer Lisans Programları": "Other Undergraduate Programs",
+  "Diğer Fakülteler": "Other Faculties"
+};
+
+const DEPT_EN_MAP = {
+  phys: "Physics (PHYS)",
+  chem: "Chemistry (CHEM)",
+  math: "Mathematics (MATH)",
+  mbg: "Molecular Biology and Genetics (MBG)",
+  cet: "Computer Education and Educational Technology (CET)",
+  ed: "Guidance and Psychological Counseling (ED)",
+  pred: "Early Childhood Education (PRED)",
+  sced_sci: "Science Education (SCED_SCI)",
+  sced_sec_math: "Secondary School Mathematics Education (SCED_SEC_MATH)",
+  sced_math: "Primary Mathematics Education (SCED_MATH)",
+  sced_chem: "Chemistry Education (SCED_CHEM)",
+  sced_phy: "Physics Education (SCED_PHY)",
+  fled: "English Language Teaching (FLED)",
+  law: "Law (LAW)",
+  econ: "Economics (ECON)",
+  mgmt_a: "Management - Program A (MGMT_A)",
+  mgmt_b: "Management - Program B (MGMT_B)",
+  pols: "Political Science and International Relations (POLS)",
+  tour: "Tourism Administration (TOUR)",
+  intt: "International Trade (INTT)",
+  mis: "Management Information Systems (MIS)",
+  cmpe: "Computer Engineering (CMPE)",
+  ee: "Electrical and Electronics Engineering (EE)",
+  ie: "Industrial Engineering (IE)",
+  ce: "Civil Engineering (CE)",
+  che: "Chemical Engineering (CHE)",
+  me: "Mechanical Engineering (ME)",
+  soc: "Sociology (SOC)",
+  psy: "Psychology (PSY)",
+  hist: "History (HIST)",
+  tkl: "Turkish Language and Literature (TKL)",
+  transint: "Translation and Interpreting Studies (TRANSINT)",
+  ling: "Linguistics (LING)",
+  phil: "Philosophy (PHIL)",
+  wll: "Western Languages and Literatures (WLL)"
+};
+
+const MINOR_EN_MAP = {
+  wll_minor: "Western Languages and Literatures (WLL) Minor",
+  cmpe_minor: "Computer Engineering (CMPE) Minor",
+  cet_minor: "Information and Communication Technologies in Education (CET) Minor",
+  ee_minor: "Electrical and Electronics Engineering (EE) Minor",
+  ie_prod_minor: "Industrial Engineering: Production and Service Systems Minor",
+  ie_or_minor: "Industrial Engineering: Operations Research (OR) Minor",
+  econ_minor: "Economics (EC) Minor",
+  mgmt_minor: "Management (AD) Minor",
+  chem_minor: "Chemistry (CHEM) Minor",
+  me_minor: "Mechanical Engineering (ME) Minor",
+  mbg_minor: "Molecular Biology and Genetics (MBG) Minor",
+  pols_minor: "Political Science and International Relations (POLS) Minor",
+  trm_minor: "Tourism Administration (TRM) Minor",
+  tkl_minor: "Turkish Language and Literature (TKL) Minor",
+  intt_minor: "International Trade (INTT) Minor",
+  mis_minor: "Management Information Systems (MIS) Minor"
+};
+
+function getLocalizedFacultyName(trFaculty) {
+  if (!trFaculty) return '';
+  if (currentLang === 'en' && FACULTY_EN_MAP[trFaculty]) {
+    return FACULTY_EN_MAP[trFaculty];
+  }
+  return trFaculty;
+}
+
+function getLocalizedDeptName(deptKey) {
+  if (currentLang === 'en' && DEPT_EN_MAP[deptKey]) {
+    return DEPT_EN_MAP[deptKey];
+  }
+  return departmentsData[deptKey]?.name || deptKey;
+}
+
+function getLocalizedMinorName(minorKey) {
+  if (currentLang === 'en' && MINOR_EN_MAP[minorKey]) {
+    return MINOR_EN_MAP[minorKey];
+  }
+  return minorsData[minorKey]?.name || minorKey;
+}
+
 /* Fakültelere Göre optgroup Üreten Gelişmiş Seçim Menüsü */
 function populateDepartmentSelect() {
   const select = document.getElementById('deptSelect');
@@ -589,11 +734,11 @@ function populateDepartmentSelect() {
   const faculties = {};
   Object.keys(departmentsData).forEach(deptKey => {
     const dept = departmentsData[deptKey];
-    const facultyName = dept.faculty || t('otherPrograms');
+    const facultyName = dept.faculty ? getLocalizedFacultyName(dept.faculty) : t('otherPrograms');
     if (!faculties[facultyName]) {
       faculties[facultyName] = [];
     }
-    faculties[facultyName].push({ key: deptKey, name: dept.name });
+    faculties[facultyName].push({ key: deptKey, name: getLocalizedDeptName(deptKey) });
   });
 
   Object.keys(faculties).forEach(facultyName => {
@@ -620,9 +765,9 @@ function populateMinorModalOptions() {
   const faculties = {};
   Object.keys(minorsData).forEach(minorKey => {
     const m = minorsData[minorKey];
-    const fac = m.faculty || t('otherFaculties');
+    const fac = m.faculty ? getLocalizedFacultyName(m.faculty) : t('otherFaculties');
     if (!faculties[fac]) faculties[fac] = [];
-    faculties[fac].push({ key: minorKey, name: m.name });
+    faculties[fac].push({ key: minorKey, name: getLocalizedMinorName(minorKey) });
   });
 
   Object.keys(faculties).forEach(facultyName => {
@@ -951,7 +1096,7 @@ function updateSidebarPool() {
         statusBadge = `<span class="status-badge pending" style="color: #0284c7; font-weight: 600;">${escapeHTML(t('plannedStatus'))}</span>`;
       }
 
-      const poolCourseUrl = getBounCourseUrl(course.code);
+      const poolCourseUrl = getBounCourseUrl(course.code, resolveCourseTerm(course, course.code));
       const safeCode = escapeHTML(course.code);
       const safeName = escapeHTML(course.name);
       const safePrereq = course.prereq ? escapeHTML(translatePrereq(course.prereq)) : '';
@@ -1004,9 +1149,7 @@ function updateSidebarPool() {
     pool.appendChild(groupContainer);
   });
 
-  if (dashCardWrapper) {
-    pool.prepend(dashCardWrapper);
-  }
+  applyDashCardPosition();
   calculateAverages();
 }
 
@@ -1096,7 +1239,7 @@ function initUI() {
 
       if (curriculumInfo) {
         const listStr = curriculumInfo.map(c => `• ${escapeHTML(c)}`).join('<br>');
-        const tooltipContent = `<strong>${escapeHTML(activeDeptData.name)} (${escapeHTML(semDisplay)}):</strong><br>${listStr}`;
+        const tooltipContent = `<strong>${escapeHTML(getLocalizedDeptName(currentDept))} (${escapeHTML(semDisplay)}):</strong><br>${listStr}`;
         const infoBtn = box.querySelector(`#info-btn-${safeSemId}`);
         if (infoBtn) attachGlobalTooltip(infoBtn, tooltipContent);
       }
@@ -1148,8 +1291,9 @@ function createSemesterCourseCard(inst, course) {
     return `<option value="${g}" ${currentGrade === g ? 'selected' : ''}>${g} ${valText}</option>`;
   }).join('');
 
-  const effectiveCode = (course.isElective && inst.customText) ? inst.customText : course.code;
-  const courseUrl = getBounCourseUrl(effectiveCode);
+  const isCustomElective = Boolean(course.isElective && inst.customText);
+  const effectiveCode = isCustomElective ? inst.customText : course.code;
+  const courseUrl = getBounCourseUrl(effectiveCode, resolveCourseTerm(isCustomElective ? null : course, effectiveCode));
 
   const safeCode = escapeHTML(course.code);
   const safeName = escapeHTML(course.name);
@@ -1431,8 +1575,9 @@ function handleInstanceInput(instanceId, text) {
       const linkWrap = card.querySelector('.course-desc-link-wrap');
       if (linkWrap) {
         const course = getCourseForInstance(inst);
-        const effectiveCode = (course && course.isElective && text.trim()) ? text.trim() : (course ? course.code : text.trim());
-        const newUrl = getBounCourseUrl(effectiveCode);
+        const isCustomElective = Boolean(course && course.isElective && text.trim());
+        const effectiveCode = isCustomElective ? text.trim() : (course ? course.code : text.trim());
+        const newUrl = getBounCourseUrl(effectiveCode, resolveCourseTerm(isCustomElective ? null : course, effectiveCode));
         if (newUrl) {
           const safeEffectiveCode = escapeHTML(effectiveCode);
           linkWrap.innerHTML = `
@@ -1469,7 +1614,7 @@ function removeInstance(instanceId) {
 }
 
 function resetCurrentDept() {
-  const deptName = departmentsData[currentDept]?.name || currentDept;
+  const deptName = getLocalizedDeptName(currentDept);
   if (confirm(t('confirmReset')(deptName))) {
     globalState[currentDept] = { instances: [], selectedMinorId: null };
     saveGlobalState();
@@ -1776,7 +1921,7 @@ function applyMinor(minorKey) {
   initUI();
 
   const minorCourses = getActiveMinorCourseList();
-  showToast(t('toastMinorApplied')(minor.name, minorCourses.length));
+  showToast(t('toastMinorApplied')(getLocalizedMinorName(minorKey), minorCourses.length));
 }
 
 function removeCurrentMinor(shouldSave = true) {
@@ -1812,12 +1957,12 @@ function updateMinorButtonUI() {
   const minorId = state.selectedMinorId;
 
   if (minorId && minorsData[minorId]) {
-    const minor = minorsData[minorId];
-    const match = minor.name.match(/\(([^)]+)\)/);
-    const shortName = match ? match[1] : minor.name.replace(/Yandalı?/i, '').trim();
+    const localizedMinorName = getLocalizedMinorName(minorId);
+    const match = localizedMinorName.match(/\(([^)]+)\)/);
+    const shortName = match ? match[1] : localizedMinorName.replace(/Yandalı?|Minor/gi, '').trim();
     minorBtn.className = 'minor-btn has-minor';
     minorBtn.innerHTML = `🎓 ${escapeHTML(t('minorLabelPrefix'))}: ${escapeHTML(shortName)} <span class="minor-remove-btn" onclick="removeMinor(event)" title="${escapeHTML(t('minorRemoveTooltip'))}">✕</span>`;
-    minorBtn.title = `${minor.name} ${t('minorHasTitleSuffix')}`;
+    minorBtn.title = `${localizedMinorName} ${t('minorHasTitleSuffix')}`;
   } else {
     minorBtn.className = 'minor-btn';
     minorBtn.innerHTML = escapeHTML(t('addMinor'));
@@ -1879,8 +2024,8 @@ function handleMinorSelectChange(minorKey) {
   const coursesPreview = courseList.map(c => `<code>${escapeHTML(c.code)}</code> (${c.crd} Cr)`).join(', ');
 
   previewBox.innerHTML = `
-    <div class="minor-preview-title">${escapeHTML(minor.name)}</div>
-    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 8px;">🏛️ ${escapeHTML(minor.faculty || '')}</div>
+    <div class="minor-preview-title">${escapeHTML(getLocalizedMinorName(minorKey))}</div>
+    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 8px;">🏛️ ${escapeHTML(getLocalizedFacultyName(minor.faculty || ''))}</div>
     ${reqHtml ? `<div class="minor-preview-reqs">${reqHtml}</div>` : ''}
     <div style="margin-top: 8px; font-size: 0.82rem; color: #334155;">
       <strong>${escapeHTML(t('minorSampleDist'))}</strong><br>
@@ -2017,8 +2162,45 @@ async function handleFeedbackSubmit(event) {
 
 const dashCardWrapper = document.getElementById('dashCardWrapper');
 
+function updatePinButtonUI() {
+  const btn = document.getElementById('pinDashBtn');
+  if (!btn) return;
+  btn.classList.toggle('pinned', isDashPinned);
+  const titleText = isDashPinned ? t('unpinCardTitle') : t('pinCardTitle');
+  btn.title = titleText;
+  btn.setAttribute('aria-label', titleText);
+  btn.setAttribute('aria-pressed', isDashPinned ? 'true' : 'false');
+}
+
+function applyDashCardPosition() {
+  if (!dashCardWrapper) return;
+  const fixedTop = document.getElementById('sidebarFixedTop');
+  const pool = document.getElementById('course-pool');
+
+  if (isDashPinned) {
+    if (fixedTop && dashCardWrapper.parentNode !== fixedTop) {
+      fixedTop.prepend(dashCardWrapper);
+    } else if (fixedTop && fixedTop.firstElementChild !== dashCardWrapper) {
+      fixedTop.prepend(dashCardWrapper);
+    }
+  } else {
+    if (pool && (dashCardWrapper.parentNode !== pool || pool.firstElementChild !== dashCardWrapper)) {
+      pool.prepend(dashCardWrapper);
+    }
+  }
+}
+
+function toggleDashPin() {
+  isDashPinned = !isDashPinned;
+  localStorage.setItem('boun_pin_dash_card', isDashPinned ? 'true' : 'false');
+  updatePinButtonUI();
+  applyDashCardPosition();
+}
+
 window.addEventListener('resize', () => {
   initUI();
 });
 
+updatePinButtonUI();
+applyDashCardPosition();
 loadCurriculum();

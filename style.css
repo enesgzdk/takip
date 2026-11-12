@@ -357,7 +357,12 @@ select.dept-select option {
   margin-bottom: 0;
 }
 
+.sidebar-fixed-top .dashboard-card-wrapper {
+  margin-bottom: 8px;
+}
+
 .dashboard-card {
+  position: relative;
   background: linear-gradient(135deg, #003366 0%, #004c99 100%);
   color: #fff;
   border-radius: 10px;
@@ -368,10 +373,48 @@ select.dept-select option {
   box-shadow: 0 4px 12px rgba(0, 51, 102, 0.18);
 }
 
+.pin-dash-btn {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.75rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 2;
+}
+
+.pin-dash-btn:hover {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #ffffff;
+}
+
+.pin-dash-btn.pinned {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.16);
+}
+
 .dash-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.dash-row-top {
+  padding-right: 28px;
 }
 
 .dash-item {
