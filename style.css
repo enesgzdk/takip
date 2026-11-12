@@ -41,6 +41,15 @@ html, body {
   flex-direction: column;
 }
 
+html, body,
+.course-card,
+button,
+select,
+label,
+.semester-box {
+  touch-action: manipulation;
+}
+
 .top-bar {
   position: relative;
   flex: 0 0 auto;
@@ -149,6 +158,7 @@ select.dept-select option {
 .minor-select-container {
   display: flex;
   align-items: center;
+  gap: 6px;
 }
 
 .minor-btn {
@@ -710,10 +720,50 @@ select.dept-select option {
   border-color: #e9d5ff;
 }
 
-.course-card.minor-card.status-passed {
+.minor-btn.dm-btn {
+  border-color: #99f6e4;
+  background: #f0fdfa;
+  color: #0f766e;
+}
+
+.minor-btn.dm-btn:hover {
+  background: #ccfbf1;
+  border-color: #5eead4;
+  color: #115e59;
+}
+
+.minor-btn.dm-btn.has-dm {
+  background: #ccfbf1;
+  border-color: #2dd4bf;
+  color: #0d9488;
+}
+
+.minor-btn.dm-btn.has-dm:hover {
+  background: #99f6e4;
+  border-color: #14b8a6;
+}
+
+.course-card.dm-card {
+  border-left: 4px solid #0d9488 !important;
+  background: #f0fdfa !important;
+  border-color: #99f6e4;
+}
+
+.course-card.dm-card.status-passed {
   border-left-color: #059669 !important;
-  background: #f0fdf4;
+  background: #f0fdf4 !important;
   border-color: #86efac;
+}
+
+.dm-badge {
+  font-size: 0.65rem;
+  background: #ccfbf1;
+  color: #0f766e;
+  border: 1px solid #99f6e4;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .minor-badge {
@@ -1352,14 +1402,17 @@ textarea.form-control {
     align-items: center;
     gap: 6px;
     width: 100%;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
   }
   .minor-select-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     flex: 0 0 auto;
   }
   .minor-btn {
-    padding: 5px 10px;
-    font-size: 0.76rem;
+    padding: 5px 8px;
+    font-size: 0.74rem;
   }
   .top-bar-btn-group {
     display: none;

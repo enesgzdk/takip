@@ -36,6 +36,9 @@
         <button id="minorBtn" class="minor-btn" onclick="openMinorModal()" title="Yandal Programı Seç / Düzenle">
           🎓 Yandal Ekle
         </button>
+        <button id="dmBtn" class="minor-btn dm-btn" onclick="openDmModal()" title="Çift Anadal Programı Seç / Düzenle">
+          🎓 ÇAP Ekle
+        </button>
       </div>
       <div id="toolsDropdown" class="top-bar-btn-group">
         <button id="exportBtn" class="topbar-btn export-btn" onclick="exportDataAsJSON()" title="Mevcut ders planınızı ve notlarınızı JSON dosyası olarak indirin">
@@ -186,6 +189,34 @@
         <button type="button" id="minorCancelBtn" class="btn-cancel-issue" onclick="closeMinorModal()">Vazgeç</button>
         <button type="button" id="minorApplyBtn" class="btn-submit-issue" onclick="handleApplyMinorFromModal()">
           <span>Yandalı Uygula</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="dmModal" class="modal-backdrop" onclick="handleDmBackdropClick(event)">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="dmModalTitle">
+      <div class="modal-header">
+        <h3 id="dmModalTitle">🎓 Çift Anadal Programı (ÇAP) Seçimi</h3>
+        <button type="button" class="modal-close-btn" onclick="closeDmModal()" aria-label="Kapat">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label id="dmSelectLabel" for="dmSelect">ÇAP Programı Seçin</label>
+          <select id="dmSelect" class="form-control" onchange="handleDmSelectChange(this.value)" style="cursor: pointer;">
+            <option value="">(ÇAP Yok / İptal Et)</option>
+          </select>
+        </div>
+
+        <div id="dmPreviewBox" class="minor-preview-box">
+          <div style="color: #64748b; font-style: italic;">Lütfen incelemek istediğiniz bir ÇAP programı seçin.</div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="dmCancelBtn" class="btn-cancel-issue" onclick="closeDmModal()">Vazgeç</button>
+        <button type="button" id="dmApplyBtn" class="btn-submit-issue" onclick="handleApplyDmFromModal()">
+          <span>ÇAP'ı Uygula</span>
         </button>
       </div>
     </div>

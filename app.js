@@ -119,6 +119,27 @@ const translations = {
     minorPoolDefaultName: "Yandal Seçmeli Dersi",
     minorCancelBtn: "Vazgeç",
     minorApplyBtn: "Yandalı Uygula",
+    addDm: "🎓 ÇAP Ekle",
+    dmBtnTitle: "Çift Anadal Programı (ÇAP) Seç / Düzenle",
+    dmLabelPrefix: "ÇAP",
+    dmRemoveTooltip: "ÇAP'ı Kaldır",
+    dmHasTitleSuffix: "(Kaldırmak için ✕ butonuna tıklayın)",
+    dmBadge: "🎓 ÇAP",
+    removeDmCourseTitle: "Bu ÇAP dersini kaldır",
+    confirmRemoveDm: "Mevcut ÇAP programını ve eklenen ÇAP derslerini kaldırmak istediğinize emin misiniz?",
+    toastDmApplied: (name, count) => `✓ ${name} seçildi (${count} ders). Ek ÇAP dersleri sol paneldeki ilgili dönem bloklarına eklendi!`,
+    toastDmRemoved: "ÇAP programı kaldırıldı.",
+    dmModalTitle: "🎓 Çift Anadal Programı (ÇAP) Seçimi",
+    dmSelectLabel: "ÇAP Programı Seçin",
+    dmNoSelectionOption: "(ÇAP Yok / İptal Et)",
+    dmPreviewPlaceholder: "Lütfen incelemek istediğiniz bir ÇAP programı seçin.",
+    dmPreviewRemoved: "(ÇAP seçilmedi veya mevcut ÇAP iptal edilecek.)",
+    dmNoAvailable: "Bu bölüm için henüz ÇAP müfredat verisi bulunmamaktadır.",
+    dmMinExtraCredits: "Ek Kredi Yükü:",
+    dmTotalCredits: "Toplam Program Kredisi:",
+    dmBaseGpa: "Taban GPA:",
+    dmCancelBtn: "Vazgeç",
+    dmApplyBtn: "ÇAP'ı Uygula",
     semGroupLabels: {
       '1.1': '1. Dönem (1. Yıl Güz)',
       '1.2': '2. Dönem (1. Yıl Bahar)',
@@ -138,7 +159,9 @@ const translations = {
       '4. Yıl (Normal Mezuniyet)': '4. Yıl (Normal Mezuniyet)',
       '5. Yıl (1. Uzatma)': '5. Yıl (1. Uzatma)',
       '6. Yıl (2. Uzatma)': '6. Yıl (2. Uzatma)',
-      '7. Yıl (Azami Yasal Süre)': '7. Yıl (Azami Yasal Süre)'
+      '7. Yıl (3. Uzatma)': '7. Yıl (3. Uzatma)',
+      '7. Yıl (Azami Yasal Süre)': '7. Yıl (Azami Yasal Süre)',
+      '8. Yıl (Azami Yasal Süre)': '8. Yıl (Azami Yasal Süre)'
     },
     limitTag: "YÖK Sınır",
     loadErrorTitle: "Müfredat Verisi Yüklenemedi!",
@@ -249,6 +272,27 @@ const translations = {
     minorPoolDefaultName: "Minor Elective Course",
     minorCancelBtn: "Cancel",
     minorApplyBtn: "Apply Minor",
+    addDm: "🎓 Add Double Major",
+    dmBtnTitle: "Select / Edit Double Major (ÇAP) Program",
+    dmLabelPrefix: "DM",
+    dmRemoveTooltip: "Remove Double Major",
+    dmHasTitleSuffix: "(Click ✕ to remove)",
+    dmBadge: "🎓 Double Major",
+    removeDmCourseTitle: "Remove this double major course",
+    confirmRemoveDm: "Are you sure you want to remove the current Double Major program and its extra courses?",
+    toastDmApplied: (name, count) => `✓ ${name} selected (${count} courses). Extra DM courses added to course pool!`,
+    toastDmRemoved: "Double Major program removed.",
+    dmModalTitle: "🎓 Double Major Program Selection",
+    dmSelectLabel: "Select Double Major Program",
+    dmNoSelectionOption: "(No Double Major / Remove)",
+    dmPreviewPlaceholder: "Please select a double major program to preview.",
+    dmPreviewRemoved: "(No double major selected or current program will be removed.)",
+    dmNoAvailable: "Double major curriculum data is not yet available for this department.",
+    dmMinExtraCredits: "Extra Credit Load:",
+    dmTotalCredits: "Total Program Credits:",
+    dmBaseGpa: "Min. Application GPA:",
+    dmCancelBtn: "Cancel",
+    dmApplyBtn: "Apply Double Major",
     semGroupLabels: {
       '1.1': 'Term 1 (Year 1 Fall)',
       '1.2': 'Term 2 (Year 1 Spring)',
@@ -268,7 +312,9 @@ const translations = {
       '4. Yıl (Normal Mezuniyet)': 'Year 4 (Regular Graduation)',
       '5. Yıl (1. Uzatma)': 'Year 5 (Extension 1)',
       '6. Yıl (2. Uzatma)': 'Year 6 (Extension 2)',
-      '7. Yıl (Azami Yasal Süre)': 'Year 7 (Max Legal Duration)'
+      '7. Yıl (3. Uzatma)': 'Year 7 (Extension 3)',
+      '7. Yıl (Azami Yasal Süre)': 'Year 7 (Max Legal Duration)',
+      '8. Yıl (Azami Yasal Süre)': 'Year 8 (Max Legal Duration)'
     },
     limitTag: "Max Limit",
     loadErrorTitle: "Failed to Load Curriculum Data!",
@@ -375,6 +421,15 @@ function applyStaticTranslations() {
     minorApplyBtn.innerHTML = `<span>${escapeHTML(t('minorApplyBtn'))}</span>`;
   }
 
+  // DM modal
+  setText('dmModalTitle', t('dmModalTitle'));
+  setText('dmSelectLabel', t('dmSelectLabel'));
+  setText('dmCancelBtn', t('dmCancelBtn'));
+  const dmApplyBtn = document.getElementById('dmApplyBtn');
+  if (dmApplyBtn) {
+    dmApplyBtn.innerHTML = `<span>${escapeHTML(t('dmApplyBtn'))}</span>`;
+  }
+
   updatePinButtonUI();
 }
 
@@ -384,11 +439,18 @@ function toggleLanguage() {
   applyStaticTranslations();
   populateDepartmentSelect();
   populateMinorModalOptions();
+  populateDmModalOptions();
   const minorSelect = document.getElementById('minorSelect');
   if (minorSelect) {
     const state = getDeptState(currentDept);
     minorSelect.value = state.selectedMinorId || '';
     handleMinorSelectChange(minorSelect.value);
+  }
+  const dmSelect = document.getElementById('dmSelect');
+  if (dmSelect) {
+    const state = getDeptState(currentDept);
+    dmSelect.value = state.selectedDmId || '';
+    handleDmSelectChange(dmSelect.value);
   }
   initUI();
 }
@@ -538,7 +600,7 @@ function getBounCourseUrl(courseCode, term = FALL_TERM) {
   return `https://registration.bogazici.edu.tr/login/?page=course-search&semester=${encodedTerm}&q=${compactCode.toLowerCase()}`;
 }
 
-const yearStructure = [
+const BASE_YEAR_STRUCTURE = [
   { yearLabel: '0. Yıl (Hazırlık / Erken Dönem)', isExtended: false, sems: ['0.1', '0.2', '0.3 (Yaz)'] },
   { yearLabel: '1. Yıl', isExtended: false, sems: ['1.1', '1.2', '1.3 (Yaz)'] },
   { yearLabel: '2. Yıl', isExtended: false, sems: ['2.1', '2.2', '2.3 (Yaz)'] },
@@ -549,8 +611,38 @@ const yearStructure = [
   { yearLabel: '7. Yıl (Azami Yasal Süre)', isExtended: true, tag: 'YÖK Sınır', sems: ['7.1', '7.2', '7.3 (Yaz)'] }
 ];
 
-const SEMESTER_ORDER = [];
-yearStructure.forEach(y => y.sems.forEach(s => SEMESTER_ORDER.push(s)));
+function getEffectiveYearStructure() {
+  const state = getDeptState(currentDept);
+  const hasDm = Boolean(state && state.selectedDmId && dmData && dmData[state.selectedDmId]);
+  if (!hasDm) {
+    return BASE_YEAR_STRUCTURE;
+  }
+  return [
+    { yearLabel: '0. Yıl (Hazırlık / Erken Dönem)', isExtended: false, sems: ['0.1', '0.2', '0.3 (Yaz)'] },
+    { yearLabel: '1. Yıl', isExtended: false, sems: ['1.1', '1.2', '1.3 (Yaz)'] },
+    { yearLabel: '2. Yıl', isExtended: false, sems: ['2.1', '2.2', '2.3 (Yaz)'] },
+    { yearLabel: '3. Yıl', isExtended: false, sems: ['3.1', '3.2', '3.3 (Yaz)'] },
+    { yearLabel: '4. Yıl (Normal Mezuniyet)', isExtended: false, sems: ['4.1', '4.2', '4.3 (Yaz)'] },
+    { yearLabel: '5. Yıl (1. Uzatma)', isExtended: true, sems: ['5.1', '5.2', '5.3 (Yaz)'] },
+    { yearLabel: '6. Yıl (2. Uzatma)', isExtended: true, sems: ['6.1', '6.2', '6.3 (Yaz)'] },
+    { yearLabel: '7. Yıl (3. Uzatma)', isExtended: true, sems: ['7.1', '7.2', '7.3 (Yaz)'] },
+    { yearLabel: '8. Yıl (Azami Yasal Süre)', isExtended: true, tag: 'YÖK Sınır', sems: ['8.1', '8.2', '8.3 (Yaz)'] }
+  ];
+}
+
+const yearStructure = BASE_YEAR_STRUCTURE;
+
+const SEMESTER_ORDER = [
+  '0.1', '0.2', '0.3 (Yaz)',
+  '1.1', '1.2', '1.3 (Yaz)',
+  '2.1', '2.2', '2.3 (Yaz)',
+  '3.1', '3.2', '3.3 (Yaz)',
+  '4.1', '4.2', '4.3 (Yaz)',
+  '5.1', '5.2', '5.3 (Yaz)',
+  '6.1', '6.2', '6.3 (Yaz)',
+  '7.1', '7.2', '7.3 (Yaz)',
+  '8.1', '8.2', '8.3 (Yaz)'
+];
 
 function getSemesterOrderIndex(semId) {
   const idx = SEMESTER_ORDER.indexOf(semId);
@@ -606,14 +698,31 @@ function refreshRepeatBadges() {
 
 let departmentsData = {};
 let minorsData = {};
+let dmData = {};
 let currentDept = localStorage.getItem('boun_active_dept') || 'math';
 let globalState = JSON.parse(localStorage.getItem('boun_multi_dept_gpa_state')) || {};
 
+// ÇAP (Double Major) bölüm eşleştirme haritası
+const DEPT_TO_DM_MAJOR = {
+  'sced_sec_math': 'maed',
+  'sced_math': 'maed',
+  'tour': 'trm',
+  'transint': 'tr',
+  'ec': 'econ',
+  'mgmt_a': 'mgmt',
+  'mgmt_b': 'mgmt'
+};
+
+function getDmTargetKey(deptKey) {
+  return DEPT_TO_DM_MAJOR[deptKey] || deptKey;
+}
+
 async function loadCurriculum() {
   try {
-    const [currResp, minorsResp] = await Promise.all([
+    const [currResp, minorsResp, dmResp] = await Promise.all([
       fetch('./curriculum.json'),
-      fetch('./minors.json')
+      fetch('./minors.json'),
+      fetch('./dm_curriculum.json').catch(() => ({ ok: false }))
     ]);
 
     if (!currResp.ok) throw new Error(`HTTP Hata: ${currResp.status}`);
@@ -625,6 +734,17 @@ async function loadCurriculum() {
       } catch (mErr) {
         console.warn("minors.json okunamadı:", mErr);
       }
+    }
+
+    if (dmResp && dmResp.ok) {
+      try {
+        dmData = await dmResp.json();
+      } catch (dErr) {
+        console.warn("dm_curriculum.json okunamadı:", dErr);
+        dmData = {};
+      }
+    } else {
+      dmData = {};
     }
 
     const availableKeys = Object.keys(departmentsData);
@@ -658,6 +778,7 @@ async function loadCurriculum() {
     applyStaticTranslations();
     populateDepartmentSelect();
     populateMinorModalOptions();
+    populateDmModalOptions();
     initUI();
   } catch (err) {
     console.error("Müfredat JSON dosyası yüklenemedi:", err);
@@ -821,10 +942,13 @@ function populateMinorModalOptions() {
 
 function getDeptState(deptKey) {
   if (!globalState[deptKey]) {
-    globalState[deptKey] = { instances: [], selectedMinorId: null };
+    globalState[deptKey] = { instances: [], selectedMinorId: null, selectedDmId: null };
   }
   if (globalState[deptKey].selectedMinorId === undefined) {
     globalState[deptKey].selectedMinorId = null;
+  }
+  if (globalState[deptKey].selectedDmId === undefined) {
+    globalState[deptKey].selectedDmId = null;
   }
   return globalState[deptKey];
 }
@@ -836,6 +960,9 @@ function findCourseById(courseId) {
   const minorCourses = getActiveMinorCourseList();
   const minorCourse = minorCourses.find(c => c.id === courseId);
   if (minorCourse) return minorCourse;
+  const dmCourses = getActiveDmCourseList();
+  const dmCourse = dmCourses.find(c => c.id === courseId);
+  if (dmCourse) return dmCourse;
   for (const dKey of Object.keys(departmentsData)) {
     const c = departmentsData[dKey].courses?.find(c => c.id === courseId);
     if (c) return c;
@@ -846,6 +973,7 @@ function findCourseById(courseId) {
 function getCourseForInstance(inst) {
   if (!inst) return null;
   if (inst.minorCourse) return inst.minorCourse;
+  if (inst.dmCourse) return inst.dmCourse;
   return findCourseById(inst.courseId);
 }
 
@@ -923,11 +1051,13 @@ function calculateAverages() {
   const state = getDeptState(currentDept);
   const courses = departmentsData[currentDept]?.courses || [];
   const activeMinorCourses = getActiveMinorCourseList();
-  const allRequiredCourses = [...courses, ...activeMinorCourses];
+  const activeDmCourses = getActiveDmCourseList();
+  const allRequiredCourses = [...courses, ...activeMinorCourses, ...activeDmCourses];
 
   const semesterStats = {};
   const allSems = [];
-  yearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
+  const activeYearStructure = getEffectiveYearStructure();
+  activeYearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
   allSems.forEach(s => {
     semesterStats[s] = { totalPoints: 0, totalCredits: 0, earnedCredits: 0, scheduledCredits: 0 };
   });
@@ -1045,7 +1175,8 @@ function updateSidebarPool() {
   const state = getDeptState(currentDept);
   const majorCourses = departmentsData[currentDept]?.courses || [];
   const activeMinorCourses = getActiveMinorCourseList();
-  const allRequiredCourses = [...majorCourses, ...activeMinorCourses];
+  const activeDmCourses = getActiveDmCourseList();
+  const allRequiredCourses = [...majorCourses, ...activeMinorCourses, ...activeDmCourses];
 
   const poolTitleEl = document.getElementById('sidebarPoolTitle');
   if (poolTitleEl) {
@@ -1082,6 +1213,14 @@ function updateSidebarPool() {
     }
   });
 
+  activeDmCourses.forEach(course => {
+    if (course.sem && groups[course.sem]) {
+      groups[course.sem].push(course);
+    } else {
+      groups['other'].push(course);
+    }
+  });
+
   const semesterLabels = t('semGroupLabels');
   const isMobile = isMobileDevice();
 
@@ -1107,10 +1246,11 @@ function updateSidebarPool() {
       const hasFailedOnly = courseInstances.length > 0 && !hasPassed;
       const isPlaced = courseInstances.length > 0 && !hasPassed && !hasFailedOnly;
       const isMinor = !!course.isMinor;
+      const isDm = !!course.isDoubleMajor;
 
       const poolCard = document.createElement('div');
       const isLocked = hasPassed;
-      poolCard.className = `course-card ${isMinor ? 'minor-card' : ''} ${hasPassed ? 'status-passed pool-locked' : (hasFailedOnly ? 'status-failed' : '')}`;
+      poolCard.className = `course-card ${isMinor ? 'minor-card' : ''} ${isDm ? 'dm-card' : ''} ${hasPassed ? 'status-passed pool-locked' : (hasFailedOnly ? 'status-failed' : '')}`;
       poolCard.draggable = !isLocked && !isMobile;
       poolCard.dataset.courseId = course.id;
 
@@ -1138,6 +1278,7 @@ function updateSidebarPool() {
           <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
             <span class="course-title">${safeCode}</span>
             ${isMinor ? `<span class="minor-badge">${escapeHTML(t('minorBadge'))}</span>` : ''}
+            ${isDm ? `<span class="dm-badge">${escapeHTML(t('dmBadge'))}</span>` : ''}
           </div>
           <span class="course-credits">${course.crd} Cr</span>
         </div>
@@ -1189,15 +1330,18 @@ function handleMobileAddCourse(courseId, targetSem, selectEl) {
   if (!course) return;
 
   const isMinor = !!course.isMinor;
+  const isDm = !!course.isDoubleMajor;
   const newInst = {
-    instanceId: 'inst_' + (isMinor ? 'user_minor_' : '') + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+    instanceId: 'inst_' + (isMinor ? 'user_minor_' : (isDm ? 'user_dm_' : '')) + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
     courseId: courseId,
     semId: targetSem,
     passed: false,
     grade: 'AA',
     customText: '',
     isMinor: isMinor,
-    minorCourse: isMinor ? course : undefined
+    minorCourse: isMinor ? course : undefined,
+    isDoubleMajor: isDm,
+    dmCourse: isDm ? course : undefined
   };
 
   state.instances.push(newInst);
@@ -1227,8 +1371,9 @@ function initUI() {
   yearsGrid.innerHTML = '';
 
   const yearLabelMap = t('yearLabels');
+  const activeYearStructure = getEffectiveYearStructure();
 
-  yearStructure.forEach(y => {
+  activeYearStructure.forEach(y => {
     const row = document.createElement('div');
     row.className = `year-row ${y.isExtended ? 'extended' : ''}`;
 
@@ -1297,6 +1442,7 @@ function initUI() {
   refreshRepeatBadges();
   updateSidebarPool();
   updateMinorButtonUI();
+  updateDmButtonUI();
 }
 
 function createSemesterCourseCard(inst, course) {
@@ -1304,10 +1450,11 @@ function createSemesterCourseCard(inst, course) {
   const isPassed = !!inst.passed;
   const isMobile = isMobileDevice();
   const isMinor = !!inst.isMinor || !!course.isMinor;
+  const isDm = !!inst.isDoubleMajor || !!course.isDoubleMajor;
   const state = getDeptState(currentDept);
   const isRepeat = isRepeatInstance(inst, state.instances);
 
-  card.className = `course-card ${isMinor ? 'minor-card' : ''} ${isPassed ? 'status-passed locked' : 'status-failed'}`;
+  card.className = `course-card ${isMinor ? 'minor-card' : ''} ${isDm ? 'dm-card' : ''} ${isPassed ? 'status-passed locked' : 'status-failed'}`;
   card.id = `inst-${inst.instanceId}`;
   card.draggable = !isPassed && !isMobile;
   card.dataset.instanceId = inst.instanceId;
@@ -1334,6 +1481,7 @@ function createSemesterCourseCard(inst, course) {
       <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; min-width:0;">
         <span class="course-title">${safeCode}</span>
         ${isMinor ? `<span class="minor-badge">${escapeHTML(t('minorBadge'))}</span>` : ''}
+        ${isDm ? `<span class="dm-badge">${escapeHTML(t('dmBadge'))}</span>` : ''}
         ${isRepeat ? `<span class="repeat-badge">${escapeHTML(t('repeatBadge'))}</span>` : ''}
       </div>
       <div style="display:flex; align-items:center; gap:6px;">
@@ -1346,7 +1494,7 @@ function createSemesterCourseCard(inst, course) {
         ` : ''}
         <span class="course-credits">${course.crd} Cr</span>
         ${!isPassed ? `
-          <button class="delete-btn" onclick="removeInstance('${inst.instanceId}')" title="${escapeHTML(isMinor ? t('removeMinorCourseTitle') : t('removeFromTermTitle'))}">✕</button>
+          <button class="delete-btn" onclick="removeInstance('${inst.instanceId}')" title="${escapeHTML(isMinor ? t('removeMinorCourseTitle') : (isDm ? t('removeDmCourseTitle') : t('removeFromTermTitle')))}">✕</button>
         ` : ''}
       </div>
     </div>
@@ -1372,7 +1520,6 @@ function createSemesterCourseCard(inst, course) {
              class="custom-input" 
              placeholder="${escapeHTML(t('electiveInputPlaceholder'))}" 
              value="${safeCustomText}" 
-             ${isPassed ? 'disabled style="background:#f1f5f9; cursor:not-allowed;"' : ''}
              oninput="handleInstanceInput('${inst.instanceId}', this.value)">
     ` : ''}
 
@@ -1493,15 +1640,18 @@ function handleDrop(e) {
     if (!course) return;
 
     const isMinor = !!course.isMinor;
+    const isDm = !!course.isDoubleMajor;
     const newInst = {
-      instanceId: 'inst_' + (isMinor ? 'user_minor_' : '') + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+      instanceId: 'inst_' + (isMinor ? 'user_minor_' : (isDm ? 'user_dm_' : '')) + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
       courseId: draggedId,
       semId: semId,
       passed: false,
       grade: 'AA',
       customText: '',
       isMinor: isMinor,
-      minorCourse: isMinor ? course : undefined
+      minorCourse: isMinor ? course : undefined,
+      isDoubleMajor: isDm,
+      dmCourse: isDm ? course : undefined
     };
 
     const targetIndex = afterElement
@@ -1644,7 +1794,7 @@ function removeInstance(instanceId) {
 function resetCurrentDept() {
   const deptName = getLocalizedDeptName(currentDept);
   if (confirm(t('confirmReset')(deptName))) {
-    globalState[currentDept] = { instances: [], selectedMinorId: null };
+    globalState[currentDept] = { instances: [], selectedMinorId: null, selectedDmId: null };
     saveGlobalState();
     initUI();
   }
@@ -1662,10 +1812,12 @@ function exportDataAsJSON() {
       activeDept: currentDept,
       activeDeptName: activeDeptData?.name || currentDept,
       selectedMinorId: currentDeptState.selectedMinorId || null,
+      selectedDmId: currentDeptState.selectedDmId || null,
       summary: {
         plannedCoursesCount: currentDeptState.instances.length,
         passedCoursesCount: currentDeptState.instances.filter(i => i.passed).length,
-        selectedMinorId: currentDeptState.selectedMinorId || null
+        selectedMinorId: currentDeptState.selectedMinorId || null,
+        selectedDmId: currentDeptState.selectedDmId || null
       },
       globalState: globalState
     };
@@ -1729,13 +1881,14 @@ function importDataFromJSON(event) {
         candidateState = { ...globalState };
         candidateState[currentDept] = {
           instances: parsed.instances,
-          selectedMinorId: parsed.selectedMinorId || null
+          selectedMinorId: parsed.selectedMinorId || null,
+          selectedDmId: parsed.selectedDmId || null
         };
       }
       // 3. Doğrudan instances dizisi: [ { courseId, semId, ... } ]
       else if (Array.isArray(parsed)) {
         candidateState = { ...globalState };
-        candidateState[currentDept] = { instances: parsed, selectedMinorId: null };
+        candidateState[currentDept] = { instances: parsed, selectedMinorId: null, selectedDmId: null };
       }
       // 4. Doğrudan ham globalState nesnesi: { phys: { instances: [...] }, math: { ... } }
       else if (typeof parsed === 'object') {
@@ -1755,17 +1908,27 @@ function importDataFromJSON(event) {
       // Güvenlik ve veri temizleme: her bölümün instances'ının dizi olduğundan emin ol
       Object.keys(candidateState).forEach(k => {
         if (!candidateState[k] || !Array.isArray(candidateState[k].instances)) {
-          candidateState[k] = { instances: [], selectedMinorId: candidateState[k]?.selectedMinorId || null };
+          candidateState[k] = {
+            instances: [],
+            selectedMinorId: candidateState[k]?.selectedMinorId || null,
+            selectedDmId: candidateState[k]?.selectedDmId || null
+          };
         } else {
           candidateState[k].instances = candidateState[k].instances.filter(inst => inst && inst.courseId && inst.semId);
           if (candidateState[k].selectedMinorId === undefined) {
             candidateState[k].selectedMinorId = null;
+          }
+          if (candidateState[k].selectedDmId === undefined) {
+            candidateState[k].selectedDmId = null;
           }
         }
       });
 
       if (parsed.selectedMinorId !== undefined && candidateState[targetDept || currentDept]) {
         candidateState[targetDept || currentDept].selectedMinorId = parsed.selectedMinorId;
+      }
+      if (parsed.selectedDmId !== undefined && candidateState[targetDept || currentDept]) {
+        candidateState[targetDept || currentDept].selectedDmId = parsed.selectedDmId;
       }
 
       // Mevcut verisi varsa kullanıcıya nazikçe onay sor
@@ -2078,6 +2241,262 @@ function handleApplyMinorFromModal() {
 }
 
 /* ============================================================
+   Çift Anadal Programı (ÇAP) Mantığı & Modal Fonksiyonları
+   ============================================================ */
+
+function getAvailableDmKeysForDept(deptKey) {
+  if (!dmData || typeof dmData !== 'object') return [];
+  const targetKey = getDmTargetKey(deptKey);
+  return Object.keys(dmData).filter(dmKey => {
+    const prog = dmData[dmKey];
+    return prog && prog.majorKey === targetKey;
+  });
+}
+
+function getDmCourseList(dmKey) {
+  if (!dmKey || !dmData[dmKey]) return [];
+  const prog = dmData[dmKey];
+  const courses = prog.courses || [];
+
+  // Ana dal müfredatındaki ders kodlarını topla (Ortak dersleri atlamak için)
+  const majorCourses = departmentsData[currentDept]?.courses || [];
+  const majorCodes = new Set();
+  majorCourses.forEach(c => {
+    if (c.code) majorCodes.add(c.code.replace(/\s+/g, '').toUpperCase());
+  });
+
+  const result = [];
+  courses.forEach((c, idx) => {
+    if (c.source !== 'double_major') return;
+    const cleanCode = (c.code || '').trim();
+    if (!cleanCode) return;
+    const normalized = cleanCode.replace(/\s+/g, '').toUpperCase();
+    if (majorCodes.has(normalized)) return;
+
+    // Null Kredi Koruması: c.crd !== null ? Number(c.crd) : (curriculum.json içinde aynı kodlu ders || 3)
+    let crd = 3;
+    if (c.crd !== null && c.crd !== undefined && !isNaN(Number(c.crd))) {
+      crd = Number(c.crd);
+    } else {
+      const ref = findCourseByCode(cleanCode);
+      if (ref && ref.crd !== null && ref.crd !== undefined && !isNaN(Number(ref.crd))) {
+        crd = Number(ref.crd);
+      }
+    }
+
+    const safeIdCode = cleanCode.replace(/[^a-zA-Z0-9]/g, '_');
+    result.push({
+      id: c.id ? `dm_${dmKey}_${c.id}` : `dm_${dmKey}_${idx}_${safeIdCode}`,
+      code: cleanCode,
+      name: c.name || cleanCode,
+      crd: crd,
+      sem: c.sem || 'other',
+      prereq: c.prereq || '',
+      isElective: Boolean(c.isElective),
+      isDoubleMajor: true
+    });
+  });
+
+  return result;
+}
+
+function getActiveDmCourseList() {
+  const state = getDeptState(currentDept);
+  const dmKey = state.selectedDmId;
+  if (!dmKey || !dmData[dmKey]) return [];
+  return getDmCourseList(dmKey);
+}
+
+function applyDm(dmKey) {
+  if (!dmKey || !dmData[dmKey]) {
+    removeCurrentDm(true);
+    return;
+  }
+
+  // Önceki ÇAP derslerini temizle (kullanıcının ana dalına ve notlarına dokunmadan)
+  removeCurrentDm(false);
+
+  const state = getDeptState(currentDept);
+  const prog = dmData[dmKey];
+
+  state.selectedDmId = dmKey;
+  saveGlobalState();
+  initUI();
+
+  const dmCourses = getActiveDmCourseList();
+  showToast(t('toastDmApplied')(prog.name, dmCourses.length));
+}
+
+function removeCurrentDm(shouldSave = true) {
+  const state = getDeptState(currentDept);
+  state.instances = (state.instances || []).filter(inst => {
+    const isDmInst = inst.isDoubleMajor || inst.dmCourse ||
+      (inst.courseId && String(inst.courseId).startsWith('dm_')) ||
+      (inst.instanceId && String(inst.instanceId).startsWith('inst_user_dm_'));
+    return !isDmInst;
+  });
+  state.selectedDmId = null;
+  if (shouldSave) {
+    saveGlobalState();
+    initUI();
+    showToast(t('toastDmRemoved'));
+  }
+}
+
+function removeDm(event) {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  if (confirm(t('confirmRemoveDm'))) {
+    removeCurrentDm(true);
+  }
+}
+
+function updateDmButtonUI() {
+  const dmBtn = document.getElementById('dmBtn');
+  if (!dmBtn) return;
+  const state = getDeptState(currentDept);
+  const dmId = state.selectedDmId;
+
+  if (dmId && dmData[dmId]) {
+    const prog = dmData[dmId];
+    const match = prog.name.match(/\(([^)]+)\)/);
+    const shortName = match ? match[1] : prog.name.replace(/ÇAP|Programı/gi, '').trim();
+    dmBtn.className = 'minor-btn dm-btn has-dm';
+    dmBtn.innerHTML = `🎓 ${escapeHTML(t('dmLabelPrefix'))}: ${escapeHTML(shortName)} <span class="minor-remove-btn" onclick="removeDm(event)" title="${escapeHTML(t('dmRemoveTooltip'))}">✕</span>`;
+    dmBtn.title = `${prog.name} ${t('dmHasTitleSuffix')}`;
+  } else {
+    dmBtn.className = 'minor-btn dm-btn';
+    dmBtn.innerHTML = escapeHTML(t('addDm'));
+    dmBtn.title = t('dmBtnTitle');
+  }
+}
+
+function populateDmModalOptions() {
+  const select = document.getElementById('dmSelect');
+  if (!select) return;
+  select.innerHTML = `<option value="">${escapeHTML(t('dmNoSelectionOption'))}</option>`;
+
+  const availableKeys = getAvailableDmKeysForDept(currentDept);
+  const faculties = {};
+
+  availableKeys.forEach(dmKey => {
+    const prog = dmData[dmKey];
+    const fac = prog.faculty ? getLocalizedFacultyName(prog.faculty) : t('otherFaculties');
+    if (!faculties[fac]) faculties[fac] = [];
+    faculties[fac].push({ key: dmKey, name: prog.name });
+  });
+
+  Object.keys(faculties).forEach(facultyName => {
+    const group = document.createElement('optgroup');
+    group.label = facultyName;
+    faculties[facultyName].forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.key;
+      opt.textContent = p.name;
+      group.appendChild(opt);
+    });
+    select.appendChild(group);
+  });
+}
+
+function openDmModal() {
+  const modal = document.getElementById('dmModal');
+  if (!modal) return;
+  populateDmModalOptions();
+  const select = document.getElementById('dmSelect');
+  const state = getDeptState(currentDept);
+  if (select) {
+    select.value = state.selectedDmId || "";
+    handleDmSelectChange(select.value);
+  }
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDmModal() {
+  const modal = document.getElementById('dmModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleDmBackdropClick(event) {
+  if (event.target && event.target.id === 'dmModal') {
+    closeDmModal();
+  }
+}
+
+function handleDmSelectChange(dmKey) {
+  const previewBox = document.getElementById('dmPreviewBox');
+  if (!previewBox) return;
+
+  const availableKeys = getAvailableDmKeysForDept(currentDept);
+  if (availableKeys.length === 0) {
+    previewBox.innerHTML = `
+      <div style="color: #b45309; background: #fffbeb; padding: 10px 12px; border-radius: 8px; border: 1px solid #fde68a;">
+        ℹ️ ${escapeHTML(t('dmNoAvailable'))}
+      </div>
+    `;
+    return;
+  }
+
+  if (!dmKey || !dmData[dmKey]) {
+    previewBox.innerHTML = `
+      <div style="color: #64748b; font-style: italic;">
+        ${escapeHTML(t('dmPreviewRemoved'))}
+      </div>
+    `;
+    return;
+  }
+
+  const prog = dmData[dmKey];
+  const req = prog.requirements || {};
+  let reqHtml = '';
+  if (req.gpa !== undefined && req.gpa !== null) {
+    reqHtml += `<span>⭐ ${escapeHTML(t('dmBaseGpa'))} <strong>${Number(req.gpa).toFixed(2)}</strong></span>`;
+  }
+  if (req.minExtraCredits !== undefined && req.minExtraCredits !== null) {
+    reqHtml += `<span>🎯 ${escapeHTML(t('dmMinExtraCredits'))} <strong>${req.minExtraCredits} Cr</strong></span>`;
+  }
+  if (req.totalCredits !== undefined && req.totalCredits !== null) {
+    reqHtml += `<span>📚 ${escapeHTML(t('dmTotalCredits'))} <strong>${req.totalCredits} Cr</strong></span>`;
+  }
+
+  const dmCourses = getDmCourseList(dmKey);
+  const coursesPreview = dmCourses.length > 0
+    ? dmCourses.map(c => `<code>${escapeHTML(c.code)}</code> (${c.crd} Cr)`).join(', ')
+    : `<span style="color: #64748b; font-style: italic;">${escapeHTML(t('otherPrograms'))}</span>`;
+
+  previewBox.innerHTML = `
+    <div class="minor-preview-title" style="color: #0f766e;">${escapeHTML(prog.name)}</div>
+    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 8px;">🏛️ ${escapeHTML(getLocalizedFacultyName(prog.faculty || ''))}</div>
+    ${reqHtml ? `<div class="minor-preview-reqs">${reqHtml}</div>` : ''}
+    <div style="margin-top: 8px; font-size: 0.82rem; color: #334155;">
+      <strong>${escapeHTML(t('minorSampleDist'))} (${dmCourses.length} ${escapeHTML(t('courseUnit'))})</strong><br>
+      <span style="font-size: 0.78rem; color: #475569;">${coursesPreview}</span>
+    </div>
+    ${prog.notes ? `<div style="margin-top: 6px; font-size: 0.75rem; color: #94a3b8; font-style: italic;">ℹ️ ${escapeHTML(prog.notes)}</div>` : ''}
+  `;
+}
+
+function handleApplyDmFromModal() {
+  const select = document.getElementById('dmSelect');
+  const selectedKey = select ? select.value : "";
+
+  if (!selectedKey) {
+    removeCurrentDm(true);
+    closeDmModal();
+    return;
+  }
+
+  applyDm(selectedKey);
+  closeDmModal();
+}
+
+/* ============================================================
    Geri Bildirim / Issue Bildir Mekanizması
    ============================================================ */
 const FEEDBACK_API_URL = "https://takip-phi.vercel.app/api/issue";
@@ -2117,6 +2536,10 @@ document.addEventListener('keydown', (e) => {
     const minorModal = document.getElementById('minorModal');
     if (minorModal && minorModal.classList.contains('open')) {
       closeMinorModal();
+    }
+    const dmModal = document.getElementById('dmModal');
+    if (dmModal && dmModal.classList.contains('open')) {
+      closeDmModal();
     }
   }
 });
@@ -2288,7 +2711,8 @@ function openTermPickerModal(courseId) {
   if (titleEl) titleEl.textContent = `${course.code} - ${course.name}`;
 
   const yearLabelMap = t('yearLabels');
-  bodyEl.innerHTML = yearStructure.map(y => `
+  const activeYearStructure = getEffectiveYearStructure();
+  bodyEl.innerHTML = activeYearStructure.map(y => `
     <div class="term-picker-year-group">
       <div class="term-picker-year-label">${escapeHTML(yearLabelMap[y.yearLabel] || y.yearLabel)}</div>
       <div class="term-picker-grid">
