@@ -122,24 +122,30 @@ const translations = {
     addDm: "🎓 ÇAP Ekle",
     dmBtnTitle: "Çift Anadal Programı (ÇAP) Seç / Düzenle",
     dmLabelPrefix: "ÇAP",
+    dmActivePrefix: "🎓 ÇAP: ",
     dmRemoveTooltip: "ÇAP'ı Kaldır",
     dmHasTitleSuffix: "(Kaldırmak için ✕ butonuna tıklayın)",
     dmBadge: "🎓 ÇAP",
     removeDmCourseTitle: "Bu ÇAP dersini kaldır",
     confirmRemoveDm: "Mevcut ÇAP programını ve eklenen ÇAP derslerini kaldırmak istediğinize emin misiniz?",
+    dmRemoveConfirm: "Seçili ÇAP programını kaldırmak istediğinize emin misiniz? (Dönemlere eklediğiniz dersler korunacaktır.)",
     toastDmApplied: (name, count) => `✓ ${name} seçildi (${count} ders). Ek ÇAP dersleri sol paneldeki ilgili dönem bloklarına eklendi!`,
     toastDmRemoved: "ÇAP programı kaldırıldı.",
-    dmModalTitle: "🎓 Çift Anadal Programı (ÇAP) Seçimi",
-    dmSelectLabel: "ÇAP Programı Seçin",
-    dmNoSelectionOption: "(ÇAP Yok / İptal Et)",
+    dmModalTitle: "🎓 Çift Anadal Programı (ÇAP) Seç",
+    dmSelectLabel: "İkinci Anadal Programı:",
+    dmSelectPlaceholder: "-- ÇAP Programı Seçiniz --",
+    dmNoSelectionOption: "-- ÇAP Programı Seçiniz --",
     dmPreviewPlaceholder: "Lütfen incelemek istediğiniz bir ÇAP programı seçin.",
     dmPreviewRemoved: "(ÇAP seçilmedi veya mevcut ÇAP iptal edilecek.)",
-    dmNoAvailable: "Bu bölüm için henüz ÇAP müfredat verisi bulunmamaktadır.",
-    dmMinExtraCredits: "Ek Kredi Yükü:",
-    dmTotalCredits: "Toplam Program Kredisi:",
-    dmBaseGpa: "Taban GPA:",
-    dmCancelBtn: "Vazgeç",
-    dmApplyBtn: "ÇAP'ı Uygula",
+    dmNoAvailable: "Bu bölüm için ÇAP müfredat verisi yakında eklenecektir.",
+    dmNoPrograms: "Bu bölüm için ÇAP müfredat verisi yakında eklenecektir.",
+    dmMinGpa: "Taban GNO:",
+    dmBaseGpa: "Taban GNO:",
+    dmMinExtraCredits: "Minimum Ek Kredi:",
+    dmExtraCredits: "Minimum Ek Kredi:",
+    dmTotalCredits: "Toplam Mezuniyet Kredisi:",
+    dmCancelBtn: "İptal",
+    dmApplyBtn: "ÇAP Müfredatını Uygula",
     semGroupLabels: {
       '1.1': '1. Dönem (1. Yıl Güz)',
       '1.2': '2. Dönem (1. Yıl Bahar)',
@@ -273,24 +279,31 @@ const translations = {
     minorCancelBtn: "Cancel",
     minorApplyBtn: "Apply Minor",
     addDm: "🎓 Add Double Major",
+    dmBtn: "🎓 Add Double Major",
     dmBtnTitle: "Select / Edit Double Major (ÇAP) Program",
     dmLabelPrefix: "DM",
+    dmActivePrefix: "🎓 DM: ",
     dmRemoveTooltip: "Remove Double Major",
     dmHasTitleSuffix: "(Click ✕ to remove)",
     dmBadge: "🎓 Double Major",
     removeDmCourseTitle: "Remove this double major course",
-    confirmRemoveDm: "Are you sure you want to remove the current Double Major program and its extra courses?",
+    confirmRemoveDm: "Are you sure you want to remove the selected Double Major? (Courses already placed in terms will be preserved.)",
+    dmRemoveConfirm: "Are you sure you want to remove the selected Double Major? (Courses already placed in terms will be preserved.)",
     toastDmApplied: (name, count) => `✓ ${name} selected (${count} courses). Extra DM courses added to course pool!`,
     toastDmRemoved: "Double Major program removed.",
-    dmModalTitle: "🎓 Double Major Program Selection",
-    dmSelectLabel: "Select Double Major Program",
-    dmNoSelectionOption: "(No Double Major / Remove)",
+    dmModalTitle: "🎓 Select Double Major Program",
+    dmSelectLabel: "Second Major Program:",
+    dmSelectPlaceholder: "-- Select Double Major Program --",
+    dmNoSelectionOption: "-- Select Double Major Program --",
     dmPreviewPlaceholder: "Please select a double major program to preview.",
     dmPreviewRemoved: "(No double major selected or current program will be removed.)",
-    dmNoAvailable: "Double major curriculum data is not yet available for this department.",
-    dmMinExtraCredits: "Extra Credit Load:",
-    dmTotalCredits: "Total Program Credits:",
-    dmBaseGpa: "Min. Application GPA:",
+    dmNoAvailable: "Double major curriculum data for this department will be added soon.",
+    dmNoPrograms: "Double major curriculum data for this department will be added soon.",
+    dmMinGpa: "Min. GPA:",
+    dmBaseGpa: "Min. GPA:",
+    dmMinExtraCredits: "Min. Extra Credits:",
+    dmExtraCredits: "Min. Extra Credits:",
+    dmTotalCredits: "Total Graduation Credits:",
     dmCancelBtn: "Cancel",
     dmApplyBtn: "Apply Double Major",
     semGroupLabels: {
@@ -314,9 +327,9 @@ const translations = {
       '6. Yıl (2. Uzatma)': 'Year 6 (Extension 2)',
       '7. Yıl (3. Uzatma)': 'Year 7 (Extension 3)',
       '7. Yıl (Azami Yasal Süre)': 'Year 7 (Max Legal Duration)',
-      '8. Yıl (Azami Yasal Süre)': 'Year 8 (Max Legal Duration)'
+      '8. Yıl (Azami Yasal Süre)': 'Year 8 (Max Legal Limit)'
     },
-    limitTag: "Max Limit",
+    limitTag: "YÖK Limit",
     loadErrorTitle: "Failed to Load Curriculum Data!",
     loadErrorDesc: "Make sure <code>curriculum.json</code> is in the same folder as <code>index.html</code> and that you are serving the page over a local HTTP server (e.g., Live Server).",
     loadErrorDetail: "Error details:",
@@ -702,6 +715,30 @@ let dmData = {};
 let currentDept = localStorage.getItem('boun_active_dept') || 'math';
 let globalState = JSON.parse(localStorage.getItem('boun_multi_dept_gpa_state')) || {};
 
+// Küresel ve Bölüm Bazlı Önkoşul Haritaları
+const GLOBAL_PREREQ_MAP = {};
+const DEPT_PREREQ_MAP = {};
+
+function initPrereqMaps(currData) {
+  if (!currData || typeof currData !== 'object') return;
+  Object.keys(GLOBAL_PREREQ_MAP).forEach(k => delete GLOBAL_PREREQ_MAP[k]);
+  Object.keys(DEPT_PREREQ_MAP).forEach(k => delete DEPT_PREREQ_MAP[k]);
+
+  Object.keys(currData).forEach(dKey => {
+    DEPT_PREREQ_MAP[dKey] = {};
+    const courses = currData[dKey]?.courses || [];
+    courses.forEach(c => {
+      if (c && c.code && c.prereq) {
+        const codeKey = String(c.code).trim().toUpperCase();
+        DEPT_PREREQ_MAP[dKey][codeKey] = c.prereq;
+        if (!GLOBAL_PREREQ_MAP[codeKey]) {
+          GLOBAL_PREREQ_MAP[codeKey] = c.prereq;
+        }
+      }
+    });
+  });
+}
+
 // ÇAP (Double Major) bölüm eşleştirme haritası
 const DEPT_TO_DM_MAJOR = {
   'sced_sec_math': 'maed',
@@ -711,6 +748,14 @@ const DEPT_TO_DM_MAJOR = {
   'ec': 'econ',
   'mgmt_a': 'mgmt',
   'mgmt_b': 'mgmt'
+};
+
+const DM_MAJOR_TO_CURR_DEPT = {
+  'maed': 'sced_sec_math',
+  'trm': 'tour',
+  'tr': 'transint',
+  'econ': 'econ',
+  'mgmt': 'mgmt_a'
 };
 
 function getDmTargetKey(deptKey) {
@@ -727,6 +772,7 @@ async function loadCurriculum() {
 
     if (!currResp.ok) throw new Error(`HTTP Hata: ${currResp.status}`);
     departmentsData = await currResp.json();
+    initPrereqMaps(departmentsData);
 
     if (minorsResp.ok) {
       try {
@@ -863,10 +909,87 @@ const MINOR_EN_MAP = {
 
 function getLocalizedFacultyName(trFaculty) {
   if (!trFaculty) return '';
-  if (currentLang === 'en' && FACULTY_EN_MAP[trFaculty]) {
-    return FACULTY_EN_MAP[trFaculty];
+  if (currentLang !== 'en') return trFaculty;
+  if (FACULTY_EN_MAP[trFaculty]) return FACULTY_EN_MAP[trFaculty];
+  // Çift fakülte birleşimleri (örn. "Mühendislik Fakültesi & Fen Fakültesi")
+  if (trFaculty.includes('&')) {
+    return trFaculty
+      .split('&')
+      .map(part => {
+        const trimmed = part.trim();
+        return FACULTY_EN_MAP[trimmed] || trimmed;
+      })
+      .join(' & ');
   }
   return trFaculty;
+}
+
+const DEPT_NAME_EN = {
+  phys: "Physics",
+  chem: "Chemistry",
+  math: "Mathematics",
+  mbg: "Molecular Biology and Genetics",
+  cet: "Computer Education and Educational Technology",
+  ed: "Guidance and Psychological Counseling",
+  pred: "Early Childhood Education",
+  sced_sci: "Science Education",
+  sced_sec_math: "Secondary School Mathematics Education",
+  sced_math: "Primary Mathematics Education",
+  sced_chem: "Chemistry Education",
+  sced_phy: "Physics Education",
+  fled: "English Language Teaching",
+  law: "Law",
+  econ: "Economics",
+  mgmt: "Management",
+  mgmt_a: "Management",
+  mgmt_b: "Management",
+  pols: "Political Science and International Relations",
+  tour: "Tourism Administration",
+  trm: "Tourism Administration",
+  intt: "International Trade",
+  mis: "Management Information Systems",
+  cmpe: "Computer Engineering",
+  ee: "Electrical and Electronics Engineering",
+  ie: "Industrial Engineering",
+  ce: "Civil Engineering",
+  che: "Chemical Engineering",
+  me: "Mechanical Engineering",
+  soc: "Sociology",
+  psy: "Psychology",
+  hist: "History",
+  tkl: "Turkish Language and Literature",
+  transint: "Translation and Interpreting Studies",
+  tr: "Translation and Interpreting Studies",
+  ling: "Linguistics",
+  phil: "Philosophy",
+  wll: "Western Languages and Literatures",
+  maed: "Mathematics Education"
+};
+
+const DEPT_CODE_MAP = {
+  phys: "PHYS", chem: "CHEM", math: "MATH", mbg: "MBG", cet: "CET", ed: "ED", pred: "PRED",
+  sced_sci: "SCED", sced_sec_math: "SCED", sced_math: "SCED", sced_chem: "SCED", sced_phy: "SCED",
+  fled: "FLED", law: "LAW", econ: "ECON", mgmt: "MGMT", mgmt_a: "MGMT", mgmt_b: "MGMT",
+  pols: "POLS", tour: "TOUR", trm: "TRM", intt: "INTT", mis: "MIS", cmpe: "CMPE", ee: "EE",
+  ie: "IE", ce: "CE", che: "CHE", me: "ME", soc: "SOC", psy: "PSY", hist: "HIST", tkl: "TKL",
+  transint: "TRANSINT", tr: "TR", ling: "LING", phil: "PHIL", wll: "WLL", maed: "MAED"
+};
+
+function getDmLocalizedName(dmObj) {
+  if (!dmObj) return '';
+  if (currentLang !== 'en') return dmObj.name || '';
+  const mKey = (dmObj.majorKey || '').toLowerCase();
+  const dmKey = (dmObj.doubleMajorKey || '').toLowerCase();
+  const majorName = DEPT_NAME_EN[mKey] || mKey.toUpperCase();
+  const dmName = DEPT_NAME_EN[dmKey] || dmKey.toUpperCase();
+  const mCode = DEPT_CODE_MAP[mKey] || mKey.toUpperCase();
+  const dmCode = DEPT_CODE_MAP[dmKey] || dmKey.toUpperCase();
+  return `${majorName} – ${dmName} Double Major (${mCode} - ${dmCode})`;
+}
+
+function getDmLocalizedFaculty(dmObj) {
+  if (!dmObj) return '';
+  return getLocalizedFacultyName(dmObj.faculty || '');
 }
 
 function getLocalizedDeptName(deptKey) {
@@ -2278,9 +2401,21 @@ function getDmCourseList(dmKey) {
   if (!dmKey || !dmData[dmKey]) return [];
   const prog = dmData[dmKey];
   const courses = prog.courses || [];
+  const secondMajorRawKey = (prog.doubleMajorKey || '').toLowerCase();
+  const secondMajorMappedKey = getDmTargetKey(secondMajorRawKey);
+
+  // İkinci anadal için geçerli department anahtarları (ör. tr -> transint, maed -> sced_sec_math / sced_math)
+  const candidateSecondDeptKeys = [
+    secondMajorRawKey,
+    secondMajorMappedKey,
+    DM_MAJOR_TO_CURR_DEPT[secondMajorRawKey],
+    DM_MAJOR_TO_CURR_DEPT[secondMajorMappedKey]
+  ].filter(Boolean);
 
   return courses.map((c, idx) => {
     const cleanCode = (c.code || '').trim();
+    const upperCode = cleanCode.toUpperCase();
+
     // Null Kredi Koruması: c.crd !== null ? Number(c.crd) : (curriculum.json içinde aynı kodlu ders || 3)
     let crd = 3;
     if (c.crd !== null && c.crd !== undefined && !isNaN(Number(c.crd))) {
@@ -2289,6 +2424,28 @@ function getDmCourseList(dmKey) {
       const ref = findCourseByCode(cleanCode);
       if (ref && ref.crd !== null && ref.crd !== undefined && !isNaN(Number(ref.crd))) {
         crd = Number(ref.crd);
+      }
+    }
+
+    // Önkoşul (prereq) Çözümleme:
+    // 1. dmCourse.prereq
+    // 2. Aktif ana dal (currentDept) kaydındaki prereq
+    // 3. İkinci anadal (doubleMajorKey / alias) kaydındaki prereq
+    // 4. GLOBAL_PREREQ_MAP[code]
+    let resolvedPrereq = '';
+    if (c.prereq) {
+      resolvedPrereq = c.prereq;
+    } else if (DEPT_PREREQ_MAP[currentDept] && DEPT_PREREQ_MAP[currentDept][upperCode]) {
+      resolvedPrereq = DEPT_PREREQ_MAP[currentDept][upperCode];
+    } else {
+      for (const sKey of candidateSecondDeptKeys) {
+        if (DEPT_PREREQ_MAP[sKey] && DEPT_PREREQ_MAP[sKey][upperCode]) {
+          resolvedPrereq = DEPT_PREREQ_MAP[sKey][upperCode];
+          break;
+        }
+      }
+      if (!resolvedPrereq && GLOBAL_PREREQ_MAP[upperCode]) {
+        resolvedPrereq = GLOBAL_PREREQ_MAP[upperCode];
       }
     }
 
@@ -2301,7 +2458,7 @@ function getDmCourseList(dmKey) {
       name: c.name || cleanCode,
       crd: crd,
       sem: c.sem || 'other',
-      prereq: c.prereq || '',
+      prereq: resolvedPrereq || '',
       isElective: Boolean(c.isElective),
       source: c.source || 'major',
       isDoubleMajor: isDmSource
@@ -2357,7 +2514,7 @@ function removeDm(event) {
     event.stopPropagation();
     event.preventDefault();
   }
-  if (confirm(t('confirmRemoveDm'))) {
+  if (confirm(t('dmRemoveConfirm'))) {
     removeCurrentDm(true);
   }
 }
@@ -2370,14 +2527,16 @@ function updateDmButtonUI() {
 
   if (dmId && dmData[dmId]) {
     const prog = dmData[dmId];
-    const match = prog.name.match(/\(([^)]+)\)/);
-    const shortName = match ? match[1] : prog.name.replace(/ÇAP|Programı/gi, '').trim();
+    const localizedName = getDmLocalizedName(prog);
+    const match = localizedName.match(/\(([^)]+)\)/);
+    const shortName = match ? match[1] : localizedName.replace(/ÇAP|Double Major|Programı/gi, '').trim();
+    const prefix = t('dmActivePrefix') || `🎓 ${t('dmLabelPrefix')}: `;
     dmBtn.className = 'minor-btn dm-btn has-dm';
-    dmBtn.innerHTML = `🎓 ${escapeHTML(t('dmLabelPrefix'))}: ${escapeHTML(shortName)} <span class="minor-remove-btn" onclick="removeDm(event)" title="${escapeHTML(t('dmRemoveTooltip'))}">✕</span>`;
-    dmBtn.title = `${prog.name} ${t('dmHasTitleSuffix')}`;
+    dmBtn.innerHTML = `${escapeHTML(prefix)}${escapeHTML(shortName)} <span class="minor-remove-btn" onclick="removeDm(event)" title="${escapeHTML(t('dmRemoveTooltip'))}">✕</span>`;
+    dmBtn.title = `${localizedName} ${t('dmHasTitleSuffix')}`;
   } else {
     dmBtn.className = 'minor-btn dm-btn';
-    dmBtn.innerHTML = escapeHTML(t('addDm'));
+    dmBtn.innerHTML = escapeHTML(t('dmBtn'));
     dmBtn.title = t('dmBtnTitle');
   }
 }
@@ -2385,16 +2544,16 @@ function updateDmButtonUI() {
 function populateDmModalOptions() {
   const select = document.getElementById('dmSelect');
   if (!select) return;
-  select.innerHTML = `<option value="">${escapeHTML(t('dmNoSelectionOption'))}</option>`;
+  select.innerHTML = `<option value="">${escapeHTML(t('dmSelectPlaceholder'))}</option>`;
 
   const availableKeys = getAvailableDmKeysForDept(currentDept);
   const faculties = {};
 
   availableKeys.forEach(dmKey => {
     const prog = dmData[dmKey];
-    const fac = prog.faculty ? getLocalizedFacultyName(prog.faculty) : t('otherFaculties');
+    const fac = prog.faculty ? getDmLocalizedFaculty(prog) : t('otherFaculties');
     if (!faculties[fac]) faculties[fac] = [];
-    faculties[fac].push({ key: dmKey, name: prog.name });
+    faculties[fac].push({ key: dmKey, name: getDmLocalizedName(prog) });
   });
 
   Object.keys(faculties).forEach(facultyName => {
@@ -2465,10 +2624,10 @@ function handleDmSelectChange(dmKey) {
   const req = prog.requirements || {};
   let reqHtml = '';
   if (req.gpa !== undefined && req.gpa !== null) {
-    reqHtml += `<span>⭐ ${escapeHTML(t('dmBaseGpa'))} <strong>${Number(req.gpa).toFixed(2)}</strong></span>`;
+    reqHtml += `<span>⭐ ${escapeHTML(t('dmMinGpa'))} <strong>${Number(req.gpa).toFixed(2)}</strong></span>`;
   }
   if (req.minExtraCredits !== undefined && req.minExtraCredits !== null) {
-    reqHtml += `<span>🎯 ${escapeHTML(t('dmMinExtraCredits'))} <strong>${req.minExtraCredits} Cr</strong></span>`;
+    reqHtml += `<span>🎯 ${escapeHTML(t('dmExtraCredits'))} <strong>${req.minExtraCredits} Cr</strong></span>`;
   }
   if (req.totalCredits !== undefined && req.totalCredits !== null) {
     reqHtml += `<span>📚 ${escapeHTML(t('dmTotalCredits'))} <strong>${req.totalCredits} Cr</strong></span>`;
@@ -2479,15 +2638,46 @@ function handleDmSelectChange(dmKey) {
     ? dmCourses.map(c => `<code>${escapeHTML(c.code)}</code> (${c.crd} Cr)`).join(', ')
     : `<span style="color: #64748b; font-style: italic;">${escapeHTML(t('otherPrograms'))}</span>`;
 
+  let notesHtml = '';
+  if (prog.notes) {
+    let localizedNotes = prog.notes;
+    if (currentLang === 'en') {
+      const summaryItems = [];
+      if (req.gpa !== undefined && req.gpa !== null) summaryItems.push(`Min. GPA: ${Number(req.gpa).toFixed(2)}`);
+      if (req.minExtraCredits !== undefined && req.minExtraCredits !== null) summaryItems.push(`Min. Extra Credits: ${req.minExtraCredits} Cr`);
+      if (req.totalCredits !== undefined && req.totalCredits !== null) summaryItems.push(`Total Graduation Credits: ${req.totalCredits} Cr`);
+      const summaryStr = summaryItems.join(' • ');
+
+      // Standart Türkçe ifadeleri İngilizceye çevir
+      let translated = prog.notes
+        .replace(/Toplam\s+(\d+)\s+kredi/gi, 'Total $1 credits')
+        .replace(/Toplam\s+(\d+)-(\d+)\s+kredi/gi, 'Total $1-$2 credits')
+        .replace(/ek\s+(kredi|yük)\s+(\d+)(\s*kredi)?/gi, 'extra load $2 credits')
+        .replace(/günlük\s+zorunlu\s+staj/gi, 'days mandatory internship')
+        .replace(/gün\s+stajı?\s+zorunludur/gi, 'days mandatory internship')
+        .replace(/gün\s+([A-Z]+)\s+stajı/gi, 'days $1 internship')
+        .replace(/zorunludur/gi, 'is mandatory')
+        .replace(/alınmalıdır/gi, 'must be taken')
+        .replace(/muaf\s+tutulur|muaf\s+sayılır|muaftır/gi, 'is exempted')
+        .replace(/yerine\s+geçer/gi, 'substitutes')
+        .replace(/önceden\s+alınmışsa/gi, 'if taken previously')
+        .replace(/ders\s+bazlı\s+kredi[^.]+null\s+bırakılmıştır\.?/gi, 'Course credits not specified in the official PDF; standard department defaults applied.')
+        .replace(/kaynak\s+PDF'te[^\.]+\./gi, '');
+
+      localizedNotes = summaryStr ? `${summaryStr}. ${translated}` : translated;
+    }
+    notesHtml = `<div style="margin-top: 6px; font-size: 0.75rem; color: #94a3b8; font-style: italic;">ℹ️ ${escapeHTML(localizedNotes)}</div>`;
+  }
+
   previewBox.innerHTML = `
-    <div class="minor-preview-title" style="color: #0f766e;">${escapeHTML(prog.name)}</div>
-    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 8px;">🏛️ ${escapeHTML(getLocalizedFacultyName(prog.faculty || ''))}</div>
+    <div class="minor-preview-title" style="color: #0f766e;">${escapeHTML(getDmLocalizedName(prog))}</div>
+    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 8px;">🏛️ ${escapeHTML(getDmLocalizedFaculty(prog))}</div>
     ${reqHtml ? `<div class="minor-preview-reqs">${reqHtml}</div>` : ''}
     <div style="margin-top: 8px; font-size: 0.82rem; color: #334155;">
       <strong>${escapeHTML(t('minorSampleDist'))} (${dmCourses.length} ${escapeHTML(t('courseUnit'))})</strong><br>
       <span style="font-size: 0.78rem; color: #475569;">${coursesPreview}</span>
     </div>
-    ${prog.notes ? `<div style="margin-top: 6px; font-size: 0.75rem; color: #94a3b8; font-style: italic;">ℹ️ ${escapeHTML(prog.notes)}</div>` : ''}
+    ${notesHtml}
   `;
 }
 

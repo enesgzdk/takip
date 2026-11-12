@@ -18232,6 +18232,549 @@
     },
     "notes": "Ders bazlı kredi ve toplam kredi değerleri kaynak PDF'ten ayrıntılandırılmadığı için null bırakılmıştır."
   },
+  "wll_ling": {
+    "majorKey": "wll",
+    "doubleMajorKey": "ling",
+    "name": "Batı Dilleri ve Edebiyatları – Dilbilimi ÇAP (WLL - LING)",
+    "faculty": "İnsan ve Toplum Bilimleri Fakültesi",
+    "sourceUrl": "ling-wll_double_major.pdf",
+    "requirements": {
+      "gpa": 3.2,
+      "minExtraCredits": null,
+      "totalCredits": 161
+    },
+    "courses": [
+      {
+        "id": "wll_ling_1_1_1",
+        "code": "ENGL 105",
+        "name": "Introduction to Literary Forms I",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_1_1_2",
+        "code": "EL 101",
+        "name": "Survey of English Literature from Old English Period to Restoration",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_1_1_3",
+        "code": "CL 103",
+        "name": "Classical Literature",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_1_1_4",
+        "code": "PHIL 111",
+        "name": "Introduction to Ancient and Medieval Philosophy",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_1_1_5",
+        "code": "PSY 101",
+        "name": "Introduction to Psychology I",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_1_2_1",
+        "code": "ENGL 106",
+        "name": "Introduction to Literary Forms II",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_1_2_2",
+        "code": "EL 102",
+        "name": "Survey of English Literature from Restoration to Present",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_1_2_3",
+        "code": "CL 106",
+        "name": "Literary Theory and Criticism I",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_1_2_4",
+        "code": "PHIL 112",
+        "name": "Introduction to Modern Philosophy",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_1_2_5",
+        "code": "LING 101",
+        "name": "Introduction to Language and Linguistics I",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_2_1_1",
+        "code": "EL 201",
+        "name": "Medieval English Literature",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_1_2",
+        "code": "CL 207",
+        "name": "Literary Theory and Criticism II",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_1_3",
+        "code": "Science Elective",
+        "name": "Science Elective",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_1_4",
+        "code": "HIST Elective",
+        "name": "HIST Elective",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_1_5",
+        "code": "LING 203",
+        "name": "Syntax",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_2_1_6",
+        "code": "TK 221",
+        "name": "Turkish I",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_1_7",
+        "code": "Foreign Lang.",
+        "name": "Foreign Language",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_2_1",
+        "code": "EL 202",
+        "name": "The English Renaissance",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_2_2",
+        "code": "CL 208",
+        "name": "Literary Theory and Criticism III",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_2_3",
+        "code": "Science Elective",
+        "name": "Science Elective",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_2_4",
+        "code": "HIST Elective",
+        "name": "HIST Elective",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_2_5",
+        "code": "LING 102",
+        "name": "Introduction to Language and Linguistics II",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_2_2_6",
+        "code": "LING 104",
+        "name": "Phonetics",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_2_2_7",
+        "code": "TK 222",
+        "name": "Turkish II",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_2_2_8",
+        "code": "Foreign Lang.",
+        "name": "Foreign Language",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_3_1_1",
+        "code": "AL 311",
+        "name": "Survey of American Literature from 17th to 19th Century",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_3_1_2",
+        "code": "EL 303",
+        "name": "Restoration and Augustan Literature",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_3_1_3",
+        "code": "LL Elective 1",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_3_1_4",
+        "code": "LL Elective 2",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_3_1_5",
+        "code": "HTR 311",
+        "name": "History of the Turkish Republic I",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_3_1_6",
+        "code": "LING 201",
+        "name": "Phonology",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_3_1_7",
+        "code": "LING Elective",
+        "name": "LING Elective",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": true,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_3_2_1",
+        "code": "AL 312",
+        "name": "Survey of American Literature from late 19th Century to Present",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_3_2_2",
+        "code": "EL 305",
+        "name": "Studies in Shakespeare",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_3_2_3",
+        "code": "EL 306",
+        "name": "The English Romantics",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_3_2_4",
+        "code": "HTR 312",
+        "name": "History of the Turkish Republic II",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_3_2_5",
+        "code": "LING 202",
+        "name": "Morphology",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_3_2_6",
+        "code": "LING 206",
+        "name": "Language Typology",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_4_1_1",
+        "code": "DRA 403",
+        "name": "Modern Drama",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_4_1_2",
+        "code": "EL 405",
+        "name": "Victorian Poetry and Prose",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_4_1_3",
+        "code": "LL Elective 1",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_4_1_4",
+        "code": "LL Elective 2",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_4_1_5",
+        "code": "LING 313",
+        "name": "Phonology and Morphology of Modern Turkish",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_4_1_6",
+        "code": "LING 411",
+        "name": "Linguistic Methodology",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_4_2_1",
+        "code": "EL 402",
+        "name": "Modern Novel",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_4_2_2",
+        "code": "EL 408",
+        "name": "Modern Poetry",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_4_2_3",
+        "code": "EL 412",
+        "name": "Senior Thesis",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_4_2_4",
+        "code": "LL Elective",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_ling_4_2_5",
+        "code": "LING 314",
+        "name": "Syntax and Semantics of Modern Turkish",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_4_2_6",
+        "code": "LING Elective 1",
+        "name": "LING Elective",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": true,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_ling_4_2_7",
+        "code": "LING Elective 2",
+        "name": "LING Elective",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": true,
+        "source": "double_major"
+      }
+    ],
+    "curriculumMap": {
+      "1.1": [
+        "ENGL 105",
+        "EL 101",
+        "CL 103",
+        "PHIL 111",
+        "PSY 101"
+      ],
+      "1.2": [
+        "ENGL 106",
+        "EL 102",
+        "CL 106",
+        "PHIL 112",
+        "LING 101"
+      ],
+      "2.1": [
+        "EL 201",
+        "CL 207",
+        "Science Elective",
+        "HIST Elective",
+        "LING 203",
+        "TK 221",
+        "Foreign Lang."
+      ],
+      "2.2": [
+        "EL 202",
+        "CL 208",
+        "Science Elective",
+        "HIST Elective",
+        "LING 102",
+        "LING 104",
+        "TK 222",
+        "Foreign Lang."
+      ],
+      "3.1": [
+        "AL 311",
+        "EL 303",
+        "LL Elective 1",
+        "LL Elective 2",
+        "HTR 311",
+        "LING 201",
+        "LING Elective"
+      ],
+      "3.2": [
+        "AL 312",
+        "EL 305",
+        "EL 306",
+        "HTR 312",
+        "LING 202",
+        "LING 206"
+      ],
+      "4.1": [
+        "DRA 403",
+        "EL 405",
+        "LL Elective 1",
+        "LL Elective 2",
+        "LING 313",
+        "LING 411"
+      ],
+      "4.2": [
+        "EL 402",
+        "EL 408",
+        "EL 412",
+        "LL Elective",
+        "LING 314",
+        "LING Elective 1",
+        "LING Elective 2"
+      ]
+    },
+    "notes": "2022 ve sonrası girişliler için güncel program (Toplam 161 kredi). Ders bazlı kredi değerleri kaynak PDF'te belirtilmediğinden null bırakılmıştır."
+  },
   "ling_fled": {
     "majorKey": "ling",
     "doubleMajorKey": "fled",
@@ -49822,6 +50365,1665 @@
       ]
     },
     "notes": "Toplam 155 kredi / 285 AKTS (+24 kredi)."
+  },
+  "wll_phil": {
+    "majorKey": "wll",
+    "doubleMajorKey": "phil",
+    "name": "Batı Dilleri ve Edebiyatları – Felsefe ÇAP (WLL - PHIL)",
+    "faculty": "İnsan ve Toplum Bilimleri Fakültesi",
+    "sourceUrl": "phil-wll_double_major_program.pdf",
+    "requirements": {
+      "gpa": 3.2,
+      "minExtraCredits": null,
+      "totalCredits": 160
+    },
+    "courses": [
+      {
+        "id": "wll_phil_1_1_1",
+        "code": "ENGL 105",
+        "name": "Introduction to Literary Forms I",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_1_1_2",
+        "code": "EL 101",
+        "name": "Survey of English Literature from Old English Period to Restoration",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_1_1_3",
+        "code": "CL 103",
+        "name": "Classical Literature",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_1_1_4",
+        "code": "PHIL 111",
+        "name": "Introduction to Ancient and Medieval Philosophy",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_1_1_5",
+        "code": "PSY 101",
+        "name": "Introduction to Psychology I",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_1_2_1",
+        "code": "ENGL 106",
+        "name": "Introduction to Literary Forms II",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_1_2_2",
+        "code": "EL 102",
+        "name": "Survey of English Literature from Restoration to Present",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_1_2_3",
+        "code": "CL 106",
+        "name": "Literary Theory and Criticism I",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_1_2_4",
+        "code": "PHIL 112",
+        "name": "Introduction to Modern Philosophy",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_1_2_5",
+        "code": "LING 101",
+        "name": "Introduction to Language and Linguistics I",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_2_1_1",
+        "code": "CL 207",
+        "name": "Literary Theory and Criticism II",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_2_1_2",
+        "code": "EL 201",
+        "name": "Medieval English Literature",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_2_1_3",
+        "code": "PHIL 101",
+        "name": "Introduction to Philosophy",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_2_1_4",
+        "code": "Science Elective",
+        "name": "Science Elective",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_2_1_5",
+        "code": "PHIL 131",
+        "name": "Logic I",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_2_1_6",
+        "code": "PHIL 105",
+        "name": "Informal Logic",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_2_1_7",
+        "code": "TK 221",
+        "name": "Turkish I",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_2_2_1",
+        "code": "CL 208",
+        "name": "Literary Theory and Criticism III",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_2_2_2",
+        "code": "EL 202",
+        "name": "The English Renaissance",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_2_2_3",
+        "code": "PHIL 106",
+        "name": "Philosophical Texts",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_2_2_4",
+        "code": "Science Elective",
+        "name": "Science Elective",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_2_2_5",
+        "code": "HIST Elective",
+        "name": "HIST Elective",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_2_2_6",
+        "code": "PHIL 132",
+        "name": "Logic II",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_2_2_7",
+        "code": "TK 222",
+        "name": "Turkish II",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_1_1",
+        "code": "AL 311",
+        "name": "Survey of American Literature from 17th to 19th Century",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_1_2",
+        "code": "EL 303",
+        "name": "Restoration and Augustan Literature",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_1_3",
+        "code": "HIST Elective",
+        "name": "HIST Elective",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_1_4",
+        "code": "LL Elective",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_1_5",
+        "code": "PHIL 213",
+        "name": "History of Philosophy I",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_3_1_6",
+        "code": "HTR 311",
+        "name": "History of the Turkish Republic I",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_1_7",
+        "code": "PHIL 273",
+        "name": "Epistemology",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_3_2_1",
+        "code": "AL 312",
+        "name": "Survey of American Literature from late 19th Century to Present",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_2_2",
+        "code": "EL 305",
+        "name": "Studies in Shakespeare",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_2_3",
+        "code": "EL 306",
+        "name": "The English Romantics",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_2_4",
+        "code": "LL Elective",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_2_5",
+        "code": "PHIL 222",
+        "name": "Philosophy of Science",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_3_2_6",
+        "code": "HTR 312",
+        "name": "History of the Turkish Republic II",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_3_2_7",
+        "code": "PHIL 214",
+        "name": "History of Philosophy II",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_4_1_1",
+        "code": "DRA 403",
+        "name": "Modern Drama",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_4_1_2",
+        "code": "EL 405",
+        "name": "Victorian Poetry and Prose",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_4_1_3",
+        "code": "LL Elective 1",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_4_1_4",
+        "code": "LL Elective 2",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_4_1_5",
+        "code": "PHIL 313",
+        "name": "History of Philosophy III",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_4_1_6",
+        "code": "PHIL 341",
+        "name": "Ethics",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_4_1_7",
+        "code": "PHIL Elective",
+        "name": "PHIL Elective",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": true,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_4_2_1",
+        "code": "EL 402",
+        "name": "Modern Novel",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_4_2_2",
+        "code": "EL 408",
+        "name": "Modern Poetry",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_4_2_3",
+        "code": "EL 412",
+        "name": "Senior Thesis",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_4_2_4",
+        "code": "LL Elective",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_phil_4_2_5",
+        "code": "PHIL 314",
+        "name": "History of Philosophy IV",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_4_2_6",
+        "code": "PHIL 382",
+        "name": "Ontology",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_phil_4_2_7",
+        "code": "PHIL Elective",
+        "name": "PHIL Elective",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": true,
+        "source": "double_major"
+      }
+    ],
+    "curriculumMap": {
+      "1.1": [
+        "ENGL 105",
+        "EL 101",
+        "CL 103",
+        "PHIL 111",
+        "PSY 101"
+      ],
+      "1.2": [
+        "ENGL 106",
+        "EL 102",
+        "CL 106",
+        "PHIL 112",
+        "LING 101"
+      ],
+      "2.1": [
+        "CL 207",
+        "EL 201",
+        "PHIL 101",
+        "Science Elective",
+        "PHIL 131",
+        "PHIL 105",
+        "TK 221"
+      ],
+      "2.2": [
+        "CL 208",
+        "EL 202",
+        "PHIL 106",
+        "Science Elective",
+        "HIST Elective",
+        "PHIL 132",
+        "TK 222"
+      ],
+      "3.1": [
+        "AL 311",
+        "EL 303",
+        "HIST Elective",
+        "LL Elective",
+        "PHIL 213",
+        "HTR 311",
+        "PHIL 273"
+      ],
+      "3.2": [
+        "AL 312",
+        "EL 305",
+        "EL 306",
+        "LL Elective",
+        "PHIL 222",
+        "HTR 312",
+        "PHIL 214"
+      ],
+      "4.1": [
+        "DRA 403",
+        "EL 405",
+        "LL Elective 1",
+        "LL Elective 2",
+        "PHIL 313",
+        "PHIL 341",
+        "PHIL Elective"
+      ],
+      "4.2": [
+        "EL 402",
+        "EL 408",
+        "EL 412",
+        "LL Elective",
+        "PHIL 314",
+        "PHIL 382",
+        "PHIL Elective"
+      ]
+    },
+    "notes": "2023 güncel program (Toplam 160 kredi). Ders bazlı kredi değerleri kaynak PDF'te belirtilmediğinden null bırakılmıştır."
+  },
+  "wll_tkl": {
+    "majorKey": "wll",
+    "doubleMajorKey": "tkl",
+    "name": "Batı Dilleri ve Edebiyatları – Türk Dili ve Edebiyatı ÇAP (WLL - TKL)",
+    "faculty": "İnsan ve Toplum Bilimleri Fakültesi",
+    "sourceUrl": "tkl-wll_double_major_program.pdf",
+    "requirements": {
+      "gpa": 3.2,
+      "minExtraCredits": null,
+      "totalCredits": 162
+    },
+    "courses": [
+      {
+        "id": "wll_tkl_1_1_1",
+        "code": "ENGL 105",
+        "name": "Introduction to Literary Forms I",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_1_1_2",
+        "code": "EL 101",
+        "name": "Survey of English Literature from Old English Period to Restoration",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_1_1_3",
+        "code": "CL 103",
+        "name": "Classical Literature",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_1_1_4",
+        "code": "PHIL 111",
+        "name": "Introduction to Ancient and Medieval Philosophy",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_1_1_5",
+        "code": "PSY 101",
+        "name": "Introduction to Psychology I",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_1_2_1",
+        "code": "ENGL 106",
+        "name": "Introduction to Literary Forms II",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_1_2_2",
+        "code": "EL 102",
+        "name": "Survey of English Literature from Restoration to Present",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_1_2_3",
+        "code": "CL 106",
+        "name": "Literary Theory and Criticism I",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_1_2_4",
+        "code": "PHIL 112",
+        "name": "Introduction to Modern Philosophy",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_1_2_5",
+        "code": "LING 101",
+        "name": "Introduction to Language and Linguistics",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_2_1_1",
+        "code": "CL 207",
+        "name": "Literary Theory and Criticism II",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_2_1_2",
+        "code": "EL 201",
+        "name": "Medieval English Literature",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_2_1_3",
+        "code": "Science Elective",
+        "name": "Science Elective",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_2_1_4",
+        "code": "TKL 101",
+        "name": "Ottoman Turkish I",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_2_1_5",
+        "code": "TKL 204",
+        "name": "Genres in Divan Literature",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_2_1_6",
+        "code": "TK 221/TKL 103",
+        "name": "Turkish I / Turkish Language and Grammar I",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_2_2_1",
+        "code": "CL 208",
+        "name": "Literary Theory and Criticism III",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_2_2_2",
+        "code": "EL 202",
+        "name": "The English Renaissance",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_2_2_3",
+        "code": "Science Elective",
+        "name": "Science Elective",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_2_2_4",
+        "code": "TKL 102",
+        "name": "Ottoman Turkish II",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_2_2_5",
+        "code": "TKL 205",
+        "name": "Methods of Analyzing Divan Poetry",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_2_2_6",
+        "code": "TK 222/TKL 104",
+        "name": "Turkish II / Turkish Language and Grammar II",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_1_1",
+        "code": "AL 311",
+        "name": "Survey of American Literature from 17th to 19th Century",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_1_2",
+        "code": "EL 303",
+        "name": "Restoration and Augustan Literature",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_1_3",
+        "code": "LL Elective",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_1_4",
+        "code": "TKL 309",
+        "name": "Turkish Poetry in the Republican Period",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_3_1_5",
+        "code": "TKL 211",
+        "name": "Modernization in Turkish Literature I",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_3_1_6",
+        "code": "HTR 311",
+        "name": "History of the Turkish Republic I",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_1_7",
+        "code": "HIST Elective",
+        "name": "History Elective",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_2_1",
+        "code": "AL 312",
+        "name": "Survey of American Literature from late 19th Century to Present",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_2_2",
+        "code": "EL 305",
+        "name": "Studies in Shakespeare",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_2_3",
+        "code": "EL 306",
+        "name": "The English Romantics",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_2_4",
+        "code": "LL Elective",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_2_5",
+        "code": "TKL 217",
+        "name": "Old Anatolian Turkish",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_3_2_6",
+        "code": "TKL 212",
+        "name": "Modernization in Turkish Literature II",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_3_2_7",
+        "code": "HTR 312",
+        "name": "History of the Turkish Republic II",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_3_2_8",
+        "code": "HIST Elective",
+        "name": "HIST Elective",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_4_1_1",
+        "code": "DRA 403",
+        "name": "Modern Drama",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_4_1_2",
+        "code": "EL 405",
+        "name": "Victorian Poetry and Prose",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_4_1_3",
+        "code": "LL Elective 1",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_4_1_4",
+        "code": "LL Elective 2",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_4_1_5",
+        "code": "TKL 311",
+        "name": "Turkish Folk Literature I",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_4_1_6",
+        "code": "TKL 313",
+        "name": "Divan Literature I",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_4_1_7",
+        "code": "TKL 409",
+        "name": "Prose in Old Turkish Literature",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_4_2_1",
+        "code": "EL 402",
+        "name": "Modern Novel",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_4_2_2",
+        "code": "EL 408",
+        "name": "Modern Poetry",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_4_2_3",
+        "code": "EL 412",
+        "name": "Senior Thesis",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_4_2_4",
+        "code": "LL Elective",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tkl_4_2_5",
+        "code": "TKL 314",
+        "name": "Divan Literature II",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_4_2_6",
+        "code": "TKL 414",
+        "name": "Tanzimat Novel",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tkl_4_2_7",
+        "code": "TKL 434",
+        "name": "Novel in Modern Turkish Literature",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "double_major"
+      }
+    ],
+    "curriculumMap": {
+      "1.1": [
+        "ENGL 105",
+        "EL 101",
+        "CL 103",
+        "PHIL 111",
+        "PSY 101"
+      ],
+      "1.2": [
+        "ENGL 106",
+        "EL 102",
+        "CL 106",
+        "PHIL 112",
+        "LING 101"
+      ],
+      "2.1": [
+        "CL 207",
+        "EL 201",
+        "Science Elective",
+        "TKL 101",
+        "TKL 204",
+        "TK 221/TKL 103"
+      ],
+      "2.2": [
+        "CL 208",
+        "EL 202",
+        "Science Elective",
+        "TKL 102",
+        "TKL 205",
+        "TK 222/TKL 104"
+      ],
+      "3.1": [
+        "AL 311",
+        "EL 303",
+        "LL Elective",
+        "TKL 309",
+        "TKL 211",
+        "HTR 311",
+        "HIST Elective"
+      ],
+      "3.2": [
+        "AL 312",
+        "EL 305",
+        "EL 306",
+        "LL Elective",
+        "TKL 217",
+        "TKL 212",
+        "HTR 312",
+        "HIST Elective"
+      ],
+      "4.1": [
+        "DRA 403",
+        "EL 405",
+        "LL Elective 1",
+        "LL Elective 2",
+        "TKL 311",
+        "TKL 313",
+        "TKL 409"
+      ],
+      "4.2": [
+        "EL 402",
+        "EL 408",
+        "EL 412",
+        "LL Elective",
+        "TKL 314",
+        "TKL 414",
+        "TKL 434"
+      ]
+    },
+    "notes": "2022 ve sonrası girişliler için güncel program (Toplam 162/164 kredi). Ders bazlı kredi değerleri kaynak PDF'te belirtilmediğinden null bırakılmıştır."
+  },
+  "wll_tr": {
+    "majorKey": "wll",
+    "doubleMajorKey": "tr",
+    "name": "Batı Dilleri ve Edebiyatları – Çeviribilimi ÇAP (WLL - TR)",
+    "faculty": "İnsan ve Toplum Bilimleri Fakültesi",
+    "sourceUrl": "tr-wll_double_major_program.pdf",
+    "requirements": {
+      "gpa": 3.2,
+      "minExtraCredits": null,
+      "totalCredits": 161
+    },
+    "courses": [
+      {
+        "id": "wll_tr_1_1_1",
+        "code": "ENGL 105",
+        "name": "Introduction to Literary Forms I",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_1_1_2",
+        "code": "EL 101",
+        "name": "Survey of English Literature from Old English Period to Restoration",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_1_1_3",
+        "code": "CL 103",
+        "name": "Classical Literature",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_1_1_4",
+        "code": "PHIL 111",
+        "name": "Introduction to Ancient and Medieval Philosophy",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_1_1_5",
+        "code": "PSY 101",
+        "name": "Introduction to Psychology I",
+        "crd": null,
+        "sem": "1.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_1_2_1",
+        "code": "ENGL 106",
+        "name": "Introduction to Literary Forms II",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_1_2_2",
+        "code": "EL 102",
+        "name": "Survey of English Literature from Restoration to Present",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_1_2_3",
+        "code": "CL 106",
+        "name": "Literary Theory and Criticism I",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_1_2_4",
+        "code": "PHIL 112",
+        "name": "Introduction to Modern Philosophy",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_1_2_5",
+        "code": "LING 101",
+        "name": "Introduction to Language and Linguistics I",
+        "crd": null,
+        "sem": "1.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_2_1_1",
+        "code": "CL 207",
+        "name": "Literary Theory and Criticism II",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_2_1_2",
+        "code": "EL 201",
+        "name": "Medieval English Literature",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_2_1_3",
+        "code": "SCI Elective",
+        "name": "Science Elective",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_2_1_4",
+        "code": "TK 221",
+        "name": "Turkish I",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_2_1_5",
+        "code": "TR 109",
+        "name": "Introduction to Translation and Translation Studies I",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_2_1_6",
+        "code": "TR 111",
+        "name": "Rhetoric and Composition for Translators",
+        "crd": null,
+        "sem": "2.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_2_2_1",
+        "code": "CL 208",
+        "name": "Literary Theory and Criticism III",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_2_2_2",
+        "code": "EL 202",
+        "name": "The English Renaissance",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_2_2_3",
+        "code": "TK 222",
+        "name": "Turkish II",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_2_2_4",
+        "code": "TR 106",
+        "name": "Research Paper Writing in Translation Studies",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_2_2_5",
+        "code": "TR 110",
+        "name": "Introduction to Translation and Translation Studies II",
+        "crd": null,
+        "sem": "2.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_3_1_1",
+        "code": "AL 311",
+        "name": "Survey of American Literature from 17th to 19th Century",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_3_1_2",
+        "code": "EL 303",
+        "name": "Restoration and Augustan Literature",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_3_1_3",
+        "code": "LL Elective",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_3_1_4",
+        "code": "HTR 311",
+        "name": "History of the Turkish Republic I",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_3_1_5",
+        "code": "TR 203",
+        "name": "Information Technologies (IT) for Translators",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_3_1_6",
+        "code": "TR 215",
+        "name": "Technical Translation",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_3_1_7",
+        "code": "TR Elective",
+        "name": "TR Elective",
+        "crd": null,
+        "sem": "3.1",
+        "isElective": true,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_3_2_1",
+        "code": "AL 312",
+        "name": "Survey of American Literature from late 19th Century to Present",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_3_2_2",
+        "code": "EL 305",
+        "name": "Studies in Shakespeare",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_3_2_3",
+        "code": "EL 306",
+        "name": "The English Romantics",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_3_2_4",
+        "code": "LL Elective",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_3_2_5",
+        "code": "HTR 312",
+        "name": "History of the Turkish Republic II",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_3_2_6",
+        "code": "INT 202",
+        "name": "Introduction to Interpreting",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_3_2_7",
+        "code": "TR Elective",
+        "name": "TR Elective",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": true,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_3_2_8",
+        "code": "TR 314",
+        "name": "Literary Translation",
+        "crd": null,
+        "sem": "3.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_4_1_1",
+        "code": "DRA 403",
+        "name": "Modern Drama",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_4_1_2",
+        "code": "EL 405",
+        "name": "Victorian Poetry and Prose",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_4_1_3",
+        "code": "LL Elective 1",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_4_1_4",
+        "code": "LL Elective 2",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_4_1_5",
+        "code": "INT 301",
+        "name": "Introduction to Consecutive Interpreting",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_4_1_6",
+        "code": "TR 301",
+        "name": "Theories of Translation",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_4_1_7",
+        "code": "TR Elective",
+        "name": "TR Elective",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": true,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_4_1_8",
+        "code": "TR 401",
+        "name": "Contemporary Issues in Translation",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_4_1_9",
+        "code": "TR 427",
+        "name": "Translation Project Design",
+        "crd": null,
+        "sem": "4.1",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_4_2_1",
+        "code": "EL 402",
+        "name": "Modern Novel",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_4_2_2",
+        "code": "EL 408",
+        "name": "Modern Poetry",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_4_2_3",
+        "code": "EL 412",
+        "name": "Senior Thesis",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_4_2_4",
+        "code": "LL Elective",
+        "name": "LL Elective",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": true,
+        "source": "major"
+      },
+      {
+        "id": "wll_tr_4_2_5",
+        "code": "TR 316",
+        "name": "Translation Criticism",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_4_2_6",
+        "code": "TR 318",
+        "name": "Seminar",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_4_2_7",
+        "code": "TR Elective",
+        "name": "TR Elective",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": true,
+        "source": "double_major"
+      },
+      {
+        "id": "wll_tr_4_2_8",
+        "code": "TR 428",
+        "name": "Translation Project",
+        "crd": null,
+        "sem": "4.2",
+        "isElective": false,
+        "source": "double_major"
+      }
+    ],
+    "curriculumMap": {
+      "1.1": [
+        "ENGL 105",
+        "EL 101",
+        "CL 103",
+        "PHIL 111",
+        "PSY 101"
+      ],
+      "1.2": [
+        "ENGL 106",
+        "EL 102",
+        "CL 106",
+        "PHIL 112",
+        "LING 101"
+      ],
+      "2.1": [
+        "CL 207",
+        "EL 201",
+        "SCI Elective",
+        "TK 221",
+        "TR 109",
+        "TR 111"
+      ],
+      "2.2": [
+        "CL 208",
+        "EL 202",
+        "TK 222",
+        "TR 106",
+        "TR 110"
+      ],
+      "3.1": [
+        "AL 311",
+        "EL 303",
+        "LL Elective",
+        "HTR 311",
+        "TR 203",
+        "TR 215",
+        "TR Elective"
+      ],
+      "3.2": [
+        "AL 312",
+        "EL 305",
+        "EL 306",
+        "LL Elective",
+        "HTR 312",
+        "INT 202",
+        "TR Elective",
+        "TR 314"
+      ],
+      "4.1": [
+        "DRA 403",
+        "EL 405",
+        "LL Elective 1",
+        "LL Elective 2",
+        "INT 301",
+        "TR 301",
+        "TR Elective",
+        "TR 401",
+        "TR 427"
+      ],
+      "4.2": [
+        "EL 402",
+        "EL 408",
+        "EL 412",
+        "LL Elective",
+        "TR 316",
+        "TR 318",
+        "TR Elective",
+        "TR 428"
+      ]
+    },
+    "notes": "2022 ve sonrası girişliler için güncel program (Toplam 161 kredi). Ders bazlı kredi değerleri kaynak PDF'te belirtilmediğinden null bırakılmıştır."
   },
   "psy_phil": {
     "majorKey": "psy",
