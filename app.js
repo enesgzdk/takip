@@ -176,13 +176,68 @@ const translations = {
     loadErrorDetail: "Hata detayı:",
     pinCardTitle: "Kartı Üste Sabitle",
     unpinCardTitle: "Sabitlemeyi Kaldır",
-    shareBtn: "📤 Paylaş",
-    shareBtnTitle: "Ders planınızı görsel veya link olarak paylaşın",
-    shareModalTitle: "📤 Planı Paylaş",
+    shareBtn: "📤 Paylaş & Aktar",
+    shareBtnTitle: "Planınızı paylaşın, görsel/JSON indirin veya transkript/yedek aktarın",
+    shareModalTitle: "📤 Paylaş & Aktar",
+    shareExportSectionTitle: "📤 Dışa Aktar & Paylaş",
+    shareImportSectionTitle: "📥 İçe Aktar",
     sharePngBtn: "Görsel Olarak İndir (PNG)",
-    sharePngDesc: "Dönemleri ve ders planınızı yüksek çözünürlüklü temiz bir özet görseli olarak indirin.",
-    shareLinkBtn: "Paylaşılabilir Linki Kopyala",
+    sharePngDesc: "Dönemleri ve ders planınızı yüksek çözünürlüklü özet görseli olarak indirin.",
+    shareLinkBtn: "Paylaşılabilir Sandbox Linki Kopyala",
     shareLinkDesc: "Mevcut ders planınızı içeren linki panoya kopyalayın, arkadaşlarınız tek tıkla açsın.",
+    shareJsonExportBtn: "Yedek İndir (JSON)",
+    shareJsonExportDesc: "Tüm planınızı ve notlarınızı JSON yedek dosyası olarak kaydedin.",
+    shareTranscriptBtn: "BÜ / e-Devlet Transkripti Aktar (PDF / Metin)",
+    shareTranscriptDesc: "Transkript PDF dosyanızı yükleyin veya metni yapıştırarak derslerinizi otomatik aktarın.",
+    shareJsonImportBtn: "Yedek Dosyası Yükle (JSON)",
+    shareJsonImportDesc: "Daha önce indirdiğiniz JSON plan yedeğini geri yükleyin.",
+    mobileCatalogTitle: "⊞ Uygulama Kataloğu",
+    catSecAcademic: "Akademik Programlar",
+    catSecSmart: "Akıllı Araçlar",
+    catSecData: "Veri & Paylaşım",
+    catSecSystem: "Sistem",
+    catMinorTitle: "Yandal Ekle / Yönet",
+    catMinorSubDefault: "Yandal programı seç",
+    catDmTitle: "ÇAP Ekle / Yönet",
+    catDmSubDefault: "Çift anadal seç",
+    catPrereqTitle: "Önkoşul Ağacı",
+    catPrereqSub: "Kilit zincirlerini gör",
+    catAutoFillSub: "Dönemlere akıllı dağıt",
+    catUndoTitle: "Doldurmayı Geri Al",
+    catUndoSub: "Önceki plana dön",
+    catTranscriptTitle: "Transkript Aktar (PDF)",
+    catTranscriptSub: "e-Devlet / BUIS yükle",
+    catPngTitle: "Görsel İndir (PNG)",
+    catPngSub: "Planı resim kaydet",
+    catLinkTitle: "Sandbox Link Kopyala",
+    catLinkSub: "Tek tıkla paylaşım",
+    catExportJsonTitle: "JSON İndir",
+    catExportJsonSub: "Yedek dosyası al",
+    catImportJsonTitle: "JSON Yükle",
+    catImportJsonSub: "Yedeği geri yükle",
+    catLangTitle: "Dil Değiştir (TR / EN)",
+    catLangSub: "Arayüz dilini değiştir",
+    catFeedbackTitle: "Hata / Öneri",
+    catFeedbackSub: "Geri bildirim gönder",
+    catResetTitle: "Planı Sıfırla",
+    catResetSub: "Tüm dönemleri temizle",
+    guideBtn: "❓ Rehber",
+    guideBtnTitle: "Uygulama Rehberi ve Hızlı Başlangıç",
+    catGuideTitle: "Rehber",
+    catGuideSub: "İlk açılış kılavuzu",
+    welcomeTitle: "👋 Boğaziçi Tracker'a Hoş Geldin!",
+    welcomeSubtitle: "4 yıllık ders planını, GPA hedeflerini, Yandal ve ÇAP süreçlerini tek yerden yönet.",
+    welcomeFeat1Title: "Sürükle-Bırak & GPA Takibi",
+    welcomeFeat1Desc: "Dersleri dönemlere yerleştir, tahmini harf notlarıyla anlık dönem ve genel ortalamanı (GPA) hesapla.",
+    welcomeFeat2Title: "Yandal & ÇAP Desteği",
+    welcomeFeat2Desc: "Ana dalının yanına Yandal veya Çift Anadal ekle; ortak sayılan dersleri ve kalan kredileri otomatik gör.",
+    welcomeFeat3Title: "PDF Transkript & Otomatik Doldur",
+    welcomeFeat3Desc: "BÜ / e-Devlet transkriptini saniyeler içinde aktar veya kalan derslerini önkoşullara göre otomatik planla.",
+    welcomeFeat4Title: "Önkoşul Ağacı & Güvenli Paylaşım",
+    welcomeFeat4Desc: "Hangi dersin neleri kilitlediğini görselleştir; planını link, PNG veya JSON yedeği olarak paylaş.",
+    welcomeWarningHtml: "<strong>Önemli Not:</strong> Müfredat ve önkoşul verileri bölüm sayfalarından derlenmiştir; dönemlik güncellemeler nedeniyle nadir de olsa farklılıklar bulunabilir. Eksik veya hatalı bir ders/önkoşul fark ederseniz <strong>Hata / Öneri Bildir</strong> butonundan bize iletebilirsiniz.",
+    welcomeFeedbackBtn: "🐞 Hata / Öneri Bildir",
+    welcomeStartBtn: "🚀 Planlamaya Başla",
     shareLinkCopied: "✅ Paylaşım linki panoya kopyalandı!",
     shareExporting: "Görsel hazırlanıyor...",
     shareExportSuccess: "✓ Görsel başarıyla indirildi!",
@@ -430,13 +485,68 @@ const translations = {
     loadErrorDetail: "Error details:",
     pinCardTitle: "Pin Card",
     unpinCardTitle: "Unpin Card",
-    shareBtn: "📤 Share",
-    shareBtnTitle: "Share your course plan as an image or link",
-    shareModalTitle: "📤 Share Plan",
+    shareBtn: "📤 Share & Import",
+    shareBtnTitle: "Share your plan, export PNG/JSON, or import transcript/backup",
+    shareModalTitle: "📤 Share & Import",
+    shareExportSectionTitle: "📤 Export & Share",
+    shareImportSectionTitle: "📥 Import",
     sharePngBtn: "Download as Image (PNG)",
     sharePngDesc: "Download your semesters and course plan as a clean, high-resolution summary image.",
-    shareLinkBtn: "Copy Shareable Link",
+    shareLinkBtn: "Copy Shareable Sandbox Link",
     shareLinkDesc: "Copy a link containing your course plan to clipboard so friends can view it with one click.",
+    shareJsonExportBtn: "Download Backup (JSON)",
+    shareJsonExportDesc: "Save your full course plan and grades as a JSON backup file.",
+    shareTranscriptBtn: "Import BOUN / e-Devlet Transcript (PDF / Text)",
+    shareTranscriptDesc: "Upload your transcript PDF or paste text to auto-import your courses.",
+    shareJsonImportBtn: "Upload Backup File (JSON)",
+    shareJsonImportDesc: "Restore a previously downloaded JSON plan backup.",
+    mobileCatalogTitle: "⊞ App Catalog",
+    catSecAcademic: "Academic Programs",
+    catSecSmart: "Smart Tools",
+    catSecData: "Data & Sharing",
+    catSecSystem: "System",
+    catMinorTitle: "Add / Manage Minor",
+    catMinorSubDefault: "Select a minor program",
+    catDmTitle: "Add / Manage Double Major",
+    catDmSubDefault: "Select double major",
+    catPrereqTitle: "Prereq Tree",
+    catPrereqSub: "View unlock chains",
+    catAutoFillSub: "Smart term scheduling",
+    catUndoTitle: "Undo Auto-Fill",
+    catUndoSub: "Restore previous plan",
+    catTranscriptTitle: "Import Transcript (PDF)",
+    catTranscriptSub: "Upload e-Devlet / BUIS",
+    catPngTitle: "Download Image (PNG)",
+    catPngSub: "Save plan as image",
+    catLinkTitle: "Copy Sandbox Link",
+    catLinkSub: "One-click sharing",
+    catExportJsonTitle: "Download JSON",
+    catExportJsonSub: "Export backup file",
+    catImportJsonTitle: "Upload JSON",
+    catImportJsonSub: "Restore from backup",
+    catLangTitle: "Switch Language (TR / EN)",
+    catLangSub: "Change interface language",
+    catFeedbackTitle: "Bug / Feedback",
+    catFeedbackSub: "Send us feedback",
+    catResetTitle: "Reset Plan",
+    catResetSub: "Clear all semesters",
+    guideBtn: "❓ Guide",
+    guideBtnTitle: "App Guide & Quick Start",
+    catGuideTitle: "Guide",
+    catGuideSub: "Quick start walkthrough",
+    welcomeTitle: "👋 Welcome to Boğaziçi Tracker!",
+    welcomeSubtitle: "Manage your 4-year course plan, GPA goals, Minor, and Double Major paths in one place.",
+    welcomeFeat1Title: "Drag-Drop & GPA Tracking",
+    welcomeFeat1Desc: "Place courses into semesters and calculate your live semester & cumulative GPA with estimated letter grades.",
+    welcomeFeat2Title: "Minor & Double Major Support",
+    welcomeFeat2Desc: "Add a Minor or Double Major alongside your major; automatically track shared courses and remaining credits.",
+    welcomeFeat3Title: "PDF Transcript & Auto-Fill",
+    welcomeFeat3Desc: "Import your BU / e-Devlet transcript in seconds or auto-plan remaining courses respecting prerequisites.",
+    welcomeFeat4Title: "Prereq Tree & Safe Sharing",
+    welcomeFeat4Desc: "Visualize which courses unlock others; share your plan via link, PNG export, or JSON backup.",
+    welcomeWarningHtml: "<strong>Important Note:</strong> Curriculum and prerequisite data are compiled from department pages; minor differences may rarely occur due to semesterly updates. If you spot a missing or incorrect course/prerequisite, let us know via the <strong>Report Bug / Suggestion</strong> button.",
+    welcomeFeedbackBtn: "🐞 Report Bug / Suggestion",
+    welcomeStartBtn: "🚀 Start Planning",
     shareLinkCopied: "✅ Share link copied to clipboard!",
     shareExporting: "Generating image...",
     shareExportSuccess: "✓ Image downloaded successfully!",
@@ -564,20 +674,10 @@ function applyStaticTranslations() {
 
   setText('appSubtitle', t('appSubtitle'));
   setText('deptLabel', t('deptLabel'));
-  setText('exportBtn', t('exportBtn'));
-  setAttr('exportBtn', 'title', t('exportBtnTitle'));
-  setText('importBtn', t('importBtn'));
-  setAttr('importBtn', 'title', t('importBtnTitle'));
   setText('feedbackBtn', t('feedbackBtn'));
   setAttr('feedbackBtn', 'title', t('feedbackBtnTitle'));
   setText('shareBtn', t('shareBtn'));
   setAttr('shareBtn', 'title', t('shareBtnTitle'));
-  setText('mobileShareBtn', t('shareBtn'));
-  setAttr('mobileShareBtn', 'title', t('shareBtnTitle'));
-  setText('transcriptBtn', t('transcriptBtn'));
-  setAttr('transcriptBtn', 'title', t('transcriptBtnTitle'));
-  setText('mobileTranscriptBtn', t('transcriptBtn'));
-  setAttr('mobileTranscriptBtn', 'title', t('transcriptBtnTitle'));
   setText('supportBtn', t('supportBtn'));
   setAttr('supportBtn', 'title', t('supportBtnTitle'));
   setText('resetBtn', t('resetBtn'));
@@ -640,20 +740,77 @@ function applyStaticTranslations() {
     dmApplyBtn.innerHTML = `<span>${escapeHTML(t('dmApplyBtn'))}</span>`;
   }
 
-  // Share modal
+  // Share & Import modal
   setText('shareModalTitle', t('shareModalTitle'));
+  setText('shareExportSectionTitle', t('shareExportSectionTitle'));
+  setText('shareImportSectionTitle', t('shareImportSectionTitle'));
   setText('sharePngBtn', t('sharePngBtn'));
   setText('sharePngDesc', t('sharePngDesc'));
   setText('shareLinkBtn', t('shareLinkBtn'));
   setText('shareLinkDesc', t('shareLinkDesc'));
+  setText('shareJsonExportBtn', t('shareJsonExportBtn'));
+  setText('shareJsonExportDesc', t('shareJsonExportDesc'));
+  setText('shareTranscriptBtn', t('shareTranscriptBtn'));
+  setText('shareTranscriptDesc', t('shareTranscriptDesc'));
+  setText('shareJsonImportBtn', t('shareJsonImportBtn'));
+  setText('shareJsonImportDesc', t('shareJsonImportDesc'));
   setText('shareCancelBtn', t('shareCancelBtn'));
+
+  // Mobile App Catalog
+  setText('mobileCatalogTitle', t('mobileCatalogTitle'));
+  setText('catSecAcademic', t('catSecAcademic'));
+  setText('catSecSmart', t('catSecSmart'));
+  setText('catSecData', t('catSecData'));
+  setText('catSecSystem', t('catSecSystem'));
+  setText('catMinorTitle', t('catMinorTitle'));
+  setText('catDmTitle', t('catDmTitle'));
+  setText('catPrereqTitle', t('catPrereqTitle'));
+  setText('catPrereqSub', t('catPrereqSub'));
+  setText('catAutoFillSub', t('catAutoFillSub'));
+  setText('catUndoTitle', t('catUndoTitle'));
+  setText('catUndoSub', t('catUndoSub'));
+  setText('catTranscriptTitle', t('catTranscriptTitle'));
+  setText('catTranscriptSub', t('catTranscriptSub'));
+  setText('catPngTitle', t('catPngTitle'));
+  setText('catPngSub', t('catPngSub'));
+  setText('catLinkTitle', t('catLinkTitle'));
+  setText('catLinkSub', t('catLinkSub'));
+  setText('catExportJsonTitle', t('catExportJsonTitle'));
+  setText('catExportJsonSub', t('catExportJsonSub'));
+  setText('catImportJsonTitle', t('catImportJsonTitle'));
+  setText('catImportJsonSub', t('catImportJsonSub'));
+  setText('catLangTitle', t('catLangTitle'));
+  setText('catLangSub', t('catLangSub'));
+  setText('catFeedbackTitle', t('catFeedbackTitle'));
+  setText('catFeedbackSub', t('catFeedbackSub'));
+  setText('catResetTitle', t('catResetTitle'));
+  setText('catResetSub', t('catResetSub'));
+
+  // Guide & Welcome Onboarding modal
+  setText('guideBtn', t('guideBtn'));
+  setAttr('guideBtn', 'title', t('guideBtnTitle'));
+  setText('catGuideTitle', t('catGuideTitle'));
+  setText('catGuideSub', t('catGuideSub'));
+  setText('welcomeTitle', t('welcomeTitle'));
+  setText('welcomeSubtitle', t('welcomeSubtitle'));
+  setText('welcomeFeat1Title', t('welcomeFeat1Title'));
+  setText('welcomeFeat1Desc', t('welcomeFeat1Desc'));
+  setText('welcomeFeat2Title', t('welcomeFeat2Title'));
+  setText('welcomeFeat2Desc', t('welcomeFeat2Desc'));
+  setText('welcomeFeat3Title', t('welcomeFeat3Title'));
+  setText('welcomeFeat3Desc', t('welcomeFeat3Desc'));
+  setText('welcomeFeat4Title', t('welcomeFeat4Title'));
+  setText('welcomeFeat4Desc', t('welcomeFeat4Desc'));
+  const welcomeWarningEl = document.getElementById('welcomeWarningText');
+  if (welcomeWarningEl) welcomeWarningEl.innerHTML = t('welcomeWarningHtml');
+  setText('welcomeFeedbackBtn', t('welcomeFeedbackBtn'));
+  setText('welcomeStartBtn', t('welcomeStartBtn'));
 
   // Prereq Tree & Auto-Fill buttons + modals
   setText('prereqTreeBtn', t('prereqTreeBtn'));
   setAttr('prereqTreeBtn', 'title', t('prereqTreeBtnTitle'));
   updateAutoFillButtonLabel();
   setAttr('autoFillBtn', 'title', t('autoFillBtnTitle'));
-  setText('undoAutoFillBtn', t('undoAutoFillBtn'));
   setAttr('undoAutoFillBtn', 'title', t('undoAutoFillBtnTitle'));
   setText('prereqTreeModalTitle', t('prereqTreeModalTitle'));
   setText('ptLegPassed', t('ptLegPassed'));
@@ -1091,6 +1248,7 @@ async function loadCurriculum() {
     populateMinorModalOptions();
     populateDmModalOptions();
     initUI();
+    checkAndShowWelcomeModal();
   } catch (err) {
     console.error("Müfredat JSON dosyası yüklenemedi:", err);
     document.body.innerHTML = `
@@ -1100,6 +1258,55 @@ async function loadCurriculum() {
         <p style="color: #64748b; font-size: 0.85rem;">${escapeHTML(t('loadErrorDetail'))} ${escapeHTML(err.message)}</p>
       </div>
     `;
+  }
+}
+
+const WELCOME_STORAGE_KEY = 'boun_tracker_welcomed_v1';
+
+function openWelcomeModal() {
+  const modal = document.getElementById('welcomeModal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  modal.classList.add('open');
+}
+
+function closeWelcomeModal(markWelcomed = true) {
+  if (markWelcomed) {
+    try {
+      localStorage.setItem(WELCOME_STORAGE_KEY, 'true');
+    } catch (_) {
+      // Ignore storage errors (e.g. private mode)
+    }
+  }
+  const modal = document.getElementById('welcomeModal');
+  if (modal) {
+    modal.classList.remove('open', 'active', 'show');
+    modal.style.display = 'none';
+  }
+}
+
+function handleWelcomeBackdropClick(event) {
+  if (event.target && event.target.id === 'welcomeModal') {
+    closeWelcomeModal(true);
+  }
+}
+
+function openFeedbackFromWelcome() {
+  closeWelcomeModal(true);
+  if (typeof openFeedbackModal === 'function') {
+    openFeedbackModal();
+  }
+}
+
+function checkAndShowWelcomeModal() {
+  const hasHashPlan = Boolean(window.location.hash && window.location.hash.includes('#plan='));
+  if (isSandboxMode || hasHashPlan) return;
+  try {
+    if (!localStorage.getItem(WELCOME_STORAGE_KEY)) {
+      openWelcomeModal();
+    }
+  } catch (_) {
+    // Ignore storage errors
   }
 }
 
@@ -1610,10 +1817,17 @@ function updateSidebarPool() {
   }
 
   const pool = document.getElementById('course-pool');
+  const poolActionBar = document.getElementById('poolActionBar');
+  if (poolActionBar && poolActionBar.parentNode === pool) {
+    poolActionBar.remove();
+  }
   if (dashCardWrapper && dashCardWrapper.parentNode === pool) {
     dashCardWrapper.remove();
   }
   pool.innerHTML = '';
+  if (poolActionBar) {
+    pool.appendChild(poolActionBar);
+  }
 
   const groups = {
     '1.1': [], '1.2': [],
@@ -3936,6 +4150,13 @@ function updateMinorButtonUI() {
 
   updateBtn(minorBtn, false);
   updateBtn(mobileMinorBtn, true);
+
+  const catMinorSub = document.getElementById('catMinorSub');
+  if (catMinorSub) {
+    catMinorSub.innerText = (minorId && minorsData[minorId])
+      ? getLocalizedMinorName(minorId)
+      : t('catMinorSubDefault');
+  }
 }
 
 function openMinorModal() {
@@ -4185,6 +4406,13 @@ function updateDmButtonUI() {
 
   updateBtn(dmBtn, false);
   updateBtn(mobileDmBtn, true);
+
+  const catDmSub = document.getElementById('catDmSub');
+  if (catDmSub) {
+    catDmSub.innerText = (dmId && dmData[dmId])
+      ? getDmLocalizedName(dmData[dmId])
+      : t('catDmSubDefault');
+  }
 }
 
 function populateDmModalOptions() {
@@ -4474,6 +4702,7 @@ function applyDashCardPosition() {
   if (!dashCardWrapper) return;
   const fixedTop = document.getElementById('sidebarFixedTop');
   const pool = document.getElementById('course-pool');
+  const poolActionBar = document.getElementById('poolActionBar');
 
   if (isDashPinned) {
     if (fixedTop && dashCardWrapper.parentNode !== fixedTop) {
@@ -4482,8 +4711,14 @@ function applyDashCardPosition() {
       fixedTop.prepend(dashCardWrapper);
     }
   } else {
-    if (pool && (dashCardWrapper.parentNode !== pool || pool.firstElementChild !== dashCardWrapper)) {
-      pool.prepend(dashCardWrapper);
+    if (pool) {
+      if (poolActionBar && poolActionBar.parentNode === pool) {
+        if (poolActionBar.nextElementSibling !== dashCardWrapper) {
+          poolActionBar.insertAdjacentElement('afterend', dashCardWrapper);
+        }
+      } else if (dashCardWrapper.parentNode !== pool || pool.firstElementChild !== dashCardWrapper) {
+        pool.prepend(dashCardWrapper);
+      }
     }
   }
 }
@@ -4511,6 +4746,34 @@ function closeToolsDropdown() {
   const menuBtn = document.getElementById('mobileMenuBtn');
   if (dropdown) dropdown.classList.remove('open');
   if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+  closeMobileCatalog();
+}
+
+function openMobileCatalog() {
+  const modal = document.getElementById('mobileCatalogModal');
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  if (!modal) return;
+  updateAutoFillButtonLabel();
+  updateUndoAutoFillButtonState();
+  modal.classList.add('open');
+  if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileCatalog() {
+  const modal = document.getElementById('mobileCatalogModal');
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  if (modal && modal.classList.contains('open')) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+}
+
+function handleMobileCatalogBackdropClick(event) {
+  if (event.target && event.target.id === 'mobileCatalogModal') {
+    closeMobileCatalog();
+  }
 }
 
 document.addEventListener('click', (e) => {
@@ -5154,17 +5417,29 @@ function isSummerPriorityCourse(course) {
 }
 
 function updateAutoFillButtonLabel() {
-  const btn = document.getElementById('autoFillBtn');
-  if (!btn) return;
   const state = getDeptState(currentDept);
   const hasAnyPlaced = Boolean(state && Array.isArray(state.instances) && state.instances.length > 0);
-  btn.innerText = hasAnyPlaced ? t('autoFillBtnRemaining') : t('autoFillBtnEmpty');
+  const label = hasAnyPlaced ? t('autoFillBtnRemaining') : t('autoFillBtnEmpty');
+
+  const btn = document.getElementById('autoFillBtn');
+  if (btn) btn.innerText = label;
+
+  const catAutoFillTitle = document.getElementById('catAutoFillTitle');
+  if (catAutoFillTitle) {
+    catAutoFillTitle.innerText = label.replace(/^⚡\s*/, '');
+  }
 }
 
 function updateUndoAutoFillButtonState() {
+  const hasUndo = Boolean(lastAutoFillBackup && lastAutoFillBackup.dept === currentDept);
   const btn = document.getElementById('undoAutoFillBtn');
   if (btn) {
-    btn.disabled = !(lastAutoFillBackup && lastAutoFillBackup.dept === currentDept);
+    btn.disabled = !hasUndo;
+    btn.classList.toggle('is-hidden', !hasUndo);
+  }
+  const catUndoCard = document.getElementById('catalogUndoCard');
+  if (catUndoCard) {
+    catUndoCard.classList.toggle('is-hidden', !hasUndo);
   }
 }
 

@@ -20,8 +20,12 @@
         <button type="button" id="mobileLangBtn" class="topbar-btn lang-btn" onclick="toggleLanguage()" title="Dil Değiştir / Switch Language">
           🌐 <span id="mobileLangToggleLabel">TR | EN</span>
         </button>
-        <button type="button" id="mobileMenuBtn" class="topbar-btn mobile-menu-btn" onclick="toggleToolsDropdown(event)" aria-expanded="false" aria-controls="toolsDropdown" title="Araçlar / Tools">
-          ⚙️
+        <button type="button" id="mobileMenuBtn" class="topbar-btn mobile-menu-btn" onclick="openMobileCatalog()" aria-expanded="false" aria-controls="mobileCatalogModal" title="Uygulama Kataloğu / App Catalog">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <circle cx="4" cy="4" r="1.8"/><circle cx="10" cy="4" r="1.8"/><circle cx="16" cy="4" r="1.8"/>
+            <circle cx="4" cy="10" r="1.8"/><circle cx="10" cy="10" r="1.8"/><circle cx="16" cy="10" r="1.8"/>
+            <circle cx="4" cy="16" r="1.8"/><circle cx="10" cy="16" r="1.8"/><circle cx="16" cy="16" r="1.8"/>
+          </svg>
         </button>
       </div>
     </div>
@@ -41,29 +45,11 @@
         </button>
       </div>
       <div id="toolsDropdown" class="top-bar-btn-group">
-        <button id="mobileMinorBtn" class="topbar-btn mobile-minor-btn" onclick="openMinorModal()" title="Yandal Programı Seç / Düzenle">
-          🎓 Yandal Ekle
+        <button id="shareBtn" class="topbar-btn share-btn" onclick="openShareModal()" title="Ders planınızı paylaşın, görsel/JSON indirin veya transkript/yedek aktarın">
+          📤 Paylaş &amp; Aktar
         </button>
-        <button id="mobileDmBtn" class="topbar-btn mobile-dm-btn" onclick="openDmModal()" title="Çift Anadal Programı Seç / Düzenle">
-          🎓 ÇAP Ekle
-        </button>
-        <button id="mobileShareBtn" class="topbar-btn mobile-share-btn" onclick="openShareModal()" title="Ders planınızı paylaşın">
-          📤 Paylaş
-        </button>
-        <button id="shareBtn" class="topbar-btn share-btn" onclick="openShareModal()" title="Ders planınızı görsel veya link olarak paylaşın">
-          📤 Paylaş
-        </button>
-        <button id="mobileTranscriptBtn" class="topbar-btn mobile-transcript-btn" onclick="openTranscriptModal()" title="BUIS'ten kopyaladığınız transkripti otomatik aktarın">
-          📥 Transkript Aktar
-        </button>
-        <button id="transcriptBtn" class="topbar-btn transcript-btn" onclick="openTranscriptModal()" title="BUIS'ten kopyaladığınız transkripti otomatik aktarın">
-          📥 Transkript Aktar
-        </button>
-        <button id="exportBtn" class="topbar-btn export-btn" onclick="exportDataAsJSON()" title="Mevcut ders planınızı ve notlarınızı JSON dosyası olarak indirin">
-          📥 JSON İndir
-        </button>
-        <button id="importBtn" class="topbar-btn import-btn" onclick="document.getElementById('jsonFileInput').click()" title="Daha önce indirdiğiniz JSON planını yükleyin">
-          📤 JSON Yükle
+        <button id="guideBtn" class="topbar-btn guide-btn" onclick="openWelcomeModal()" title="Uygulama Rehberi ve Hızlı Başlangıç">
+          ❓ Rehber
         </button>
         <button id="feedbackBtn" class="topbar-btn feedback-btn" onclick="openFeedbackModal()" title="Hata Bildir veya Öneri Paylaş">
           💬 Hata / Öneri
@@ -110,20 +96,22 @@
           <span id="sidebarPoolTitle">Ders Havuzu</span>
           <span id="sidebarPoolSubtitle" style="font-size: 0.74rem; font-weight: normal; color: var(--text-muted);">Dönem Blokları</span>
         </div>
-        <div class="sidebar-tools-bar">
-          <button type="button" id="prereqTreeBtn" class="sidebar-tool-btn prereq-tree-btn" onclick="openPrereqTreeModal()" title="Derslerin önkoşul ağacını ve kilit zincirlerini görüntüleyin">
-            🕸️ Önkoşul Ağacı
-          </button>
-          <button type="button" id="autoFillBtn" class="sidebar-tool-btn autofill-btn" onclick="openAutoFillModal()" title="Kalan dersleri önkoşul sırasına göre dönemlere otomatik yerleştirin">
-            ⚡ Otomatik Doldur
-          </button>
-          <button type="button" id="undoAutoFillBtn" class="sidebar-tool-btn undo-fill-btn" onclick="undoAutoFillCourses()" disabled title="Son otomatik doldurma işlemini geri al">
-            ↩️ Doldurmayı Geri Al
-          </button>
-        </div>
       </div>
 
       <div id="course-pool" class="sidebar-scroll-pool">
+        <div id="poolActionBar" class="sidebar-segmented-bar pool-action-bar">
+          <button type="button" id="prereqTreeBtn" class="sidebar-seg-btn prereq-tree-btn" onclick="openPrereqTreeModal()" title="Derslerin önkoşul ağacını ve kilit zincirlerini görüntüleyin">
+            🕸️ Önkoşul Ağacı
+          </button>
+          <div class="sidebar-autofill-group">
+            <button type="button" id="autoFillBtn" class="sidebar-seg-btn autofill-btn" onclick="openAutoFillModal()" title="Kalan dersleri önkoşul sırasına göre dönemlere otomatik yerleştirin">
+              ⚡ Otomatik Doldur
+            </button>
+            <button type="button" id="undoAutoFillBtn" class="sidebar-undo-pill is-hidden" onclick="undoAutoFillCourses()" disabled title="Son otomatik doldurma işlemini geri al" aria-label="Doldurmayı Geri Al">
+              ↩️
+            </button>
+          </div>
+        </div>
         <div id="dashCardWrapper" class="dashboard-card-wrapper">
           <div class="dashboard-card">
             <button type="button" id="pinDashBtn" class="pin-dash-btn" onclick="toggleDashPin()" title="Kartı Üste Sabitle">📌</button>
@@ -270,25 +258,56 @@
   <div id="shareModal" class="modal-backdrop" onclick="handleShareBackdropClick(event)">
     <div class="modal-dialog share-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
       <div class="modal-header">
-        <h3 id="shareModalTitle">📤 Planı Paylaş</h3>
+        <h3 id="shareModalTitle">📤 Paylaş &amp; Aktar</h3>
         <button type="button" class="modal-close-btn" onclick="closeShareModal()" aria-label="Kapat">✕</button>
       </div>
       <div class="modal-body share-modal-body">
-        <div class="share-options-grid">
-          <button type="button" class="share-option-card" onclick="exportPlanAsPng()">
-            <div class="share-option-icon">🖼️</div>
-            <div class="share-option-content">
-              <strong id="sharePngBtn">Görsel Olarak İndir (PNG)</strong>
-              <span id="sharePngDesc">Dönemleri ve ders planınızı yüksek çözünürlüklü temiz bir özet görseli olarak indirin.</span>
+        <div class="share-two-col">
+          <div class="share-col">
+            <div id="shareExportSectionTitle" class="share-section-title">📤 Dışa Aktar &amp; Paylaş</div>
+            <div class="share-options-grid">
+              <button type="button" class="share-option-card" onclick="exportPlanAsPng()">
+                <div class="share-option-icon">🖼️</div>
+                <div class="share-option-content">
+                  <strong id="sharePngBtn">Görsel Olarak İndir (PNG)</strong>
+                  <span id="sharePngDesc">Dönemleri ve ders planınızı yüksek çözünürlüklü özet görseli olarak indirin.</span>
+                </div>
+              </button>
+              <button type="button" class="share-option-card" onclick="copyShareLink()">
+                <div class="share-option-icon">🔗</div>
+                <div class="share-option-content">
+                  <strong id="shareLinkBtn">Paylaşılabilir Sandbox Linki Kopyala</strong>
+                  <span id="shareLinkDesc">Mevcut ders planınızı içeren linki panoya kopyalayın, arkadaşlarınız tek tıkla açsın.</span>
+                </div>
+              </button>
+              <button type="button" class="share-option-card" onclick="closeShareModal(); exportDataAsJSON()">
+                <div class="share-option-icon">💾</div>
+                <div class="share-option-content">
+                  <strong id="shareJsonExportBtn">Yedek İndir (JSON)</strong>
+                  <span id="shareJsonExportDesc">Tüm planınızı ve notlarınızı JSON yedek dosyası olarak kaydedin.</span>
+                </div>
+              </button>
             </div>
-          </button>
-          <button type="button" class="share-option-card" onclick="copyShareLink()">
-            <div class="share-option-icon">🔗</div>
-            <div class="share-option-content">
-              <strong id="shareLinkBtn">Paylaşılabilir Linki Kopyala</strong>
-              <span id="shareLinkDesc">Mevcut ders planınızı içeren linki panoya kopyalayın, arkadaşlarınız tek tıkla açsın.</span>
+          </div>
+          <div class="share-col">
+            <div id="shareImportSectionTitle" class="share-section-title">📥 İçe Aktar</div>
+            <div class="share-options-grid">
+              <button type="button" class="share-option-card" onclick="closeShareModal(); openTranscriptModal()">
+                <div class="share-option-icon" style="background:#ecfdf5;">📄</div>
+                <div class="share-option-content">
+                  <strong id="shareTranscriptBtn">BÜ / e-Devlet Transkripti Aktar (PDF / Metin)</strong>
+                  <span id="shareTranscriptDesc">Transkript PDF dosyanızı yükleyin veya metni yapıştırarak derslerinizi otomatik aktarın.</span>
+                </div>
+              </button>
+              <button type="button" class="share-option-card" onclick="closeShareModal(); document.getElementById('jsonFileInput').click()">
+                <div class="share-option-icon" style="background:#f5f3ff;">📂</div>
+                <div class="share-option-content">
+                  <strong id="shareJsonImportBtn">Yedek Dosyası Yükle (JSON)</strong>
+                  <span id="shareJsonImportDesc">Daha önce indirdiğiniz JSON plan yedeğini geri yükleyin.</span>
+                </div>
+              </button>
             </div>
-          </button>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -426,6 +445,164 @@
         <button type="button" class="modal-close-btn" onclick="closeTermPickerModal()" aria-label="Kapat">✕</button>
       </div>
       <div id="termPickerBody" class="bottom-sheet-body"></div>
+    </div>
+  </div>
+
+  <div id="mobileCatalogModal" class="catalog-backdrop" onclick="handleMobileCatalogBackdropClick(event)">
+    <div class="catalog-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileCatalogTitle">
+      <div class="bottom-sheet-handle"></div>
+      <div class="catalog-header">
+        <h3 id="mobileCatalogTitle">⊞ Uygulama Kataloğu</h3>
+        <button type="button" class="modal-close-btn" onclick="closeMobileCatalog()" aria-label="Kapat">✕</button>
+      </div>
+      <div class="catalog-body">
+        <div class="catalog-section">
+          <div id="catSecAcademic" class="catalog-section-title">Akademik Programlar</div>
+          <div class="catalog-grid">
+            <button type="button" id="catalogMinorCard" class="catalog-card cat-card-indigo" onclick="closeMobileCatalog(); openMinorModal()">
+              <span class="cat-icon">🎓</span>
+              <span class="cat-title" id="catMinorTitle">Yandal Ekle / Yönet</span>
+              <span class="cat-sub" id="catMinorSub">Yandal programı seç</span>
+            </button>
+            <button type="button" id="catalogDmCard" class="catalog-card cat-card-emerald" onclick="closeMobileCatalog(); openDmModal()">
+              <span class="cat-icon">🎓</span>
+              <span class="cat-title" id="catDmTitle">ÇAP Ekle / Yönet</span>
+              <span class="cat-sub" id="catDmSub">Çift anadal seç</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="catalog-section">
+          <div id="catSecSmart" class="catalog-section-title">Akıllı Araçlar</div>
+          <div class="catalog-grid">
+            <button type="button" id="catalogPrereqCard" class="catalog-card cat-card-purple" onclick="closeMobileCatalog(); openPrereqTreeModal()">
+              <span class="cat-icon">🕸️</span>
+              <span class="cat-title" id="catPrereqTitle">Önkoşul Ağacı</span>
+              <span class="cat-sub" id="catPrereqSub">Kilit zincirlerini gör</span>
+            </button>
+            <button type="button" id="catalogAutoFillCard" class="catalog-card cat-card-teal" onclick="closeMobileCatalog(); openAutoFillModal()">
+              <span class="cat-icon">⚡</span>
+              <span class="cat-title" id="catAutoFillTitle">Otomatik Doldur</span>
+              <span class="cat-sub" id="catAutoFillSub">Dönemlere akıllı dağıt</span>
+            </button>
+            <button type="button" id="catalogUndoCard" class="catalog-card cat-card-amber is-hidden" onclick="closeMobileCatalog(); undoAutoFillCourses()">
+              <span class="cat-icon">↩️</span>
+              <span class="cat-title" id="catUndoTitle">Doldurmayı Geri Al</span>
+              <span class="cat-sub" id="catUndoSub">Önceki plana dön</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="catalog-section">
+          <div id="catSecData" class="catalog-section-title">Veri &amp; Paylaşım</div>
+          <div class="catalog-grid">
+            <button type="button" id="catalogTranscriptCard" class="catalog-card cat-card-blue" onclick="closeMobileCatalog(); openTranscriptModal()">
+              <span class="cat-icon">📄</span>
+              <span class="cat-title" id="catTranscriptTitle">Transkript Aktar (PDF)</span>
+              <span class="cat-sub" id="catTranscriptSub">e-Devlet / BUIS yükle</span>
+            </button>
+            <button type="button" id="catalogPngCard" class="catalog-card" onclick="closeMobileCatalog(); exportPlanAsPng()">
+              <span class="cat-icon">🖼️</span>
+              <span class="cat-title" id="catPngTitle">Görsel İndir (PNG)</span>
+              <span class="cat-sub" id="catPngSub">Planı resim kaydet</span>
+            </button>
+            <button type="button" id="catalogLinkCard" class="catalog-card" onclick="closeMobileCatalog(); copyShareLink()">
+              <span class="cat-icon">🔗</span>
+              <span class="cat-title" id="catLinkTitle">Sandbox Link Kopyala</span>
+              <span class="cat-sub" id="catLinkSub">Tek tıkla paylaşım</span>
+            </button>
+            <button type="button" id="catalogExportJsonCard" class="catalog-card" onclick="closeMobileCatalog(); exportDataAsJSON()">
+              <span class="cat-icon">💾</span>
+              <span class="cat-title" id="catExportJsonTitle">JSON İndir</span>
+              <span class="cat-sub" id="catExportJsonSub">Yedek dosyası al</span>
+            </button>
+            <button type="button" id="catalogImportJsonCard" class="catalog-card" onclick="closeMobileCatalog(); document.getElementById('jsonFileInput').click()">
+              <span class="cat-icon">📂</span>
+              <span class="cat-title" id="catImportJsonTitle">JSON Yükle</span>
+              <span class="cat-sub" id="catImportJsonSub">Yedeği geri yükle</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="catalog-section">
+          <div id="catSecSystem" class="catalog-section-title">Sistem</div>
+          <div class="catalog-grid">
+            <button type="button" id="catalogLangCard" class="catalog-card" onclick="closeMobileCatalog(); toggleLanguage()">
+              <span class="cat-icon">🌐</span>
+              <span class="cat-title" id="catLangTitle">Dil Değiştir (TR / EN)</span>
+              <span class="cat-sub" id="catLangSub">Arayüz dilini değiştir</span>
+            </button>
+            <button type="button" id="catalogGuideCard" class="catalog-card" onclick="closeMobileCatalog(); openWelcomeModal()">
+              <span class="cat-icon">❓</span>
+              <span class="cat-title" id="catGuideTitle">Rehber</span>
+              <span class="cat-sub" id="catGuideSub">İlk açılış kılavuzu</span>
+            </button>
+            <button type="button" id="catalogFeedbackCard" class="catalog-card" onclick="closeMobileCatalog(); openFeedbackModal()">
+              <span class="cat-icon">💬</span>
+              <span class="cat-title" id="catFeedbackTitle">Hata / Öneri</span>
+              <span class="cat-sub" id="catFeedbackSub">Geri bildirim gönder</span>
+            </button>
+            <button type="button" id="catalogResetCard" class="catalog-card cat-card-danger" onclick="closeMobileCatalog(); resetCurrentDept()">
+              <span class="cat-icon">🗑️</span>
+              <span class="cat-title" id="catResetTitle">Planı Sıfırla</span>
+              <span class="cat-sub" id="catResetSub">Tüm dönemleri temizle</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hoş Geldin (Onboarding) Modalı -->
+  <div id="welcomeModal" class="modal-backdrop" onclick="handleWelcomeBackdropClick(event)">
+    <div class="modal-dialog welcome-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+      <div class="modal-header welcome-modal-header">
+        <div class="welcome-header-text">
+          <h3 id="welcomeTitle">👋 Boğaziçi Tracker'a Hoş Geldin!</h3>
+          <p id="welcomeSubtitle" class="welcome-subtitle">4 yıllık ders planını, GPA hedeflerini, Yandal ve ÇAP süreçlerini tek yerden yönet.</p>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeWelcomeModal(true)" aria-label="Kapat">✕</button>
+      </div>
+      <div class="modal-body welcome-modal-body">
+        <div class="welcome-features-grid">
+          <div class="welcome-feature-card">
+            <div class="welcome-feature-icon">📅</div>
+            <div class="welcome-feature-content">
+              <h4 id="welcomeFeat1Title">Sürükle-Bırak &amp; GPA Takibi</h4>
+              <p id="welcomeFeat1Desc">Dersleri dönemlere yerleştir, tahmini harf notlarıyla anlık dönem ve genel ortalamanı (GPA) hesapla.</p>
+            </div>
+          </div>
+          <div class="welcome-feature-card">
+            <div class="welcome-feature-icon">🎓</div>
+            <div class="welcome-feature-content">
+              <h4 id="welcomeFeat2Title">Yandal &amp; ÇAP Desteği</h4>
+              <p id="welcomeFeat2Desc">Ana dalının yanına Yandal veya Çift Anadal ekle; ortak sayılan dersleri ve kalan kredileri otomatik gör.</p>
+            </div>
+          </div>
+          <div class="welcome-feature-card">
+            <div class="welcome-feature-icon">📄</div>
+            <div class="welcome-feature-content">
+              <h4 id="welcomeFeat3Title">PDF Transkript &amp; Otomatik Doldur</h4>
+              <p id="welcomeFeat3Desc">BÜ / e-Devlet transkriptini saniyeler içinde aktar veya kalan derslerini önkoşullara göre otomatik planla.</p>
+            </div>
+          </div>
+          <div class="welcome-feature-card">
+            <div class="welcome-feature-icon">🕸️</div>
+            <div class="welcome-feature-content">
+              <h4 id="welcomeFeat4Title">Önkoşul Ağacı &amp; Güvenli Paylaşım</h4>
+              <p id="welcomeFeat4Desc">Hangi dersin neleri kilitlediğini görselleştir; planını link, PNG veya JSON yedeği olarak paylaş.</p>
+            </div>
+          </div>
+        </div>
+        <div class="welcome-warning-box">
+          <span class="welcome-warning-icon">⚠️</span>
+          <p id="welcomeWarningText"><strong>Önemli Not:</strong> Müfredat ve önkoşul verileri bölüm sayfalarından derlenmiştir; dönemlik güncellemeler nedeniyle nadir de olsa farklılıklar bulunabilir. Eksik veya hatalı bir ders/önkoşul fark ederseniz <strong>Hata / Öneri Bildir</strong> butonundan bize iletebilirsiniz.</p>
+        </div>
+      </div>
+      <div class="modal-footer welcome-footer">
+        <button type="button" id="welcomeFeedbackBtn" class="btn-cancel-issue" onclick="openFeedbackFromWelcome()">🐞 Hata / Öneri Bildir</button>
+        <button type="button" id="welcomeStartBtn" class="btn-submit-issue welcome-start-btn" onclick="closeWelcomeModal(true)">🚀 Planlamaya Başla</button>
+      </div>
     </div>
   </div>
 
