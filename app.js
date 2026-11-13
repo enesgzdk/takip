@@ -8,7 +8,7 @@ let isDashPinned = localStorage.getItem('boun_pin_dash_card') === 'true';
 
 const GRADE_POINTS = {
   'AA': 4.0, 'BA': 3.5, 'BB': 3.0, 'CB': 2.5,
-  'CC': 2.0, 'DC': 1.5, 'DD': 1.0, 'F': 0.0, 'P': null
+  'CC': 2.0, 'DC': 1.5, 'DD': 1.0, 'F': 0.0, 'P': null, 'EX': null
 };
 
 const savedLang = localStorage.getItem('boun_lang');
@@ -198,7 +198,28 @@ const translations = {
     sandboxSaveConfirm: "Bu plan kendi kayıtlı planınızın üzerine yazılsın mı?",
     sandboxSavedSuccess: "✓ Plan başarıyla kendi tarayıcınıza kaydedildi!",
     sandboxExitSuccess: "✓ Kendi kayıtlı planınıza dönüldü.",
-    sandboxDeptDisabledTooltip: "Önizleme modunda bölüm değiştirilemez."
+    sandboxDeptDisabledTooltip: "Önizleme modunda bölüm değiştirilemez.",
+    transcriptBtn: "📥 Transkript Aktar",
+    transcriptBtnTitle: "BUIS'ten kopyaladığınız transkripti otomatik aktarın",
+    transcriptModalTitle: "📥 BÜ Transkript Otomatik İçe Aktarıcı",
+    transcriptGuide: "📌 <strong>BUIS (Öğrenci Bilgi Sistemi)</strong> &rarr; <em>Transkript</em> sayfasını açıp <code>Ctrl+A</code> ve <code>Ctrl+C</code> ile tüm sayfayı kopyalayın ve aşağıdaki kutuya yapıştırın.",
+    transcriptInputLabel: "Transkript Metni:",
+    transcriptPreviewBtn: "🔍 Önizle ve Ayrıştır",
+    transcriptApplyBtn: "✅ Tümünü Plana Aktar",
+    transcriptNoCoursesFound: "Transkript metninde ders bulunamadı. Lütfen BUIS transkript sayfasından kopyaladığınızdan emin olun.",
+    transcriptSummary: (termsCount, coursesCount) => `🎯 ${termsCount} Dönem, ${coursesCount} Ders Başarıyla Ayrıştırıldı`,
+    transcriptMatchedCurriculum: "Müfredat",
+    transcriptMatchedElective: "Seçmeli Slotu",
+    transcriptCustomCourse: "Ek Ders",
+    transcriptPassed: "Geçti",
+    transcriptFailed: "Kaldı",
+    transcriptApplyConfirm: "Mevcut planınızın üzerine aktarılsın mı? (Dönemlerdeki dersler transkript verileriyle güncellenecektir.)",
+    transcriptAppliedSuccess: (count) => `✓ Transkript başarıyla aktarıldı! (${count} ders yerleştirildi)`,
+    erasmusBtn: "Erasmus",
+    erasmusActive: "Erasmus",
+    erasmusTag: "🇪🇺 Erasmus / Exchange",
+    erasmusActiveTitle: "Erasmus/Exchange dönemini kaldır",
+    erasmusInactiveTitle: "Bu dönemi Erasmus/Exchange dönemi olarak işaretle (Notlar EX sayılır, GPA etkilenmez)"
   },
   en: {
     appSubtitle: "| Course & GPA Tracker",
@@ -381,7 +402,28 @@ const translations = {
     sandboxSaveConfirm: "Do you want to overwrite your saved plan with this one?",
     sandboxSavedSuccess: "✓ Plan saved to your browser successfully!",
     sandboxExitSuccess: "✓ Returned to your saved plan.",
-    sandboxDeptDisabledTooltip: "Department cannot be changed in Preview mode."
+    sandboxDeptDisabledTooltip: "Department cannot be changed in Preview mode.",
+    transcriptBtn: "📥 Import Transcript",
+    transcriptBtnTitle: "Import your transcript copied from BUIS automatically",
+    transcriptModalTitle: "📥 BOUN Transcript Auto Importer",
+    transcriptGuide: "📌 Open <strong>BUIS (Student Info System)</strong> &rarr; <em>Transcript</em>, copy the whole page with <code>Ctrl+A</code> and <code>Ctrl+C</code>, then paste below.",
+    transcriptInputLabel: "Transcript Text:",
+    transcriptPreviewBtn: "🔍 Preview & Parse",
+    transcriptApplyBtn: "✅ Apply All to Plan",
+    transcriptNoCoursesFound: "No courses detected in transcript text. Please make sure you copied from BUIS transcript page.",
+    transcriptSummary: (termsCount, coursesCount) => `🎯 ${termsCount} Terms, ${coursesCount} Courses Successfully Parsed`,
+    transcriptMatchedCurriculum: "Curriculum",
+    transcriptMatchedElective: "Elective Slot",
+    transcriptCustomCourse: "Extra Course",
+    transcriptPassed: "Passed",
+    transcriptFailed: "Failed",
+    transcriptApplyConfirm: "Apply transcript to current plan? (Courses will be updated with transcript data.)",
+    transcriptAppliedSuccess: (count) => `✓ Transcript successfully imported! (${count} courses placed)`,
+    erasmusBtn: "Erasmus",
+    erasmusActive: "Erasmus",
+    erasmusTag: "🇪🇺 Erasmus / Exchange",
+    erasmusActiveTitle: "Remove Erasmus/Exchange semester",
+    erasmusInactiveTitle: "Mark as Erasmus/Exchange semester (Grades count as EX, GPA unaffected)"
   }
 };
 
@@ -432,6 +474,10 @@ function applyStaticTranslations() {
   setAttr('shareBtn', 'title', t('shareBtnTitle'));
   setText('mobileShareBtn', t('shareBtn'));
   setAttr('mobileShareBtn', 'title', t('shareBtnTitle'));
+  setText('transcriptBtn', t('transcriptBtn'));
+  setAttr('transcriptBtn', 'title', t('transcriptBtnTitle'));
+  setText('mobileTranscriptBtn', t('transcriptBtn'));
+  setAttr('mobileTranscriptBtn', 'title', t('transcriptBtnTitle'));
   setText('supportBtn', t('supportBtn'));
   setAttr('supportBtn', 'title', t('supportBtnTitle'));
   setText('resetBtn', t('resetBtn'));
@@ -501,6 +547,19 @@ function applyStaticTranslations() {
   setText('shareLinkBtn', t('shareLinkBtn'));
   setText('shareLinkDesc', t('shareLinkDesc'));
   setText('shareCancelBtn', t('shareCancelBtn'));
+
+  // Transcript modal
+  setText('transcriptModalTitle', t('transcriptModalTitle'));
+  const trGuideEl = document.getElementById('transcriptGuide');
+  if (trGuideEl) trGuideEl.innerHTML = t('transcriptGuide');
+  setText('transcriptInputLabel', t('transcriptInputLabel'));
+  setAttr('transcriptInput', 'placeholder', t('transcriptInputPlaceholder'));
+  setText('transcriptPreviewBtn', t('transcriptPreviewBtn'));
+  setText('transcriptCancelBtn', t('shareCancelBtn'));
+  const trApplyBtn = document.getElementById('transcriptApplyBtn');
+  if (trApplyBtn) {
+    trApplyBtn.innerHTML = `<span>${escapeHTML(t('transcriptApplyBtn'))}</span>`;
+  }
 
   updateMinorButtonUI();
   updateDmButtonUI();
@@ -1136,13 +1195,16 @@ function populateMinorModalOptions() {
 
 function getDeptState(deptKey) {
   if (!globalState[deptKey]) {
-    globalState[deptKey] = { instances: [], selectedMinorId: null, selectedDmId: null };
+    globalState[deptKey] = { instances: [], selectedMinorId: null, selectedDmId: null, erasmusSemesters: [] };
   }
   if (globalState[deptKey].selectedMinorId === undefined) {
     globalState[deptKey].selectedMinorId = null;
   }
   if (globalState[deptKey].selectedDmId === undefined) {
     globalState[deptKey].selectedDmId = null;
+  }
+  if (!Array.isArray(globalState[deptKey].erasmusSemesters)) {
+    globalState[deptKey].erasmusSemesters = [];
   }
   return globalState[deptKey];
 }
@@ -1250,6 +1312,7 @@ function attachGlobalTooltip(el, htmlContent) {
 
 function calculateAverages() {
   const state = getDeptState(currentDept);
+  const erasmusSet = new Set(state.erasmusSemesters || []);
   const activeDmCourses = getActiveDmCourseList();
   const majorCourses = departmentsData[currentDept]?.courses || [];
   const baseProgramCourses = activeDmCourses.length > 0 ? activeDmCourses : majorCourses;
@@ -1283,7 +1346,10 @@ function calculateAverages() {
         const crd = Number(course.crd) || 0;
         semesterStats[inst.semId].earnedCredits += crd;
 
-        if (inst.grade && GRADE_POINTS[inst.grade] !== null && GRADE_POINTS[inst.grade] !== undefined) {
+        const isErasmusTerm = erasmusSet.has(inst.semId);
+        const isExGrade = (inst.grade === 'EX' || isErasmusTerm);
+
+        if (!isExGrade && inst.grade && GRADE_POINTS[inst.grade] !== null && GRADE_POINTS[inst.grade] !== undefined) {
           const pts = GRADE_POINTS[inst.grade];
           semesterStats[inst.semId].totalPoints += (pts * crd);
           semesterStats[inst.semId].totalCredits += crd;
@@ -1312,7 +1378,7 @@ function calculateAverages() {
       if (stat.earnedCredits > 0) {
         const spaStr = stat.totalCredits > 0
           ? (stat.totalPoints / stat.totalCredits).toFixed(2)
-          : 'P';
+          : (erasmusSet.has(s) ? 'EX' : 'P');
         badge.innerText = `SPA: ${spaStr}`;
         badge.className = 'spa-badge active';
       } else {
@@ -1335,8 +1401,9 @@ function calculateAverages() {
       const course = getCourseForInstance(inst);
       if (course) {
         if (course.code) passedCourseCodes.add(course.code.replace(/\s+/g, '').toUpperCase());
+        const isErasmusTerm = erasmusSet.has(inst.semId);
         latestPassedByCourse[inst.courseId] = {
-          grade: inst.grade || 'AA',
+          grade: (isErasmusTerm || inst.grade === 'EX') ? 'EX' : (inst.grade || 'AA'),
           crd: Number(course.crd) || 0
         };
       }
@@ -1350,7 +1417,7 @@ function calculateAverages() {
     const item = latestPassedByCourse[cId];
     completedCreditsTotal += item.crd;
 
-    if (item.grade !== 'P' && GRADE_POINTS[item.grade] !== null && GRADE_POINTS[item.grade] !== undefined) {
+    if (item.grade !== 'P' && item.grade !== 'EX' && GRADE_POINTS[item.grade] !== null && GRADE_POINTS[item.grade] !== undefined) {
       cumPoints += (GRADE_POINTS[item.grade] * item.crd);
       cumCredits += item.crd;
     }
@@ -1609,8 +1676,9 @@ function initUI() {
     semsContainer.className = 'semesters-container';
 
     y.sems.forEach(semId => {
+      const isErasmus = Array.isArray(state.erasmusSemesters) && state.erasmusSemesters.includes(semId);
       const box = document.createElement('div');
-      box.className = 'semester-box';
+      box.className = `semester-box ${isErasmus ? 'is-erasmus' : ''}`;
       box.dataset.semId = semId;
 
       const safeSemId = semId.replace(/[^a-zA-Z0-9]/g, '_');
@@ -1619,11 +1687,15 @@ function initUI() {
 
       box.innerHTML = `
         <div class="semester-header">
-          <div style="display:flex; align-items:center;">
+          <div style="display:flex; align-items:center; gap:5px; flex-wrap:wrap; min-width:0;">
             <span>${escapeHTML(semDisplay)}</span>
             ${curriculumInfo ? `<span class="info-btn" id="info-btn-${safeSemId}">i</span>` : ''}
+            ${isErasmus ? `<span class="erasmus-tag">${escapeHTML(t('erasmusTag'))}</span>` : ''}
           </div>
           <div class="sem-header-badges">
+            <button type="button" class="sem-erasmus-btn ${isErasmus ? 'active' : ''}" onclick="toggleErasmusSemester('${escapeHTML(semId)}')" title="${escapeHTML(isErasmus ? t('erasmusActiveTitle') : t('erasmusInactiveTitle'))}">
+              🇪🇺 ${escapeHTML(isErasmus ? t('erasmusActive') : t('erasmusBtn'))}
+            </button>
             <span id="crd-${safeSemId}" class="sem-crd-badge">0 Cr</span>
             <span id="spa-${safeSemId}" class="spa-badge">SPA: -</span>
           </div>
@@ -1682,7 +1754,7 @@ function createSemesterCourseCard(inst, course) {
   const currentGrade = inst.grade || 'AA';
 
   const gradeOptions = Object.keys(GRADE_POINTS).map(g => {
-    const valText = GRADE_POINTS[g] !== null ? `(${GRADE_POINTS[g].toFixed(1)})` : '(Pass)';
+    const valText = GRADE_POINTS[g] !== null ? `(${GRADE_POINTS[g].toFixed(1)})` : (g === 'EX' ? '(Transfer)' : '(Pass)');
     return `<option value="${g}" ${currentGrade === g ? 'selected' : ''}>${g} ${valText}</option>`;
   }).join('');
 
@@ -1959,6 +2031,21 @@ function handleGradeChange(instanceId, newGrade) {
     saveGlobalState();
     updateSidebarPool();
   }
+}
+
+function toggleErasmusSemester(semId) {
+  const state = getDeptState(currentDept);
+  if (!Array.isArray(state.erasmusSemesters)) {
+    state.erasmusSemesters = [];
+  }
+  const idx = state.erasmusSemesters.indexOf(semId);
+  if (idx > -1) {
+    state.erasmusSemesters.splice(idx, 1);
+  } else {
+    state.erasmusSemesters.push(semId);
+  }
+  saveGlobalState();
+  initUI();
 }
 
 function handleInstanceInput(instanceId, text) {
@@ -2293,6 +2380,7 @@ function createShareExportBoard() {
   const activeYearStructure = getEffectiveYearStructure();
   const allSems = [];
   activeYearStructure.forEach(y => y.sems.forEach(s => allSems.push(s)));
+  const erasmusSet = new Set(state.erasmusSemesters || []);
 
   const nonEmptys = allSems.filter(semId => {
     return state.instances.some(inst => inst.semId === semId);
@@ -2315,7 +2403,9 @@ function createShareExportBoard() {
       semesterStats[inst.semId].scheduledCredits += crd;
       if (inst.passed) {
         semesterStats[inst.semId].earnedCredits += crd;
-        if (inst.grade && GRADE_POINTS[inst.grade] !== null && GRADE_POINTS[inst.grade] !== undefined) {
+        const isErasmusTerm = erasmusSet.has(inst.semId);
+        const isExGrade = (inst.grade === 'EX' || isErasmusTerm);
+        if (!isExGrade && inst.grade && GRADE_POINTS[inst.grade] !== null && GRADE_POINTS[inst.grade] !== undefined) {
           semesterStats[inst.semId].totalPoints += (GRADE_POINTS[inst.grade] * crd);
           semesterStats[inst.semId].totalCredits += crd;
         }
@@ -2330,8 +2420,9 @@ function createShareExportBoard() {
   let semsGridHtml = '';
   nonEmptys.forEach(semId => {
     const semStat = semesterStats[semId];
+    const isErasmus = erasmusSet.has(semId);
     const spaStr = semStat.earnedCredits > 0
-      ? (semStat.totalCredits > 0 ? (semStat.totalPoints / semStat.totalCredits).toFixed(2) : 'P')
+      ? (semStat.totalCredits > 0 ? (semStat.totalPoints / semStat.totalCredits).toFixed(2) : (isErasmus ? 'EX' : 'P'))
       : '-';
 
     const semInstances = state.instances.filter(inst => inst.semId === semId);
@@ -2351,8 +2442,9 @@ function createShareExportBoard() {
         codeDisplay = `${escapeHTML(inst.customText.trim())} <span class="export-sub-code">(${escapeHTML(course.code || '')})</span>`;
       }
 
+      const effectiveGrade = isErasmus ? 'EX' : (inst.grade || 'AA');
       const gradeBadge = isPassed
-        ? `<span class="export-course-grade">${escapeHTML(inst.grade || 'AA')}</span>`
+        ? `<span class="export-course-grade">${escapeHTML(effectiveGrade)}</span>`
         : `<span class="export-course-status">⏳ ${escapeHTML(t('plannedStatus'))}</span>`;
 
       coursesHtml += `
@@ -2374,9 +2466,12 @@ function createShareExportBoard() {
     });
 
     semsGridHtml += `
-      <div class="export-sem-box">
+      <div class="export-sem-box ${isErasmus ? 'is-erasmus' : ''}">
         <div class="export-sem-header">
-          <span class="export-sem-title">${escapeHTML(formatSemLabel(semId))}</span>
+          <div style="display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
+            <span class="export-sem-title">${escapeHTML(formatSemLabel(semId))}</span>
+            ${isErasmus ? `<span class="erasmus-tag">🇪🇺 Erasmus</span>` : ''}
+          </div>
           <div class="export-sem-badges">
             <span class="export-crd-badge">${semStat.scheduledCredits} Cr</span>
             <span class="export-spa-badge ${spaStr !== '-' ? 'active' : ''}">SPA: ${spaStr}</span>
@@ -2592,6 +2687,382 @@ window.addEventListener('hashchange', () => {
     }
   }
 });
+
+// --- BÜ Transkript Otomatik İçe Aktarıcı (#transcriptModal) ---
+
+let parsedTranscriptTerms = [];
+
+function openTranscriptModal() {
+  closeToolsDropdown();
+  const modal = document.getElementById('transcriptModal');
+  if (!modal) return;
+
+  const input = document.getElementById('transcriptInput');
+  const previewArea = document.getElementById('transcriptPreviewArea');
+  const applyBtn = document.getElementById('transcriptApplyBtn');
+
+  if (input) input.value = '';
+  if (previewArea) {
+    previewArea.innerHTML = '';
+    previewArea.style.display = 'none';
+  }
+  if (applyBtn) applyBtn.disabled = true;
+  parsedTranscriptTerms = [];
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTranscriptModal() {
+  const modal = document.getElementById('transcriptModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleTranscriptBackdropClick(event) {
+  if (event.target && event.target.id === 'transcriptModal') {
+    closeTranscriptModal();
+  }
+}
+
+function handleTranscriptInputChange() {
+  const input = document.getElementById('transcriptInput');
+  const applyBtn = document.getElementById('transcriptApplyBtn');
+  const previewArea = document.getElementById('transcriptPreviewArea');
+  if (!input || !input.value.trim()) {
+    if (applyBtn) applyBtn.disabled = true;
+    if (previewArea) {
+      previewArea.innerHTML = '';
+      previewArea.style.display = 'none';
+    }
+  }
+}
+
+function parseBounTranscript(rawText) {
+  if (!rawText || typeof rawText !== 'string') return [];
+
+  const lines = rawText.split(/\r?\n/);
+  const terms = [];
+  let currentTerm = null;
+
+  const termHeaderRegex = /(?:Academic Year\s*:\s*)?(\b20\d{2})\s*[\/\-]\s*(?:20\d{2})?\s*[\/\-]?\s*(?:Semester\s*:\s*)?([123]|Güz|Bahar|Yaz|Fall|Spring|Summer)\b/i;
+  const VALID_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'F', 'P', 'S', 'U', 'W', 'EX', 'I']);
+  const courseCodeRegex = /\b([A-Z]{2,5})\s*(\d{3}[A-Z]?)(?:\.\d{1,2})?\b/;
+
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed) return;
+
+    const termMatch = trimmed.match(termHeaderRegex);
+    if (termMatch) {
+      const yearStart = parseInt(termMatch[1], 10);
+      let semTypeStr = termMatch[2].toLowerCase();
+      let semNum = 1;
+      if (semTypeStr === '2' || semTypeStr === 'bahar' || semTypeStr === 'spring') semNum = 2;
+      else if (semTypeStr === '3' || semTypeStr === 'yaz' || semTypeStr === 'summer') semNum = 3;
+
+      currentTerm = {
+        raw: trimmed,
+        year: yearStart,
+        semNum: semNum,
+        courses: []
+      };
+      terms.push(currentTerm);
+      return;
+    }
+
+    if (currentTerm) {
+      const cMatch = trimmed.match(courseCodeRegex);
+      if (cMatch) {
+        const fullCode = `${cMatch[1]} ${cMatch[2]}`;
+        if (cMatch[1] === 'YADYOK' || cMatch[1] === 'PREP') return;
+
+        const tokens = trimmed.split(/[\s\t]+/);
+
+        let foundGrade = null;
+        let gradeIdx = -1;
+
+        for (let i = tokens.length - 1; i >= 1; i--) {
+          const tok = tokens[i].toUpperCase();
+          if (tok === 'I' && i > 1 && !tokens[i - 1].match(/^\d(?:\.\d)?$/)) {
+            continue;
+          }
+          if (VALID_GRADES.has(tok)) {
+            foundGrade = tok;
+            gradeIdx = i;
+            break;
+          }
+        }
+
+        let foundCredit = null;
+        let crdIdx = -1;
+        for (let i = (gradeIdx !== -1 ? gradeIdx - 1 : tokens.length - 1); i >= 1; i--) {
+          const num = parseFloat(tokens[i]);
+          if (!isNaN(num) && num >= 0 && num <= 10 && tokens[i].match(/^\d(?:\.\d)?$/)) {
+            foundCredit = num;
+            crdIdx = i;
+            if (i > 1 && tokens[i - 1].match(/^\d(?:\.\d)?$/)) {
+              foundCredit = parseFloat(tokens[i - 1]);
+              crdIdx = i - 1;
+            }
+            break;
+          }
+        }
+
+        let titleTokens = [];
+        const codeTokenCount = (tokens[0].includes(cMatch[2])) ? 1 : 2;
+        const endTitleIdx = (crdIdx !== -1) ? crdIdx : (gradeIdx !== -1 ? gradeIdx : tokens.length);
+        if (endTitleIdx > codeTokenCount) {
+          titleTokens = tokens.slice(codeTokenCount, endTitleIdx);
+        }
+        const courseTitle = titleTokens.join(' ').trim();
+
+        currentTerm.courses.push({
+          code: fullCode,
+          title: courseTitle,
+          grade: foundGrade || 'P',
+          credit: foundCredit !== null ? foundCredit : 3
+        });
+      }
+    }
+  });
+
+  const validTerms = terms.filter(t => t.courses.length > 0);
+  if (validTerms.length === 0) return [];
+
+  validTerms.sort((a, b) => {
+    if (a.year !== b.year) return a.year - b.year;
+    return a.semNum - b.semNum;
+  });
+
+  const firstYear = validTerms[0].year;
+
+  validTerms.forEach(t => {
+    const yearIndex = (t.year - firstYear) + 1;
+    let semKey = `${yearIndex}.${t.semNum}`;
+    if (t.semNum === 3) {
+      semKey = `${yearIndex}.3 (Yaz)`;
+    }
+    t.targetSem = semKey;
+  });
+
+  return validTerms;
+}
+
+function previewTranscript() {
+  const input = document.getElementById('transcriptInput');
+  const previewArea = document.getElementById('transcriptPreviewArea');
+  const applyBtn = document.getElementById('transcriptApplyBtn');
+  if (!input || !previewArea) return;
+
+  const rawText = input.value.trim();
+  if (!rawText) {
+    previewArea.style.display = 'block';
+    previewArea.innerHTML = `<div class="transcript-guide-box" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;">⚠️ ${escapeHTML(t('transcriptNoCoursesFound'))}</div>`;
+    if (applyBtn) applyBtn.disabled = true;
+    return;
+  }
+
+  parsedTranscriptTerms = parseBounTranscript(rawText);
+
+  if (parsedTranscriptTerms.length === 0) {
+    previewArea.style.display = 'block';
+    previewArea.innerHTML = `<div class="transcript-guide-box" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;">⚠️ ${escapeHTML(t('transcriptNoCoursesFound'))}</div>`;
+    if (applyBtn) applyBtn.disabled = true;
+    return;
+  }
+
+  const activeDmCourses = getActiveDmCourseList();
+  const majorCourses = departmentsData[currentDept]?.courses || [];
+  const baseProgramCourses = activeDmCourses.length > 0 ? activeDmCourses : majorCourses;
+  const minorCourses = getActiveMinorCourseList();
+  const allEligible = [...baseProgramCourses, ...minorCourses];
+
+  const PASSING_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'P', 'S', 'EX']);
+  const usedIds = new Set();
+  let totalCourses = 0;
+
+  let termsHtml = '';
+
+  parsedTranscriptTerms.forEach(term => {
+    totalCourses += term.courses.length;
+
+    let coursesRows = '';
+    term.courses.forEach(c => {
+      const normCode = c.code.replace(/\s+/g, '').toUpperCase();
+      const isPassed = PASSING_GRADES.has(c.grade.toUpperCase());
+
+      // Direct match
+      const directMatch = allEligible.find(curC => {
+        if (!curC.code || usedIds.has(curC.id)) return false;
+        const curNorm = curC.code.replace(/\s+/g, '').toUpperCase();
+        if (curNorm === normCode) return true;
+        return curC.code.split(/[\/,]/).some(part => {
+          const p = part.trim().replace(/\s+/g, '').toUpperCase();
+          return p === normCode || (normCode.startsWith(p) && p.length >= 4);
+        });
+      });
+
+      let matchTagHtml = '';
+      if (directMatch) {
+        usedIds.add(directMatch.id);
+        matchTagHtml = `<span class="transcript-match-tag curriculum">✓ ${escapeHTML(t('transcriptMatchedCurriculum'))}: ${escapeHTML(directMatch.code)}</span>`;
+      } else {
+        const electiveSlot = allEligible.find(curC => curC.isElective && !usedIds.has(curC.id) && curC.sem === term.targetSem)
+          || allEligible.find(curC => curC.isElective && !usedIds.has(curC.id));
+        if (electiveSlot) {
+          usedIds.add(electiveSlot.id);
+          matchTagHtml = `<span class="transcript-match-tag elective">⚡ ${escapeHTML(t('transcriptMatchedElective'))}: ${escapeHTML(electiveSlot.code)}</span>`;
+        } else {
+          matchTagHtml = `<span class="transcript-match-tag extra">➕ ${escapeHTML(t('transcriptCustomCourse'))}</span>`;
+        }
+      }
+
+      const statusBadge = isPassed
+        ? `<span style="color:#15803d;font-weight:700;">${escapeHTML(c.grade)} (${escapeHTML(t('transcriptPassed'))})</span>`
+        : `<span style="color:#dc2626;font-weight:700;">${escapeHTML(c.grade)} (${escapeHTML(t('transcriptFailed'))})</span>`;
+
+      coursesRows += `
+        <div class="transcript-course-row">
+          <div class="transcript-course-left">
+            <span class="transcript-course-code">${escapeHTML(c.code)}</span>
+            <span class="transcript-course-title">${escapeHTML(c.title || '')}</span>
+          </div>
+          <div class="transcript-course-right">
+            <span>${c.credit} Cr</span>
+            ${statusBadge}
+            ${matchTagHtml}
+          </div>
+        </div>
+      `;
+    });
+
+    termsHtml += `
+      <div class="transcript-term-group">
+        <div class="transcript-term-title">
+          <span>📅 ${escapeHTML(term.raw)} ➔ <strong>${escapeHTML(formatSemLabel(term.targetSem))}</strong></span>
+          <span style="font-weight:600;color:#64748b;">${term.courses.length} ${escapeHTML(t('courseUnit'))}</span>
+        </div>
+        ${coursesRows}
+      </div>
+    `;
+  });
+
+  const summaryHtml = `
+    <div class="transcript-summary-badge">
+      ${escapeHTML(t('transcriptSummary')(parsedTranscriptTerms.length, totalCourses))}
+    </div>
+  `;
+
+  previewArea.innerHTML = summaryHtml + termsHtml;
+  previewArea.style.display = 'flex';
+  if (applyBtn) applyBtn.disabled = false;
+}
+
+function applyParsedTranscript() {
+  if (!parsedTranscriptTerms || parsedTranscriptTerms.length === 0) return;
+
+  const state = getDeptState(currentDept);
+  if (state.instances && state.instances.length > 0) {
+    if (!confirm(t('transcriptApplyConfirm'))) {
+      return;
+    }
+  }
+
+  const activeDmCourses = getActiveDmCourseList();
+  const majorCourses = departmentsData[currentDept]?.courses || [];
+  const baseProgramCourses = activeDmCourses.length > 0 ? activeDmCourses : majorCourses;
+  const minorCourses = getActiveMinorCourseList();
+  const allEligible = [...baseProgramCourses, ...minorCourses];
+
+  const PASSING_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'P', 'S', 'EX']);
+  const usedIds = new Set();
+  const newInstances = [];
+
+  parsedTranscriptTerms.forEach(term => {
+    const targetSem = term.targetSem;
+
+    term.courses.forEach(c => {
+      const normCode = c.code.replace(/\s+/g, '').toUpperCase();
+      const isPassed = PASSING_GRADES.has(c.grade.toUpperCase());
+      const finalGrade = isPassed ? c.grade.toUpperCase() : 'F';
+
+      // 1. Direct curriculum match
+      const directMatch = allEligible.find(curC => {
+        if (!curC.code || usedIds.has(curC.id)) return false;
+        const curNorm = curC.code.replace(/\s+/g, '').toUpperCase();
+        if (curNorm === normCode) return true;
+        return curC.code.split(/[\/,]/).some(part => {
+          const p = part.trim().replace(/\s+/g, '').toUpperCase();
+          return p === normCode || (normCode.startsWith(p) && p.length >= 4);
+        });
+      });
+
+      if (directMatch) {
+        usedIds.add(directMatch.id);
+        newInstances.push({
+          instanceId: 'inst_tr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+          courseId: directMatch.id,
+          semId: targetSem,
+          passed: isPassed,
+          grade: finalGrade,
+          customText: '',
+          isMinor: !!directMatch.isMinor,
+          isDoubleMajor: !!directMatch.isDoubleMajor
+        });
+        return;
+      }
+
+      // 2. Elective slot match
+      const electiveSlot = allEligible.find(curC => curC.isElective && !usedIds.has(curC.id) && curC.sem === targetSem)
+        || allEligible.find(curC => curC.isElective && !usedIds.has(curC.id));
+
+      if (electiveSlot) {
+        usedIds.add(electiveSlot.id);
+        const customText = c.code + (c.title ? ' - ' + c.title : '');
+        newInstances.push({
+          instanceId: 'inst_tr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+          courseId: electiveSlot.id,
+          semId: targetSem,
+          passed: isPassed,
+          grade: finalGrade,
+          customText: customText,
+          isMinor: !!electiveSlot.isMinor,
+          isDoubleMajor: !!electiveSlot.isDoubleMajor
+        });
+        return;
+      }
+
+      // 3. Extra custom course
+      const customCourseObj = {
+        id: 'tr_extra_' + normCode,
+        code: c.code,
+        name: c.title || c.code,
+        crd: c.credit || 3,
+        isElective: true
+      };
+      newInstances.push({
+        instanceId: 'inst_tr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+        courseId: customCourseObj.id,
+        semId: targetSem,
+        passed: isPassed,
+        grade: finalGrade,
+        customText: c.code + (c.title ? ' - ' + c.title : ''),
+        minorCourse: customCourseObj,
+        isMinor: false,
+        isDoubleMajor: false
+      });
+    });
+  });
+
+  state.instances = newInstances;
+  saveGlobalState();
+  initUI();
+  closeTranscriptModal();
+  showToast(t('transcriptAppliedSuccess')(newInstances.length));
+}
 
 /* ============================================================
    Yandal Programı (Minor Program) Yönetimi

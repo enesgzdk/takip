@@ -53,6 +53,12 @@
         <button id="shareBtn" class="topbar-btn share-btn" onclick="openShareModal()" title="Ders planınızı görsel veya link olarak paylaşın">
           📤 Paylaş
         </button>
+        <button id="mobileTranscriptBtn" class="topbar-btn mobile-transcript-btn" onclick="openTranscriptModal()" title="BUIS'ten kopyaladığınız transkripti otomatik aktarın">
+          📥 Transkript Aktar
+        </button>
+        <button id="transcriptBtn" class="topbar-btn transcript-btn" onclick="openTranscriptModal()" title="BUIS'ten kopyaladığınız transkripti otomatik aktarın">
+          📥 Transkript Aktar
+        </button>
         <button id="exportBtn" class="topbar-btn export-btn" onclick="exportDataAsJSON()" title="Mevcut ders planınızı ve notlarınızı JSON dosyası olarak indirin">
           📥 JSON İndir
         </button>
@@ -276,6 +282,38 @@
       </div>
       <div class="modal-footer">
         <button type="button" id="shareCancelBtn" class="btn-cancel-issue" onclick="closeShareModal()">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="transcriptModal" class="modal-backdrop" onclick="handleTranscriptBackdropClick(event)">
+    <div class="modal-dialog transcript-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="transcriptModalTitle">
+      <div class="modal-header">
+        <h3 id="transcriptModalTitle">📥 BÜ Transkript Otomatik İçe Aktarıcı</h3>
+        <button type="button" class="modal-close-btn" onclick="closeTranscriptModal()" aria-label="Kapat">✕</button>
+      </div>
+      <div class="modal-body transcript-modal-body">
+        <div class="transcript-guide-box">
+          <p id="transcriptGuide">
+            📌 <strong>BUIS (Öğrenci Bilgi Sistemi)</strong> &rarr; <em>Transkript</em> sayfasını açıp <code>Ctrl+A</code> ve <code>Ctrl+C</code> ile tüm sayfayı kopyalayın ve aşağıdaki kutuya yapıştırın.
+          </p>
+        </div>
+        <div class="form-group">
+          <label id="transcriptInputLabel" for="transcriptInput">Transkript Metni:</label>
+          <textarea id="transcriptInput" class="form-control transcript-textarea" rows="7" placeholder="Örn:&#10;2021/2022-1&#10;MATH 101.01 CALCULUS I 4.0 6.0 AA&#10;PHYS 121 GENERAL PHYSICS I 4.0 6.0 BA..." oninput="handleTranscriptInputChange()"></textarea>
+        </div>
+        <div class="transcript-btn-row">
+          <button type="button" id="transcriptPreviewBtn" class="topbar-btn transcript-preview-btn" onclick="previewTranscript()">
+            🔍 Önizle ve Ayrıştır
+          </button>
+        </div>
+        <div id="transcriptPreviewArea" class="transcript-preview-area" style="display: none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="transcriptCancelBtn" class="btn-cancel-issue" onclick="closeTranscriptModal()">Kapat</button>
+        <button type="button" id="transcriptApplyBtn" class="btn-submit-issue" onclick="applyParsedTranscript()" disabled>
+          <span>✅ Tümünü Plana Aktar</span>
+        </button>
       </div>
     </div>
   </div>

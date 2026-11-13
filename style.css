@@ -316,7 +316,8 @@ select.dept-select:disabled {
 
 #mobileMinorBtn,
 #mobileDmBtn,
-#mobileShareBtn {
+#mobileShareBtn,
+#mobileTranscriptBtn {
   display: none !important;
 }
 
@@ -1509,12 +1510,14 @@ textarea.form-control {
   .minor-select-container,
   #minorBtn,
   #dmBtn,
-  #shareBtn {
+  #shareBtn,
+  #transcriptBtn {
     display: none !important;
   }
   #mobileMinorBtn,
   #mobileDmBtn,
-  #mobileShareBtn {
+  #mobileShareBtn,
+  #mobileTranscriptBtn {
     display: flex !important;
   }
   .sandbox-banner {
@@ -2062,4 +2065,210 @@ textarea.form-control {
   font-size: 0.75rem;
   color: #94a3b8;
   font-weight: 500;
+}
+
+/* --- BÜ Transkript Otomatik İçe Aktarıcı (#transcriptModal) --- */
+.transcript-modal-dialog {
+  max-width: 620px;
+}
+
+.transcript-guide-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.84rem;
+  color: #166534;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.transcript-textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.8rem;
+  resize: vertical;
+  min-height: 120px;
+  border: 1.5px solid var(--border-color);
+  line-height: 1.4;
+}
+
+.transcript-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+.transcript-preview-btn {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+  font-weight: 700;
+  padding: 6px 14px;
+}
+
+.transcript-preview-btn:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.transcript-preview-area {
+  max-height: 280px;
+  overflow-y: auto;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.82rem;
+}
+
+.transcript-summary-badge {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.transcript-term-group {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.transcript-term-title {
+  font-weight: 800;
+  color: #1e293b;
+  font-size: 0.86rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transcript-course-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: #f8fafc;
+  font-size: 0.8rem;
+  gap: 8px;
+}
+
+.transcript-course-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.transcript-course-code {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.transcript-course-title {
+  color: #64748b;
+  font-size: 0.74rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.transcript-course-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.transcript-match-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.transcript-match-tag.curriculum {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.transcript-match-tag.elective {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.transcript-match-tag.extra {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* --- Erasmus / Exchange Dönemi Modu --- */
+.sem-erasmus-btn {
+  padding: 2px 7px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.2;
+}
+
+.sem-erasmus-btn:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.sem-erasmus-btn.active {
+  background: #dbeafe;
+  border-color: #3b82f6;
+  color: #1e40af;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2);
+}
+
+.semester-box.is-erasmus {
+  background: #f0f7ff !important;
+  border-color: #93c5fd !important;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.12) !important;
+}
+
+.semester-box.is-erasmus .semester-header {
+  border-bottom: 2px solid #bfdbfe;
+}
+
+.erasmus-tag {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 9999px;
+  padding: 1px 7px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
 }
