@@ -205,16 +205,26 @@ const translations = {
     transcriptGuide: "📌 <strong>BUIS (Öğrenci Bilgi Sistemi)</strong> &rarr; <em>Transkript</em> sayfasını açıp <code>Ctrl+A</code> ve <code>Ctrl+C</code> ile tüm sayfayı kopyalayın ve aşağıdaki kutuya yapıştırın.",
     transcriptInputLabel: "Transkript Metni:",
     transcriptPreviewBtn: "🔍 Önizle ve Ayrıştır",
-    transcriptApplyBtn: "✅ Tümünü Plana Aktar",
+    transcriptApplyBtn: "✅ Seçilenleri Plana Aktar",
     transcriptNoCoursesFound: "Transkript metninde ders bulunamadı. Lütfen BUIS transkript sayfasından kopyaladığınızdan emin olun.",
     transcriptSummary: (termsCount, coursesCount) => `🎯 ${termsCount} Dönem, ${coursesCount} Ders Başarıyla Ayrıştırıldı`,
     transcriptMatchedCurriculum: "Müfredat",
     transcriptMatchedElective: "Seçmeli Slotu",
-    transcriptCustomCourse: "Ek Ders",
+    transcriptCustomCourse: "Yeni Seçmeli Ders Olarak Ekle",
     transcriptPassed: "Geçti",
     transcriptFailed: "Kaldı",
     transcriptApplyConfirm: "Mevcut planınızın üzerine aktarılsın mı? (Dönemlerdeki dersler transkript verileriyle güncellenecektir.)",
     transcriptAppliedSuccess: (count) => `✓ Transkript başarıyla aktarıldı! (${count} ders yerleştirildi)`,
+    transcriptShiftDown: "◀ -1 Dönem Kaydır",
+    transcriptShiftUp: "+1 Dönem Kaydır ▶",
+    transcriptColCourse: "Ders",
+    transcriptColTerm: "Dönem",
+    transcriptColMatch: "Müfredat Eşleşmesi",
+    transcriptColGrade: "Harf Notu",
+    transcriptColStatus: "Verdim",
+    transcriptColAction: "Sil",
+    transcriptGradeNone: "-- (Not Yok)",
+    transcriptNewElectiveOpt: "➕ Yeni Seçmeli Ders Olarak Ekle",
     erasmusBtn: "Erasmus",
     erasmusActive: "Erasmus",
     erasmusTag: "🇪🇺 Erasmus / Exchange",
@@ -409,16 +419,26 @@ const translations = {
     transcriptGuide: "📌 Open <strong>BUIS (Student Info System)</strong> &rarr; <em>Transcript</em>, copy the whole page with <code>Ctrl+A</code> and <code>Ctrl+C</code>, then paste below.",
     transcriptInputLabel: "Transcript Text:",
     transcriptPreviewBtn: "🔍 Preview & Parse",
-    transcriptApplyBtn: "✅ Apply All to Plan",
+    transcriptApplyBtn: "✅ Apply Selected to Plan",
     transcriptNoCoursesFound: "No courses detected in transcript text. Please make sure you copied from BUIS transcript page.",
     transcriptSummary: (termsCount, coursesCount) => `🎯 ${termsCount} Terms, ${coursesCount} Courses Successfully Parsed`,
     transcriptMatchedCurriculum: "Curriculum",
     transcriptMatchedElective: "Elective Slot",
-    transcriptCustomCourse: "Extra Course",
+    transcriptCustomCourse: "Add as New Elective Course",
     transcriptPassed: "Passed",
     transcriptFailed: "Failed",
     transcriptApplyConfirm: "Apply transcript to current plan? (Courses will be updated with transcript data.)",
     transcriptAppliedSuccess: (count) => `✓ Transcript successfully imported! (${count} courses placed)`,
+    transcriptShiftDown: "◀ Shift -1 Term",
+    transcriptShiftUp: "Shift +1 Term ▶",
+    transcriptColCourse: "Course",
+    transcriptColTerm: "Semester",
+    transcriptColMatch: "Curriculum Match",
+    transcriptColGrade: "Grade",
+    transcriptColStatus: "Passed",
+    transcriptColAction: "Remove",
+    transcriptGradeNone: "-- (No Grade)",
+    transcriptNewElectiveOpt: "➕ Add as New Elective Course",
     erasmusBtn: "Erasmus",
     erasmusActive: "Erasmus",
     erasmusTag: "🇪🇺 Erasmus / Exchange",
@@ -2691,6 +2711,7 @@ window.addEventListener('hashchange', () => {
 // --- BÜ Transkript Otomatik İçe Aktarıcı (#transcriptModal) ---
 
 let parsedTranscriptTerms = [];
+let transcriptPreviewRows = [];
 
 function openTranscriptModal() {
   closeToolsDropdown();
@@ -2737,6 +2758,7 @@ function handleTranscriptInputChange() {
       previewArea.innerHTML = '';
       previewArea.style.display = 'none';
     }
+    transcriptPreviewRows = [];
   }
 }
 
@@ -2748,7 +2770,7 @@ function parseBounTranscript(rawText) {
   let currentTerm = null;
 
   const termHeaderRegex = /(?:Academic Year\s*:\s*)?(\b20\d{2})\s*[\/\-]\s*(?:20\d{2})?\s*[\/\-]?\s*(?:Semester\s*:\s*)?([123]|Güz|Bahar|Yaz|Fall|Spring|Summer)\b/i;
-  const VALID_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'F', 'P', 'S', 'U', 'W', 'EX', 'I']);
+  const VALID_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'F', 'FF', 'P', 'S', 'U', 'W', 'EX', 'I', 'NP']);
   const courseCodeRegex = /\b([A-Z]{2,5})\s*(\d{3}[A-Z]?)(?:\.\d{1,2})?\b/;
 
   lines.forEach(line => {
@@ -2776,14 +2798,17 @@ function parseBounTranscript(rawText) {
     if (currentTerm) {
       const cMatch = trimmed.match(courseCodeRegex);
       if (cMatch) {
-        const fullCode = `${cMatch[1]} ${cMatch[2]}`;
-        if (cMatch[1] === 'YADYOK' || cMatch[1] === 'PREP') return;
+        const prefix = cMatch[1].toUpperCase();
+        // Hazırlık / YADYOK / PREP dönemlerini ve derslerini atla
+        if (prefix === 'YADYOK' || prefix === 'PREP') return;
 
+        const fullCode = `${cMatch[1]} ${cMatch[2]}`;
         const tokens = trimmed.split(/[\s\t]+/);
 
-        let foundGrade = null;
+        let foundGrade = '';
         let gradeIdx = -1;
 
+        // Harf Notlarını Tam Yakala (AA–DD, F, FF, P, S, U, W, EX, I, NP)
         for (let i = tokens.length - 1; i >= 1; i--) {
           const tok = tokens[i].toUpperCase();
           if (tok === 'I' && i > 1 && !tokens[i - 1].match(/^\d(?:\.\d)?$/)) {
@@ -2822,13 +2847,14 @@ function parseBounTranscript(rawText) {
         currentTerm.courses.push({
           code: fullCode,
           title: courseTitle,
-          grade: foundGrade || 'P',
+          grade: foundGrade, // Ham harf notu veya henüz yoksa boş string
           credit: foundCredit !== null ? foundCredit : 3
         });
       }
     }
   });
 
+  // Yalnızca geçerli lisans dersi barındıran dönemleri al (Hazırlık/boş dönemler elensin)
   const validTerms = terms.filter(t => t.courses.length > 0);
   if (validTerms.length === 0) return [];
 
@@ -2837,6 +2863,7 @@ function parseBounTranscript(rawText) {
     return a.semNum - b.semNum;
   });
 
+  // Lisans derslerinin başladığı ilk Güz/Bahar dönemini 1.1, ikincisini 1.2, varsa yaz okulunu 1.3 olarak eşleştir
   const firstYear = validTerms[0].year;
 
   validTerms.forEach(t => {
@@ -2851,6 +2878,22 @@ function parseBounTranscript(rawText) {
   return validTerms;
 }
 
+function getAllAvailableSemKeys() {
+  const allSems = [];
+  const activeYearStructure = getEffectiveYearStructure();
+  activeYearStructure.forEach(y => {
+    y.sems.forEach(s => {
+      if (!allSems.includes(s)) allSems.push(s);
+    });
+  });
+  if (allSems.length === 0) {
+    for (let yr = 1; yr <= 6; yr++) {
+      allSems.push(`${yr}.1`, `${yr}.2`, `${yr}.3 (Yaz)`);
+    }
+  }
+  return allSems;
+}
+
 function previewTranscript() {
   const input = document.getElementById('transcriptInput');
   const previewArea = document.getElementById('transcriptPreviewArea');
@@ -2862,6 +2905,7 @@ function previewTranscript() {
     previewArea.style.display = 'block';
     previewArea.innerHTML = `<div class="transcript-guide-box" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;">⚠️ ${escapeHTML(t('transcriptNoCoursesFound'))}</div>`;
     if (applyBtn) applyBtn.disabled = true;
+    transcriptPreviewRows = [];
     return;
   }
 
@@ -2871,6 +2915,7 @@ function previewTranscript() {
     previewArea.style.display = 'block';
     previewArea.innerHTML = `<div class="transcript-guide-box" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;">⚠️ ${escapeHTML(t('transcriptNoCoursesFound'))}</div>`;
     if (applyBtn) applyBtn.disabled = true;
+    transcriptPreviewRows = [];
     return;
   }
 
@@ -2882,19 +2927,38 @@ function previewTranscript() {
 
   const PASSING_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'P', 'S', 'EX']);
   const usedIds = new Set();
-  let totalCourses = 0;
-
-  let termsHtml = '';
+  const rows = [];
+  let rowSeq = 0;
 
   parsedTranscriptTerms.forEach(term => {
-    totalCourses += term.courses.length;
-
-    let coursesRows = '';
     term.courses.forEach(c => {
+      rowSeq++;
       const normCode = c.code.replace(/\s+/g, '').toUpperCase();
-      const isPassed = PASSING_GRADES.has(c.grade.toUpperCase());
+      const rawGrade = (c.grade || '').toUpperCase();
 
-      // Direct match
+      // Durum tespiti:
+      // Geçerli not AA-DD / P / S / EX ise isPassed: true
+      // F, FF, U ise: isPassed: false, grade: 'F'
+      // Not yoksa (boş, ---, IP) veya W ise: isPassed: false, grade: ''
+      let isPassed = false;
+      let effectiveGrade = '';
+
+      if (PASSING_GRADES.has(rawGrade)) {
+        isPassed = true;
+        effectiveGrade = rawGrade;
+      } else if (rawGrade === 'F' || rawGrade === 'FF' || rawGrade === 'U') {
+        isPassed = false;
+        effectiveGrade = 'F';
+      } else {
+        isPassed = false;
+        effectiveGrade = '';
+      }
+
+      // Eşleşme arama
+      let matchType = 'extra'; // 'curriculum' | 'elective' | 'extra'
+      let matchedCourseId = '__NEW_ELECTIVE__';
+
+      // 1. Doğrudan ders kodu eşleşmesi
       const directMatch = allEligible.find(curC => {
         if (!curC.code || usedIds.has(curC.id)) return false;
         const curNorm = curC.code.replace(/\s+/g, '').toUpperCase();
@@ -2905,64 +2969,230 @@ function previewTranscript() {
         });
       });
 
-      let matchTagHtml = '';
       if (directMatch) {
         usedIds.add(directMatch.id);
-        matchTagHtml = `<span class="transcript-match-tag curriculum">✓ ${escapeHTML(t('transcriptMatchedCurriculum'))}: ${escapeHTML(directMatch.code)}</span>`;
+        matchType = 'curriculum';
+        matchedCourseId = directMatch.id;
       } else {
+        // 2. Seçmeli slotu eşleşmesi
         const electiveSlot = allEligible.find(curC => curC.isElective && !usedIds.has(curC.id) && curC.sem === term.targetSem)
           || allEligible.find(curC => curC.isElective && !usedIds.has(curC.id));
         if (electiveSlot) {
           usedIds.add(electiveSlot.id);
-          matchTagHtml = `<span class="transcript-match-tag elective">⚡ ${escapeHTML(t('transcriptMatchedElective'))}: ${escapeHTML(electiveSlot.code)}</span>`;
+          matchType = 'elective';
+          matchedCourseId = electiveSlot.id;
         } else {
-          matchTagHtml = `<span class="transcript-match-tag extra">➕ ${escapeHTML(t('transcriptCustomCourse'))}</span>`;
+          matchType = 'extra';
+          matchedCourseId = '__NEW_ELECTIVE__';
         }
       }
 
-      const statusBadge = isPassed
-        ? `<span style="color:#15803d;font-weight:700;">${escapeHTML(c.grade)} (${escapeHTML(t('transcriptPassed'))})</span>`
-        : `<span style="color:#dc2626;font-weight:700;">${escapeHTML(c.grade)} (${escapeHTML(t('transcriptFailed'))})</span>`;
-
-      coursesRows += `
-        <div class="transcript-course-row">
-          <div class="transcript-course-left">
-            <span class="transcript-course-code">${escapeHTML(c.code)}</span>
-            <span class="transcript-course-title">${escapeHTML(c.title || '')}</span>
-          </div>
-          <div class="transcript-course-right">
-            <span>${c.credit} Cr</span>
-            ${statusBadge}
-            ${matchTagHtml}
-          </div>
-        </div>
-      `;
+      rows.push({
+        id: `tr_row_${rowSeq}`,
+        termKey: term.targetSem,
+        termRaw: term.raw,
+        code: c.code,
+        title: c.title,
+        credit: c.credit,
+        matchedCourseId: matchedCourseId,
+        matchType: matchType,
+        grade: effectiveGrade,
+        passed: isPassed,
+        ignored: false
+      });
     });
-
-    termsHtml += `
-      <div class="transcript-term-group">
-        <div class="transcript-term-title">
-          <span>📅 ${escapeHTML(term.raw)} ➔ <strong>${escapeHTML(formatSemLabel(term.targetSem))}</strong></span>
-          <span style="font-weight:600;color:#64748b;">${term.courses.length} ${escapeHTML(t('courseUnit'))}</span>
-        </div>
-        ${coursesRows}
-      </div>
-    `;
   });
+
+  transcriptPreviewRows = rows;
+  renderTranscriptPreviewTable();
+}
+
+function renderTranscriptPreviewTable() {
+  const previewArea = document.getElementById('transcriptPreviewArea');
+  const applyBtn = document.getElementById('transcriptApplyBtn');
+  if (!previewArea) return;
+
+  if (!transcriptPreviewRows || transcriptPreviewRows.length === 0) {
+    previewArea.style.display = 'none';
+    if (applyBtn) applyBtn.disabled = true;
+    return;
+  }
+
+  const activeDmCourses = getActiveDmCourseList();
+  const majorCourses = departmentsData[currentDept]?.courses || [];
+  const baseProgramCourses = activeDmCourses.length > 0 ? activeDmCourses : majorCourses;
+  const minorCourses = getActiveMinorCourseList();
+  const allEligible = [...baseProgramCourses, ...minorCourses];
+
+  const allAvailableSems = getAllAvailableSemKeys();
+  const activeCount = transcriptPreviewRows.filter(r => !r.ignored).length;
+  const uniqueTerms = new Set(transcriptPreviewRows.filter(r => !r.ignored).map(r => r.termKey)).size;
 
   const summaryHtml = `
     <div class="transcript-summary-badge">
-      ${escapeHTML(t('transcriptSummary')(parsedTranscriptTerms.length, totalCourses))}
+      <span>${escapeHTML(t('transcriptSummary')(uniqueTerms, activeCount))}</span>
+      <div class="transcript-toolbar">
+        <button type="button" class="transcript-shift-btn" onclick="shiftAllTranscriptTerms(-1)" title="-1 Dönem Kaydır">
+          ${escapeHTML(t('transcriptShiftDown'))}
+        </button>
+        <button type="button" class="transcript-shift-btn" onclick="shiftAllTranscriptTerms(1)" title="+1 Dönem Kaydır">
+          ${escapeHTML(t('transcriptShiftUp'))}
+        </button>
+      </div>
     </div>
   `;
 
-  previewArea.innerHTML = summaryHtml + termsHtml;
+  const GRADE_OPTIONS_LIST = ['', 'AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'F', 'P', 'EX'];
+
+  const rowsHtml = transcriptPreviewRows.map((row, idx) => {
+    // 1. Dönem Seçici
+    const semOptionsHtml = allAvailableSems.map(s => {
+      const isSel = (s === row.termKey);
+      return `<option value="${escapeHTML(s)}" ${isSel ? 'selected' : ''}>${escapeHTML(formatSemLabel(s))}</option>`;
+    }).join('');
+
+    // 2. Müfredat Eşleşmesi Seçici
+    let matchOptionsHtml = `<option value="__NEW_ELECTIVE__" ${row.matchedCourseId === '__NEW_ELECTIVE__' ? 'selected' : ''}>${escapeHTML(t('transcriptNewElectiveOpt'))}</option>`;
+    
+    // Zorunlu ve seçmeli dersleri grupla
+    const regularCourses = allEligible.filter(c => !c.isElective);
+    const electiveSlots = allEligible.filter(c => !!c.isElective);
+
+    if (regularCourses.length > 0) {
+      matchOptionsHtml += `<optgroup label="── Müfredat Dersleri ──">`;
+      regularCourses.forEach(c => {
+        const isSel = (c.id === row.matchedCourseId);
+        matchOptionsHtml += `<option value="${escapeHTML(c.id)}" ${isSel ? 'selected' : ''}>${escapeHTML(c.code)} - ${escapeHTML(c.name)}</option>`;
+      });
+      matchOptionsHtml += `</optgroup>`;
+    }
+
+    if (electiveSlots.length > 0) {
+      matchOptionsHtml += `<optgroup label="── Seçmeli Slotları ──">`;
+      electiveSlots.forEach(c => {
+        const isSel = (c.id === row.matchedCourseId);
+        matchOptionsHtml += `<option value="${escapeHTML(c.id)}" ${isSel ? 'selected' : ''}>⚡ ${escapeHTML(c.code)} (${formatSemLabel(c.sem)})</option>`;
+      });
+      matchOptionsHtml += `</optgroup>`;
+    }
+
+    // 3. Harf Notu Seçici
+    const gradeOptionsHtml = GRADE_OPTIONS_LIST.map(g => {
+      const isSel = (g === row.grade);
+      const label = g === '' ? t('transcriptGradeNone') : (g === 'EX' ? 'EX (Transfer)' : g);
+      return `<option value="${escapeHTML(g)}" ${isSel ? 'selected' : ''}>${escapeHTML(label)}</option>`;
+    }).join('');
+
+    const rowClass = row.ignored ? 'row-ignored' : '';
+
+    return `
+      <tr class="${rowClass}" data-row-id="${escapeHTML(row.id)}">
+        <td>
+          <span class="tr-course-badge">${escapeHTML(row.code)}</span>
+          <span class="tr-course-title-sub" title="${escapeHTML(row.title || '')}">${escapeHTML(row.title || row.code)}</span>
+          <span style="font-size:0.72rem;color:#64748b;font-weight:600;">${row.credit} Cr</span>
+        </td>
+        <td>
+          <select class="tr-select tr-sem-select" onchange="handleTranscriptRowFieldChange('${row.id}', 'termKey', this.value)" ${row.ignored ? 'disabled' : ''}>
+            ${semOptionsHtml}
+          </select>
+        </td>
+        <td>
+          <select class="tr-select tr-match-select" onchange="handleTranscriptRowFieldChange('${row.id}', 'matchedCourseId', this.value)" ${row.ignored ? 'disabled' : ''}>
+            ${matchOptionsHtml}
+          </select>
+        </td>
+        <td>
+          <select class="tr-select tr-grade-select" onchange="handleTranscriptRowGradeChange('${row.id}', this.value)" ${row.ignored ? 'disabled' : ''}>
+            ${gradeOptionsHtml}
+          </select>
+        </td>
+        <td style="text-align: center;">
+          <label class="tr-check-label">
+            <input type="checkbox" ${row.passed ? 'checked' : ''} onchange="handleTranscriptRowFieldChange('${row.id}', 'passed', this.checked)" ${row.ignored ? 'disabled' : ''}>
+          </label>
+        </td>
+        <td style="text-align: center;">
+          <button type="button" class="tr-del-btn" onclick="toggleTranscriptRowIgnored('${row.id}')" title="${row.ignored ? 'Geri Al' : t('transcriptColAction')}">
+            ${row.ignored ? '↩️' : '✕'}
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  const tableHtml = `
+    <div class="transcript-table-wrap">
+      <table class="transcript-table">
+        <thead>
+          <tr>
+            <th>${escapeHTML(t('transcriptColCourse'))}</th>
+            <th>${escapeHTML(t('transcriptColTerm'))}</th>
+            <th>${escapeHTML(t('transcriptColMatch'))}</th>
+            <th>${escapeHTML(t('transcriptColGrade'))}</th>
+            <th style="text-align:center;">${escapeHTML(t('transcriptColStatus'))}</th>
+            <th style="text-align:center;">${escapeHTML(t('transcriptColAction'))}</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  previewArea.innerHTML = summaryHtml + tableHtml;
   previewArea.style.display = 'flex';
-  if (applyBtn) applyBtn.disabled = false;
+  if (applyBtn) applyBtn.disabled = (activeCount === 0);
+}
+
+function handleTranscriptRowFieldChange(rowId, field, value) {
+  const row = transcriptPreviewRows.find(r => r.id === rowId);
+  if (!row) return;
+  row[field] = value;
+}
+
+function handleTranscriptRowGradeChange(rowId, newGrade) {
+  const row = transcriptPreviewRows.find(r => r.id === rowId);
+  if (!row) return;
+  row.grade = newGrade;
+  const PASSING_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'P', 'S', 'EX']);
+  if (PASSING_GRADES.has(newGrade.toUpperCase())) {
+    row.passed = true;
+  } else {
+    row.passed = false;
+  }
+  renderTranscriptPreviewTable();
+}
+
+function toggleTranscriptRowIgnored(rowId) {
+  const row = transcriptPreviewRows.find(r => r.id === rowId);
+  if (!row) return;
+  row.ignored = !row.ignored;
+  renderTranscriptPreviewTable();
+}
+
+function shiftAllTranscriptTerms(direction) {
+  if (!transcriptPreviewRows || transcriptPreviewRows.length === 0) return;
+  const allAvailableSems = getAllAvailableSemKeys();
+
+  transcriptPreviewRows.forEach(row => {
+    const currentIdx = allAvailableSems.indexOf(row.termKey);
+    if (currentIdx !== -1) {
+      const newIdx = currentIdx + direction;
+      if (newIdx >= 0 && newIdx < allAvailableSems.length) {
+        row.termKey = allAvailableSems[newIdx];
+      }
+    }
+  });
+
+  renderTranscriptPreviewTable();
 }
 
 function applyParsedTranscript() {
-  if (!parsedTranscriptTerms || parsedTranscriptTerms.length === 0) return;
+  if (!transcriptPreviewRows || transcriptPreviewRows.length === 0) return;
+  const activeRows = transcriptPreviewRows.filter(r => !r.ignored);
+  if (activeRows.length === 0) return;
 
   const state = getDeptState(currentDept);
   if (state.instances && state.instances.length > 0) {
@@ -2977,83 +3207,53 @@ function applyParsedTranscript() {
   const minorCourses = getActiveMinorCourseList();
   const allEligible = [...baseProgramCourses, ...minorCourses];
 
-  const PASSING_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'P', 'S', 'EX']);
-  const usedIds = new Set();
   const newInstances = [];
 
-  parsedTranscriptTerms.forEach(term => {
-    const targetSem = term.targetSem;
+  activeRows.forEach(row => {
+    const targetSem = row.termKey;
+    const isPassed = !!row.passed;
+    const grade = row.grade || (isPassed ? 'AA' : '');
+    const cleanNormCode = row.code.replace(/\s+/g, '').toUpperCase();
 
-    term.courses.forEach(c => {
-      const normCode = c.code.replace(/\s+/g, '').toUpperCase();
-      const isPassed = PASSING_GRADES.has(c.grade.toUpperCase());
-      const finalGrade = isPassed ? c.grade.toUpperCase() : 'F';
+    if (row.matchedCourseId && row.matchedCourseId !== '__NEW_ELECTIVE__') {
+      const matchedCourse = allEligible.find(c => c.id === row.matchedCourseId);
+      if (matchedCourse) {
+        const isElectiveSlot = !!matchedCourse.isElective;
+        const customText = isElectiveSlot ? (row.code + (row.title ? ' - ' + row.title : '')) : '';
 
-      // 1. Direct curriculum match
-      const directMatch = allEligible.find(curC => {
-        if (!curC.code || usedIds.has(curC.id)) return false;
-        const curNorm = curC.code.replace(/\s+/g, '').toUpperCase();
-        if (curNorm === normCode) return true;
-        return curC.code.split(/[\/,]/).some(part => {
-          const p = part.trim().replace(/\s+/g, '').toUpperCase();
-          return p === normCode || (normCode.startsWith(p) && p.length >= 4);
-        });
-      });
-
-      if (directMatch) {
-        usedIds.add(directMatch.id);
         newInstances.push({
           instanceId: 'inst_tr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-          courseId: directMatch.id,
+          courseId: matchedCourse.id,
           semId: targetSem,
           passed: isPassed,
-          grade: finalGrade,
-          customText: '',
-          isMinor: !!directMatch.isMinor,
-          isDoubleMajor: !!directMatch.isDoubleMajor
-        });
-        return;
-      }
-
-      // 2. Elective slot match
-      const electiveSlot = allEligible.find(curC => curC.isElective && !usedIds.has(curC.id) && curC.sem === targetSem)
-        || allEligible.find(curC => curC.isElective && !usedIds.has(curC.id));
-
-      if (electiveSlot) {
-        usedIds.add(electiveSlot.id);
-        const customText = c.code + (c.title ? ' - ' + c.title : '');
-        newInstances.push({
-          instanceId: 'inst_tr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-          courseId: electiveSlot.id,
-          semId: targetSem,
-          passed: isPassed,
-          grade: finalGrade,
+          grade: grade,
           customText: customText,
-          isMinor: !!electiveSlot.isMinor,
-          isDoubleMajor: !!electiveSlot.isDoubleMajor
+          isMinor: !!matchedCourse.isMinor,
+          isDoubleMajor: !!matchedCourse.isDoubleMajor
         });
         return;
       }
+    }
 
-      // 3. Extra custom course
-      const customCourseObj = {
-        id: 'tr_extra_' + normCode,
-        code: c.code,
-        name: c.title || c.code,
-        crd: c.credit || 3,
-        isElective: true
-      };
-      newInstances.push({
-        instanceId: 'inst_tr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-        courseId: customCourseObj.id,
-        semId: targetSem,
-        passed: isPassed,
-        grade: finalGrade,
-        customText: c.code + (c.title ? ' - ' + c.title : ''),
-        minorCourse: customCourseObj,
-        isMinor: false,
-        isDoubleMajor: false
-      });
+    // Yeni Seçmeli / Ek Ders olarak ekleme
+    const customCourseObj = {
+      id: 'tr_extra_' + cleanNormCode,
+      code: row.code,
+      name: row.title || row.code,
+      crd: row.credit || 3,
+      isElective: true
+    };
+
+    newInstances.push({
+      instanceId: 'inst_tr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+      courseId: customCourseObj.id,
+      semId: targetSem,
+      passed: isPassed,
+      grade: grade,
+      customText: row.code + (row.title ? ' - ' + row.title : ''),
+      minorCourse: customCourseObj,
+      isMinor: false,
+      isDoubleMajor: false
     });
   });
 

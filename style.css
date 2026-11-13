@@ -2069,7 +2069,8 @@ textarea.form-control {
 
 /* --- BÜ Transkript Otomatik İçe Aktarıcı (#transcriptModal) --- */
 .transcript-modal-dialog {
-  max-width: 620px;
+  max-width: 820px;
+  width: 95vw;
 }
 
 .transcript-guide-box {
@@ -2087,7 +2088,7 @@ textarea.form-control {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.8rem;
   resize: vertical;
-  min-height: 120px;
+  min-height: 100px;
   border: 1.5px solid var(--border-color);
   line-height: 1.4;
 }
@@ -2113,7 +2114,7 @@ textarea.form-control {
 }
 
 .transcript-preview-area {
-  max-height: 280px;
+  max-height: 380px;
   overflow-y: auto;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -2121,7 +2122,7 @@ textarea.form-control {
   padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   font-size: 0.82rem;
 }
 
@@ -2135,89 +2136,144 @@ textarea.form-control {
   font-size: 0.85rem;
   display: flex;
   align-items: center;
-  gap: 6px;
-}
-
-.transcript-term-group {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.transcript-term-title {
-  font-weight: 800;
-  color: #1e293b;
-  font-size: 0.86rem;
-  border-bottom: 1px solid #f1f5f9;
-  padding-bottom: 4px;
-  display: flex;
   justify-content: space-between;
-  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.transcript-course-row {
+.transcript-toolbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 5px 8px;
-  border-radius: 6px;
-  background: #f8fafc;
-  font-size: 0.8rem;
   gap: 8px;
 }
 
-.transcript-course-left {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
+.transcript-shift-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.transcript-course-code {
-  font-weight: 800;
+.transcript-shift-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
   color: #0f172a;
 }
 
-.transcript-course-title {
+.transcript-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.transcript-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  text-align: left;
+}
+
+.transcript-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.transcript-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.transcript-table tr:hover td {
+  background: #f8fafc;
+}
+
+.transcript-table tr.row-ignored td {
+  opacity: 0.45;
+  background: #f1f5f9;
+  text-decoration: line-through;
+}
+
+.tr-select {
+  font-size: 0.78rem;
+  padding: 4px 6px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1e293b;
+  max-width: 100%;
+}
+
+.tr-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.tr-sem-select {
+  width: 105px;
+}
+
+.tr-match-select {
+  width: 220px;
+  max-width: 260px;
+}
+
+.tr-grade-select {
+  width: 90px;
+  font-weight: 700;
+}
+
+.tr-check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+
+.tr-del-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.tr-del-btn:hover {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+.tr-course-badge {
+  font-weight: 800;
+  color: #0f172a;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.tr-course-title-sub {
   color: #64748b;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
+  display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
-}
-
-.transcript-course-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.transcript-match-tag {
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.transcript-match-tag.curriculum {
-  background: #dcfce7;
-  color: #15803d;
-}
-
-.transcript-match-tag.elective {
-  background: #e0e7ff;
-  color: #4338ca;
-}
-
-.transcript-match-tag.extra {
-  background: #fef3c7;
-  color: #92400e;
+  max-width: 180px;
 }
 
 /* --- Erasmus / Exchange Dönemi Modu --- */
