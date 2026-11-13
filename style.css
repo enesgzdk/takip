@@ -2191,11 +2191,92 @@ textarea.form-control {
   color: #0f172a;
 }
 
+.transcript-groups-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.transcript-term-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.transcript-term-header {
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.transcript-term-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.transcript-term-title {
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 0.86rem;
+}
+
+.transcript-crd-pill {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.74rem;
+}
+
+.transcript-term-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tr-group-sem-select {
+  font-size: 0.78rem;
+  padding: 4px 6px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.tr-group-shift-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+}
+
+.tr-group-shift-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
 .transcript-table-wrap {
   width: 100%;
   overflow-x: auto;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
   background: #ffffff;
 }
 

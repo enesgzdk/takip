@@ -218,6 +218,10 @@ const translations = {
     transcriptAppliedSuccess: (count) => `✓ Transkript başarıyla aktarıldı! (${count} ders yerleştirildi)`,
     transcriptShiftDown: "◀ -1 Dönem Kaydır",
     transcriptShiftUp: "+1 Dönem Kaydır ▶",
+    transcriptGroupShiftDown: "⬅️ -1 Dönem",
+    transcriptGroupShiftUp: "+1 Dönem ➡️",
+    transcriptTotalCredits: (crd) => `Toplam: ${crd} Cr`,
+    transcriptTargetTerm: "Hedef",
     transcriptColCourse: "Ders",
     transcriptColTerm: "Dönem",
     transcriptColMatch: "Müfredat Eşleşmesi",
@@ -433,6 +437,10 @@ const translations = {
     transcriptAppliedSuccess: (count) => `✓ Transcript successfully imported! (${count} courses placed)`,
     transcriptShiftDown: "◀ Shift -1 Term",
     transcriptShiftUp: "Shift +1 Term ▶",
+    transcriptGroupShiftDown: "⬅️ -1 Term",
+    transcriptGroupShiftUp: "+1 Term ➡️",
+    transcriptTotalCredits: (crd) => `Total: ${crd} Cr`,
+    transcriptTargetTerm: "Target",
     transcriptColCourse: "Course",
     transcriptColTerm: "Semester",
     transcriptColMatch: "Curriculum Match",
@@ -2944,28 +2952,33 @@ function parseBounTranscript(rawText) {
   });
 
   // Lisans derslerinin başladığı dönemleri kronolojik eşleştir:
-  // Eğer ilk lisans dersi Yaz Okulu ise onu 0.3 (veya 1.3), hemen ardından gelen ilk Güz'ü 1.1, Bahar'ı 1.2 yap
+  // Eğer ilk lisans dersi Yaz Okulu ise onu mevcut 0.3 (Yaz) dönemine ata,
+  // hemen ardından gelen ilk Güz Dönemi'ni 1.1, Bahar Dönemi'ni 1.2 olarak eşleştir.
   const firstTerm = validTerms[0];
-  const baseYear = firstTerm.year;
 
   if (firstTerm.semNum === 3) {
-    firstTerm.targetSem = '0.3';
+    firstTerm.targetSem = '0.3 (Yaz)';
+    // Sonraki normal Güz dönemini 1. Sınıf başlangıç yılı kabul et
+    const firstFall = validTerms.find(t => t.semNum === 1);
+    const startYear = firstFall ? firstFall.year : (firstTerm.year + 1);
+
     validTerms.slice(1).forEach(t => {
-      const yearIndex = (t.year - baseYear) + 1;
-      let semKey = `${yearIndex}.${t.semNum}`;
+      const yearIndex = (t.year - startYear) + 1;
       if (t.semNum === 3) {
-        semKey = `${yearIndex}.3 (Yaz)`;
+        t.targetSem = `${yearIndex}.3 (Yaz)`;
+      } else {
+        t.targetSem = `${yearIndex}.${t.semNum}`;
       }
-      t.targetSem = semKey;
     });
   } else {
+    const startYear = firstTerm.year;
     validTerms.forEach(t => {
-      const yearIndex = (t.year - baseYear) + 1;
-      let semKey = `${yearIndex}.${t.semNum}`;
+      const yearIndex = (t.year - startYear) + 1;
       if (t.semNum === 3) {
-        semKey = `${yearIndex}.3 (Yaz)`;
+        t.targetSem = `${yearIndex}.3 (Yaz)`;
+      } else {
+        t.targetSem = `${yearIndex}.${t.semNum}`;
       }
-      t.targetSem = semKey;
     });
   }
 
@@ -2973,14 +2986,15 @@ function parseBounTranscript(rawText) {
 }
 
 function getAllAvailableSemKeys() {
-  const allSems = ['0.3'];
+  const allSems = [];
   const activeYearStructure = getEffectiveYearStructure();
   activeYearStructure.forEach(y => {
     y.sems.forEach(s => {
       if (!allSems.includes(s)) allSems.push(s);
     });
   });
-  if (allSems.length <= 1) {
+  if (allSems.length === 0) {
+    allSems.push('0.1', '0.2', '0.3 (Yaz)');
     for (let yr = 1; yr <= 6; yr++) {
       allSems.push(`${yr}.1`, `${yr}.2`, `${yr}.3 (Yaz)`);
     }
@@ -3142,106 +3156,192 @@ function renderTranscriptPreviewTable() {
 
   const GRADE_OPTIONS_LIST = ['', 'AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'F', 'P', 'EX'];
 
-  const rowsHtml = transcriptPreviewRows.map((row, idx) => {
-    // 1. Dönem Seçici
-    const semOptionsHtml = allAvailableSems.map(s => {
-      const isSel = (s === row.termKey);
+  // Zorunlu ve seçmeli dersleri hazırla
+  const regularCourses = allEligible.filter(c => !c.isElective);
+  const electiveSlots = allEligible.filter(c => !!c.isElective);
+
+  // Satırları dönemlerine göre grupla (orijinal dönem sırasını koruyarak)
+  const groupOrder = [];
+  const groupsMap = {};
+
+  transcriptPreviewRows.forEach(row => {
+    const rawKey = row.termRaw || row.termKey;
+    if (!groupsMap[rawKey]) {
+      groupsMap[rawKey] = {
+        termRaw: rawKey,
+        currentSemKey: row.termKey,
+        rows: []
+      };
+      groupOrder.push(rawKey);
+    }
+    groupsMap[rawKey].rows.push(row);
+  });
+
+  const groupsHtml = groupOrder.map(rawKey => {
+    const group = groupsMap[rawKey];
+    const groupRows = group.rows;
+    const activeGroupRows = groupRows.filter(r => !r.ignored);
+    const totalGroupCredits = activeGroupRows.reduce((sum, r) => sum + (Number(r.credit) || 0), 0);
+    const currentGroupSem = groupRows[0]?.termKey || group.currentSemKey;
+
+    // Grup başlığındaki dönem seçici
+    const groupSemSelectOptions = allAvailableSems.map(s => {
+      const isSel = (s === currentGroupSem);
       return `<option value="${escapeHTML(s)}" ${isSel ? 'selected' : ''}>${escapeHTML(formatSemLabel(s))}</option>`;
     }).join('');
 
-    // 2. Müfredat Eşleşmesi Seçici
-    let matchOptionsHtml = `<option value="__NEW_ELECTIVE__" ${row.matchedCourseId === '__NEW_ELECTIVE__' ? 'selected' : ''}>${escapeHTML(t('transcriptNewElectiveOpt'))}</option>`;
-    
-    // Zorunlu ve seçmeli dersleri grupla
-    const regularCourses = allEligible.filter(c => !c.isElective);
-    const electiveSlots = allEligible.filter(c => !!c.isElective);
+    const groupRowsHtml = groupRows.map(row => {
+      // 1. Ders bazında Dönem Seçici
+      const semOptionsHtml = allAvailableSems.map(s => {
+        const isSel = (s === row.termKey);
+        return `<option value="${escapeHTML(s)}" ${isSel ? 'selected' : ''}>${escapeHTML(formatSemLabel(s))}</option>`;
+      }).join('');
 
-    if (regularCourses.length > 0) {
-      matchOptionsHtml += `<optgroup label="── Müfredat Dersleri ──">`;
-      regularCourses.forEach(c => {
-        const isSel = (c.id === row.matchedCourseId);
-        matchOptionsHtml += `<option value="${escapeHTML(c.id)}" ${isSel ? 'selected' : ''}>${escapeHTML(c.code)} - ${escapeHTML(c.name)}</option>`;
-      });
-      matchOptionsHtml += `</optgroup>`;
-    }
+      // 2. Müfredat Eşleşmesi Seçici
+      let matchOptionsHtml = `<option value="__NEW_ELECTIVE__" ${row.matchedCourseId === '__NEW_ELECTIVE__' ? 'selected' : ''}>${escapeHTML(t('transcriptNewElectiveOpt'))}</option>`;
 
-    if (electiveSlots.length > 0) {
-      matchOptionsHtml += `<optgroup label="── Seçmeli Slotları ──">`;
-      electiveSlots.forEach(c => {
-        const isSel = (c.id === row.matchedCourseId);
-        matchOptionsHtml += `<option value="${escapeHTML(c.id)}" ${isSel ? 'selected' : ''}>⚡ ${escapeHTML(c.code)} (${formatSemLabel(c.sem)})</option>`;
-      });
-      matchOptionsHtml += `</optgroup>`;
-    }
+      if (regularCourses.length > 0) {
+        matchOptionsHtml += `<optgroup label="── Müfredat Dersleri ──">`;
+        regularCourses.forEach(c => {
+          const isSel = (c.id === row.matchedCourseId);
+          matchOptionsHtml += `<option value="${escapeHTML(c.id)}" ${isSel ? 'selected' : ''}>${escapeHTML(c.code)} - ${escapeHTML(c.name)}</option>`;
+        });
+        matchOptionsHtml += `</optgroup>`;
+      }
 
-    // 3. Harf Notu Seçici
-    const gradeOptionsHtml = GRADE_OPTIONS_LIST.map(g => {
-      const isSel = (g === row.grade);
-      const label = g === '' ? t('transcriptGradeNone') : (g === 'EX' ? 'EX (Transfer)' : g);
-      return `<option value="${escapeHTML(g)}" ${isSel ? 'selected' : ''}>${escapeHTML(label)}</option>`;
+      if (electiveSlots.length > 0) {
+        matchOptionsHtml += `<optgroup label="── Seçmeli Slotları ──">`;
+        electiveSlots.forEach(c => {
+          const isSel = (c.id === row.matchedCourseId);
+          matchOptionsHtml += `<option value="${escapeHTML(c.id)}" ${isSel ? 'selected' : ''}>⚡ ${escapeHTML(c.code)} (${formatSemLabel(c.sem)})</option>`;
+        });
+        matchOptionsHtml += `</optgroup>`;
+      }
+
+      // 3. Harf Notu Seçici
+      const gradeOptionsHtml = GRADE_OPTIONS_LIST.map(g => {
+        const isSel = (g === row.grade);
+        const label = g === '' ? t('transcriptGradeNone') : (g === 'EX' ? 'EX (Transfer)' : g);
+        return `<option value="${escapeHTML(g)}" ${isSel ? 'selected' : ''}>${escapeHTML(label)}</option>`;
+      }).join('');
+
+      const rowClass = row.ignored ? 'row-ignored' : '';
+
+      return `
+        <tr class="${rowClass}" data-row-id="${escapeHTML(row.id)}">
+          <td>
+            <span class="tr-course-badge">${escapeHTML(row.code)}</span>
+            <span class="tr-course-title-sub" title="${escapeHTML(row.title || '')}">${escapeHTML(row.title || row.code)}</span>
+            <span style="font-size:0.72rem;color:#64748b;font-weight:600;">${row.credit} Cr</span>
+          </td>
+          <td>
+            <select class="tr-select tr-sem-select" onchange="handleTranscriptRowFieldChange('${row.id}', 'termKey', this.value)" ${row.ignored ? 'disabled' : ''}>
+              ${semOptionsHtml}
+            </select>
+          </td>
+          <td>
+            <select class="tr-select tr-match-select" onchange="handleTranscriptRowFieldChange('${row.id}', 'matchedCourseId', this.value)" ${row.ignored ? 'disabled' : ''}>
+              ${matchOptionsHtml}
+            </select>
+          </td>
+          <td>
+            <select class="tr-select tr-grade-select" onchange="handleTranscriptRowGradeChange('${row.id}', this.value)" ${row.ignored ? 'disabled' : ''}>
+              ${gradeOptionsHtml}
+            </select>
+          </td>
+          <td style="text-align: center;">
+            <label class="tr-check-label">
+              <input type="checkbox" ${row.passed ? 'checked' : ''} onchange="handleTranscriptRowFieldChange('${row.id}', 'passed', this.checked)" ${row.ignored ? 'disabled' : ''}>
+            </label>
+          </td>
+          <td style="text-align: center;">
+            <button type="button" class="tr-del-btn" onclick="toggleTranscriptRowIgnored('${row.id}')" title="${row.ignored ? 'Geri Al' : t('transcriptColAction')}">
+              ${row.ignored ? '↩️' : '✕'}
+            </button>
+          </td>
+        </tr>
+      `;
     }).join('');
 
-    const rowClass = row.ignored ? 'row-ignored' : '';
+    const safeRawKey = escapeHTML(rawKey).replace(/'/g, "\\'");
 
     return `
-      <tr class="${rowClass}" data-row-id="${escapeHTML(row.id)}">
-        <td>
-          <span class="tr-course-badge">${escapeHTML(row.code)}</span>
-          <span class="tr-course-title-sub" title="${escapeHTML(row.title || '')}">${escapeHTML(row.title || row.code)}</span>
-          <span style="font-size:0.72rem;color:#64748b;font-weight:600;">${row.credit} Cr</span>
-        </td>
-        <td>
-          <select class="tr-select tr-sem-select" onchange="handleTranscriptRowFieldChange('${row.id}', 'termKey', this.value)" ${row.ignored ? 'disabled' : ''}>
-            ${semOptionsHtml}
-          </select>
-        </td>
-        <td>
-          <select class="tr-select tr-match-select" onchange="handleTranscriptRowFieldChange('${row.id}', 'matchedCourseId', this.value)" ${row.ignored ? 'disabled' : ''}>
-            ${matchOptionsHtml}
-          </select>
-        </td>
-        <td>
-          <select class="tr-select tr-grade-select" onchange="handleTranscriptRowGradeChange('${row.id}', this.value)" ${row.ignored ? 'disabled' : ''}>
-            ${gradeOptionsHtml}
-          </select>
-        </td>
-        <td style="text-align: center;">
-          <label class="tr-check-label">
-            <input type="checkbox" ${row.passed ? 'checked' : ''} onchange="handleTranscriptRowFieldChange('${row.id}', 'passed', this.checked)" ${row.ignored ? 'disabled' : ''}>
-          </label>
-        </td>
-        <td style="text-align: center;">
-          <button type="button" class="tr-del-btn" onclick="toggleTranscriptRowIgnored('${row.id}')" title="${row.ignored ? 'Geri Al' : t('transcriptColAction')}">
-            ${row.ignored ? '↩️' : '✕'}
-          </button>
-        </td>
-      </tr>
+      <div class="transcript-term-card">
+        <div class="transcript-term-header">
+          <div class="transcript-term-info">
+            <span class="transcript-term-title">📅 ${escapeHTML(rawKey)}</span>
+            <span class="transcript-crd-pill">${escapeHTML(t('transcriptTotalCredits')(totalGroupCredits))}</span>
+          </div>
+          <div class="transcript-term-controls">
+            <span style="font-size:0.75rem;font-weight:700;color:#475569;">${escapeHTML(t('transcriptTargetTerm'))}:</span>
+            <select class="tr-group-sem-select" onchange="handleTranscriptGroupTermChange('${safeRawKey}', this.value)">
+              ${groupSemSelectOptions}
+            </select>
+            <button type="button" class="tr-group-shift-btn" onclick="shiftTranscriptGroupTerms('${safeRawKey}', -1)" title="-1 Dönem Kaydır">
+              ${escapeHTML(t('transcriptGroupShiftDown'))}
+            </button>
+            <button type="button" class="tr-group-shift-btn" onclick="shiftTranscriptGroupTerms('${safeRawKey}', 1)" title="+1 Dönem Kaydır">
+              ${escapeHTML(t('transcriptGroupShiftUp'))}
+            </button>
+          </div>
+        </div>
+        <div class="transcript-table-wrap">
+          <table class="transcript-table">
+            <thead>
+              <tr>
+                <th>${escapeHTML(t('transcriptColCourse'))}</th>
+                <th>${escapeHTML(t('transcriptColTerm'))}</th>
+                <th>${escapeHTML(t('transcriptColMatch'))}</th>
+                <th>${escapeHTML(t('transcriptColGrade'))}</th>
+                <th style="text-align:center;">${escapeHTML(t('transcriptColStatus'))}</th>
+                <th style="text-align:center;">${escapeHTML(t('transcriptColAction'))}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${groupRowsHtml}
+            </tbody>
+          </table>
+        </div>
+      </div>
     `;
   }).join('');
 
-  const tableHtml = `
-    <div class="transcript-table-wrap">
-      <table class="transcript-table">
-        <thead>
-          <tr>
-            <th>${escapeHTML(t('transcriptColCourse'))}</th>
-            <th>${escapeHTML(t('transcriptColTerm'))}</th>
-            <th>${escapeHTML(t('transcriptColMatch'))}</th>
-            <th>${escapeHTML(t('transcriptColGrade'))}</th>
-            <th style="text-align:center;">${escapeHTML(t('transcriptColStatus'))}</th>
-            <th style="text-align:center;">${escapeHTML(t('transcriptColAction'))}</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rowsHtml}
-        </tbody>
-      </table>
+  previewArea.innerHTML = `
+    ${summaryHtml}
+    <div class="transcript-groups-container">
+      ${groupsHtml}
     </div>
   `;
-
-  previewArea.innerHTML = summaryHtml + tableHtml;
   previewArea.style.display = 'flex';
   if (applyBtn) applyBtn.disabled = (activeCount === 0);
+}
+
+function handleTranscriptGroupTermChange(termRaw, newSemKey) {
+  transcriptPreviewRows.forEach(row => {
+    if ((row.termRaw || row.termKey) === termRaw) {
+      row.termKey = newSemKey;
+    }
+  });
+  renderTranscriptPreviewTable();
+}
+
+function shiftTranscriptGroupTerms(termRaw, direction) {
+  const allAvailableSems = getAllAvailableSemKeys();
+  const groupRows = transcriptPreviewRows.filter(row => (row.termRaw || row.termKey) === termRaw);
+  if (groupRows.length === 0) return;
+
+  const currentSem = groupRows[0].termKey;
+  const currentIdx = allAvailableSems.indexOf(currentSem);
+  if (currentIdx !== -1) {
+    const newIdx = currentIdx + direction;
+    if (newIdx >= 0 && newIdx < allAvailableSems.length) {
+      const newSemKey = allAvailableSems[newIdx];
+      groupRows.forEach(row => {
+        row.termKey = newSemKey;
+      });
+      renderTranscriptPreviewTable();
+    }
+  }
 }
 
 function handleTranscriptRowFieldChange(rowId, field, value) {
@@ -3317,7 +3417,8 @@ function applyParsedTranscript() {
       const matchedCourse = allEligible.find(c => c.id === row.matchedCourseId);
       if (matchedCourse) {
         const isElectiveSlot = !!matchedCourse.isElective;
-        const customText = isElectiveSlot ? (row.code + (row.title ? ' - ' + row.title : '')) : '';
+        // Seçmeli slotunda sadece kısa ders kodu (örn: AE 111, EC 101) yazılsın
+        const customText = isElectiveSlot ? row.code : '';
 
         newInstances.push({
           instanceId: 'inst_tr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
@@ -3348,7 +3449,7 @@ function applyParsedTranscript() {
       semId: targetSem,
       passed: isPassed,
       grade: grade,
-      customText: row.code + (row.title ? ' - ' + row.title : ''),
+      customText: row.code, // Sadece kısa ders kodu
       minorCourse: customCourseObj,
       isMinor: false,
       isDoubleMajor: false
