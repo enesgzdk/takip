@@ -3046,16 +3046,17 @@ textarea.form-control {
 .catalog-sheet {
   width: 100%;
   max-width: 540px;
-  max-height: 86vh;
+  max-height: 90vh;
   background: #ffffff;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 -10px 35px rgba(15, 23, 42, 0.22);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transform: translateY(36px);
-  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   padding-bottom: env(safe-area-inset-bottom, 10px);
+  touch-action: pan-y;
 }
 
 .catalog-backdrop.open .catalog-sheet {
@@ -3066,14 +3067,14 @@ textarea.form-control {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 18px 12px;
+  padding: 4px 16px 8px;
   border-bottom: 1px solid #f1f5f9;
   flex-shrink: 0;
 }
 
 .catalog-header h3 {
   margin: 0;
-  font-size: 1.02rem;
+  font-size: 0.96rem;
   font-weight: 800;
   color: var(--accent-color);
 }
@@ -3081,31 +3082,31 @@ textarea.form-control {
 .catalog-body {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding: 14px 16px 22px;
+  padding: 10px 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .catalog-section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 .catalog-section-title {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 800;
   color: #64748b;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.45px;
   padding-left: 2px;
 }
 
 .catalog-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .catalog-card {
@@ -3113,10 +3114,10 @@ textarea.form-control {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 3px;
-  min-height: 68px;
-  padding: 10px 12px;
-  border-radius: 14px;
+  gap: 2px;
+  min-height: 54px;
+  padding: 10px 8px;
+  border-radius: 12px;
   border: 1.5px solid #e2e8f0;
   background: #f8fafc;
   color: #1e293b;
@@ -3135,26 +3136,37 @@ textarea.form-control {
 }
 
 .cat-icon {
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   line-height: 1;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .cat-title {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: #0f172a;
-  line-height: 1.2;
+  line-height: 1.18;
 }
 
 .cat-sub {
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   color: #64748b;
-  line-height: 1.2;
+  line-height: 1.15;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+}
+
+@media (max-width: 900px) {
+  .catalog-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+  }
 }
 
 .cat-card-indigo {
@@ -3383,4 +3395,16 @@ textarea.form-control {
     width: 100%;
     justify-content: center;
   }
+}
+
+/* --- ÇAP Veri Bilgilendirme Kutusu --- */
+.dm-info-box {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e3a8a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  margin-bottom: 12px;
 }

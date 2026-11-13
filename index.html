@@ -67,7 +67,7 @@
   <div id="sandboxBanner" class="sandbox-banner" style="display: none;">
     <div class="sandbox-banner-content">
       <div class="sandbox-banner-text" id="sandboxBannerText">
-        🧪 Önizleme Modu — Yaptığınız değişiklikler tarayıcınıza kaydedilmez.
+        👀 Önizleme Modu — Paylaşılan planı inceliyorsunuz; yaptığınız değişiklikler kaydedilmez.
       </div>
       <div class="sandbox-banner-actions">
         <button type="button" id="sandboxSaveBtn" class="sandbox-btn save-btn" onclick="saveSandboxToMyPlan()">
@@ -234,6 +234,9 @@
         <button type="button" class="modal-close-btn" onclick="closeDmModal()" aria-label="Kapat">✕</button>
       </div>
       <div class="modal-body">
+        <div id="dmDataNotice" class="dm-info-box">
+          ℹ️ Bilgi: Mevcut veri eksikliği nedeniyle bazı bölümlerin ÇAP programları sisteme henüz yüklenmemiştir. Aradığınız ÇAP programını listede göremiyorsanız "Hata / Öneri Bildir" üzerinden bize iletebilirsiniz.
+        </div>
         <div class="form-group">
           <label id="dmSelectLabel" for="dmSelect">ÇAP Programı Seçin</label>
           <select id="dmSelect" class="form-control" onchange="handleDmSelectChange(this.value)" style="cursor: pointer;">
@@ -276,8 +279,8 @@
               <button type="button" class="share-option-card" onclick="copyShareLink()">
                 <div class="share-option-icon">🔗</div>
                 <div class="share-option-content">
-                  <strong id="shareLinkBtn">Paylaşılabilir Sandbox Linki Kopyala</strong>
-                  <span id="shareLinkDesc">Mevcut ders planınızı içeren linki panoya kopyalayın, arkadaşlarınız tek tıkla açsın.</span>
+                  <strong id="shareLinkBtn">Paylaşılabilir Plan Linki Kopyala</strong>
+                  <span id="shareLinkDesc">Arkadaşın kendi verileri bozulmadan planını önizleyebilir</span>
                 </div>
               </button>
               <button type="button" class="share-option-card" onclick="closeShareModal(); exportDataAsJSON()">
@@ -508,8 +511,8 @@
             </button>
             <button type="button" id="catalogLinkCard" class="catalog-card" onclick="closeMobileCatalog(); copyShareLink()">
               <span class="cat-icon">🔗</span>
-              <span class="cat-title" id="catLinkTitle">Sandbox Link Kopyala</span>
-              <span class="cat-sub" id="catLinkSub">Tek tıkla paylaşım</span>
+              <span class="cat-title" id="catLinkTitle">Paylaşılabilir Plan Linki Kopyala</span>
+              <span class="cat-sub" id="catLinkSub">Arkadaşın kendi verileri bozulmadan planını önizleyebilir</span>
             </button>
             <button type="button" id="catalogExportJsonCard" class="catalog-card" onclick="closeMobileCatalog(); exportDataAsJSON()">
               <span class="cat-icon">💾</span>
@@ -527,11 +530,6 @@
         <div class="catalog-section">
           <div id="catSecSystem" class="catalog-section-title">Sistem</div>
           <div class="catalog-grid">
-            <button type="button" id="catalogLangCard" class="catalog-card" onclick="closeMobileCatalog(); toggleLanguage()">
-              <span class="cat-icon">🌐</span>
-              <span class="cat-title" id="catLangTitle">Dil Değiştir (TR / EN)</span>
-              <span class="cat-sub" id="catLangSub">Arayüz dilini değiştir</span>
-            </button>
             <button type="button" id="catalogGuideCard" class="catalog-card" onclick="closeMobileCatalog(); openWelcomeModal()">
               <span class="cat-icon">❓</span>
               <span class="cat-title" id="catGuideTitle">Rehber</span>

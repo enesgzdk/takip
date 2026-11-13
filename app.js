@@ -133,6 +133,7 @@ const translations = {
     toastDmApplied: (name, count) => `✓ ${name} seçildi (${count} ders). Ek ÇAP dersleri sol paneldeki ilgili dönem bloklarına eklendi!`,
     toastDmRemoved: "ÇAP programı kaldırıldı.",
     dmModalTitle: "🎓 Çift Anadal Programı (ÇAP) Seç",
+    dmDataNotice: "ℹ️ Bilgi: Mevcut veri eksikliği nedeniyle bazı bölümlerin ÇAP programları sisteme henüz yüklenmemiştir. Aradığınız ÇAP programını listede göremiyorsanız \"Hata / Öneri Bildir\" üzerinden bize iletebilirsiniz.",
     dmSelectLabel: "İkinci Anadal Programı:",
     dmSelectPlaceholder: "-- ÇAP Programı Seçiniz --",
     dmNoSelectionOption: "-- ÇAP Programı Seçiniz --",
@@ -183,8 +184,8 @@ const translations = {
     shareImportSectionTitle: "📥 İçe Aktar",
     sharePngBtn: "Görsel Olarak İndir (PNG)",
     sharePngDesc: "Dönemleri ve ders planınızı yüksek çözünürlüklü özet görseli olarak indirin.",
-    shareLinkBtn: "Paylaşılabilir Sandbox Linki Kopyala",
-    shareLinkDesc: "Mevcut ders planınızı içeren linki panoya kopyalayın, arkadaşlarınız tek tıkla açsın.",
+    shareLinkBtn: "Paylaşılabilir Plan Linki Kopyala",
+    shareLinkDesc: "Arkadaşın kendi verileri bozulmadan planını önizleyebilir",
     shareJsonExportBtn: "Yedek İndir (JSON)",
     shareJsonExportDesc: "Tüm planınızı ve notlarınızı JSON yedek dosyası olarak kaydedin.",
     shareTranscriptBtn: "BÜ / e-Devlet Transkripti Aktar (PDF / Metin)",
@@ -209,14 +210,12 @@ const translations = {
     catTranscriptSub: "e-Devlet / BUIS yükle",
     catPngTitle: "Görsel İndir (PNG)",
     catPngSub: "Planı resim kaydet",
-    catLinkTitle: "Sandbox Link Kopyala",
-    catLinkSub: "Tek tıkla paylaşım",
+    catLinkTitle: "Paylaşılabilir Plan Linki Kopyala",
+    catLinkSub: "Arkadaşın kendi verileri bozulmadan planını önizleyebilir",
     catExportJsonTitle: "JSON İndir",
     catExportJsonSub: "Yedek dosyası al",
     catImportJsonTitle: "JSON Yükle",
     catImportJsonSub: "Yedeği geri yükle",
-    catLangTitle: "Dil Değiştir (TR / EN)",
-    catLangSub: "Arayüz dilini değiştir",
     catFeedbackTitle: "Hata / Öneri",
     catFeedbackSub: "Geri bildirim gönder",
     catResetTitle: "Planı Sıfırla",
@@ -247,7 +246,7 @@ const translations = {
     shareCancelBtn: "Kapat",
     shareEmptyPlan: "Görsel oluşturmak için dönemlere en az bir ders eklemelisiniz.",
     plannedStatus: "Plan",
-    sandboxBannerText: "🧪 Önizleme Modu — Yaptığınız değişiklikler tarayıcınıza kaydedilmez.",
+    sandboxBannerText: "👀 Önizleme Modu — Paylaşılan planı inceliyorsunuz; yaptığınız değişiklikler kaydedilmez.",
     sandboxSaveBtn: "💾 Kendi Planıma Aktar",
     sandboxExitBtn: "↩️ Kendi Planıma Dön",
     sandboxSaveConfirm: "Bu plan kendi kayıtlı planınızın üzerine yazılsın mı?",
@@ -442,6 +441,7 @@ const translations = {
     toastDmApplied: (name, count) => `✓ ${name} selected (${count} courses). Extra DM courses added to course pool!`,
     toastDmRemoved: "Double Major program removed.",
     dmModalTitle: "🎓 Select Double Major Program",
+    dmDataNotice: "ℹ️ Note: Due to incomplete curriculum data, Double Major (DM) programs for some departments have not been uploaded yet. If you cannot find your target DM program, please let us know via \"Report Bug / Suggestion\".",
     dmSelectLabel: "Second Major Program:",
     dmSelectPlaceholder: "-- Select Double Major Program --",
     dmNoSelectionOption: "-- Select Double Major Program --",
@@ -492,8 +492,8 @@ const translations = {
     shareImportSectionTitle: "📥 Import",
     sharePngBtn: "Download as Image (PNG)",
     sharePngDesc: "Download your semesters and course plan as a clean, high-resolution summary image.",
-    shareLinkBtn: "Copy Shareable Sandbox Link",
-    shareLinkDesc: "Copy a link containing your course plan to clipboard so friends can view it with one click.",
+    shareLinkBtn: "Copy Shareable Plan Link",
+    shareLinkDesc: "Friends can preview your plan without affecting their own data",
     shareJsonExportBtn: "Download Backup (JSON)",
     shareJsonExportDesc: "Save your full course plan and grades as a JSON backup file.",
     shareTranscriptBtn: "Import BOUN / e-Devlet Transcript (PDF / Text)",
@@ -518,14 +518,12 @@ const translations = {
     catTranscriptSub: "Upload e-Devlet / BUIS",
     catPngTitle: "Download Image (PNG)",
     catPngSub: "Save plan as image",
-    catLinkTitle: "Copy Sandbox Link",
-    catLinkSub: "One-click sharing",
+    catLinkTitle: "Copy Shareable Plan Link",
+    catLinkSub: "Friends can preview your plan without affecting their own data",
     catExportJsonTitle: "Download JSON",
     catExportJsonSub: "Export backup file",
     catImportJsonTitle: "Upload JSON",
     catImportJsonSub: "Restore from backup",
-    catLangTitle: "Switch Language (TR / EN)",
-    catLangSub: "Change interface language",
     catFeedbackTitle: "Bug / Feedback",
     catFeedbackSub: "Send us feedback",
     catResetTitle: "Reset Plan",
@@ -556,7 +554,7 @@ const translations = {
     shareCancelBtn: "Close",
     shareEmptyPlan: "You need to add at least one course to semesters to generate an image.",
     plannedStatus: "Planned",
-    sandboxBannerText: "🧪 Preview Mode — Changes you make are not saved to your browser.",
+    sandboxBannerText: "👀 Preview Mode — Viewing a shared plan; changes you make are not saved.",
     sandboxSaveBtn: "💾 Save to My Plan",
     sandboxExitBtn: "↩️ Return to My Plan",
     sandboxSaveConfirm: "Do you want to overwrite your saved plan with this one?",
@@ -733,6 +731,7 @@ function applyStaticTranslations() {
 
   // DM modal
   setText('dmModalTitle', t('dmModalTitle'));
+  setText('dmDataNotice', t('dmDataNotice'));
   setText('dmSelectLabel', t('dmSelectLabel'));
   setText('dmCancelBtn', t('dmCancelBtn'));
   const dmApplyBtn = document.getElementById('dmApplyBtn');
@@ -779,8 +778,6 @@ function applyStaticTranslations() {
   setText('catExportJsonSub', t('catExportJsonSub'));
   setText('catImportJsonTitle', t('catImportJsonTitle'));
   setText('catImportJsonSub', t('catImportJsonSub'));
-  setText('catLangTitle', t('catLangTitle'));
-  setText('catLangSub', t('catLangSub'));
   setText('catFeedbackTitle', t('catFeedbackTitle'));
   setText('catFeedbackSub', t('catFeedbackSub'));
   setText('catResetTitle', t('catResetTitle'));
@@ -4753,6 +4750,11 @@ function openMobileCatalog() {
   const modal = document.getElementById('mobileCatalogModal');
   const menuBtn = document.getElementById('mobileMenuBtn');
   if (!modal) return;
+  const sheet = modal.querySelector('.catalog-sheet');
+  if (sheet) {
+    sheet.style.transition = '';
+    sheet.style.transform = '';
+  }
   updateAutoFillButtonLabel();
   updateUndoAutoFillButtonState();
   modal.classList.add('open');
@@ -4763,12 +4765,72 @@ function openMobileCatalog() {
 function closeMobileCatalog() {
   const modal = document.getElementById('mobileCatalogModal');
   const menuBtn = document.getElementById('mobileMenuBtn');
-  if (modal && modal.classList.contains('open')) {
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
+  if (modal) {
+    const sheet = modal.querySelector('.catalog-sheet');
+    if (sheet) {
+      sheet.style.transition = '';
+      sheet.style.transform = '';
+    }
+    if (modal.classList.contains('open')) {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
   }
   if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
 }
+
+(function initMobileCatalogSwipe() {
+  let startY = 0;
+  let currentDeltaY = 0;
+  let isSwiping = false;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('mobileCatalogModal');
+    const sheet = modal ? modal.querySelector('.catalog-sheet') : null;
+    if (!sheet) return;
+    const bodyEl = sheet.querySelector('.catalog-body');
+
+    sheet.addEventListener('touchstart', (e) => {
+      if (!modal.classList.contains('open') || e.touches.length !== 1) return;
+      const touchingBodyScrolled = bodyEl && bodyEl.contains(e.target) && bodyEl.scrollTop > 0;
+      if (touchingBodyScrolled) {
+        isSwiping = false;
+        return;
+      }
+      startY = e.touches[0].clientY;
+      currentDeltaY = 0;
+      isSwiping = true;
+    }, { passive: true });
+
+    sheet.addEventListener('touchmove', (e) => {
+      if (!isSwiping || e.touches.length !== 1) return;
+      const deltaY = e.touches[0].clientY - startY;
+      if (deltaY > 0) {
+        currentDeltaY = deltaY;
+        sheet.style.transition = 'none';
+        sheet.style.transform = `translateY(${deltaY}px)`;
+        if (e.cancelable) e.preventDefault();
+      } else {
+        currentDeltaY = 0;
+      }
+    }, { passive: false });
+
+    const finishSwipe = () => {
+      if (!isSwiping) return;
+      isSwiping = false;
+      sheet.style.transition = '';
+      if (currentDeltaY > 70) {
+        closeMobileCatalog();
+      } else {
+        sheet.style.transform = '';
+      }
+      currentDeltaY = 0;
+    };
+
+    sheet.addEventListener('touchend', finishSwipe, { passive: true });
+    sheet.addEventListener('touchcancel', finishSwipe, { passive: true });
+  });
+})();
 
 function handleMobileCatalogBackdropClick(event) {
   if (event.target && event.target.id === 'mobileCatalogModal') {
