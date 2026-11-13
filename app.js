@@ -2760,6 +2760,7 @@ function openTranscriptModal() {
   parsedTranscriptTerms = [];
   transcriptPreviewRows = [];
 
+  modal.classList.remove('has-preview');
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -2898,10 +2899,12 @@ async function handleTranscriptFileSelected(event) {
 })();
 
 function handleTranscriptInputChange() {
+  const modal = document.getElementById('transcriptModal');
   const input = document.getElementById('transcriptInput');
   const applyBtn = document.getElementById('transcriptApplyBtn');
   const previewArea = document.getElementById('transcriptPreviewArea');
   if (!input || !input.value.trim()) {
+    if (modal) modal.classList.remove('has-preview');
     if (input) input.classList.remove('collapsed');
     if (applyBtn) applyBtn.disabled = true;
     if (previewArea) {
@@ -3169,6 +3172,7 @@ function getAllAvailableSemKeys() {
 }
 
 function previewTranscript() {
+  const modal = document.getElementById('transcriptModal');
   const input = document.getElementById('transcriptInput');
   const previewArea = document.getElementById('transcriptPreviewArea');
   const applyBtn = document.getElementById('transcriptApplyBtn');
@@ -3176,6 +3180,7 @@ function previewTranscript() {
 
   const rawText = input.value.trim();
   if (!rawText) {
+    if (modal) modal.classList.remove('has-preview');
     if (input) input.classList.remove('collapsed');
     previewArea.style.display = 'block';
     previewArea.innerHTML = `<div class="transcript-guide-box" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;">⚠️ ${escapeHTML(t('transcriptNoCoursesFound'))}</div>`;
@@ -3187,6 +3192,7 @@ function previewTranscript() {
   parsedTranscriptTerms = parseBounTranscript(rawText);
 
   if (parsedTranscriptTerms.length === 0) {
+    if (modal) modal.classList.remove('has-preview');
     if (input) input.classList.remove('collapsed');
     previewArea.style.display = 'block';
     previewArea.innerHTML = `<div class="transcript-guide-box" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;">⚠️ ${escapeHTML(t('transcriptNoCoursesFound'))}</div>`;
@@ -3195,6 +3201,7 @@ function previewTranscript() {
     return;
   }
 
+  if (modal) modal.classList.add('has-preview');
   if (input) input.classList.add('collapsed');
 
   const activeDmCourses = getActiveDmCourseList();
@@ -3294,6 +3301,8 @@ function renderTranscriptPreviewTable() {
   if (!previewArea) return;
 
   if (!transcriptPreviewRows || transcriptPreviewRows.length === 0) {
+    const modal = document.getElementById('transcriptModal');
+    if (modal) modal.classList.remove('has-preview');
     previewArea.style.display = 'none';
     if (applyBtn) applyBtn.disabled = true;
     return;
@@ -3845,6 +3854,7 @@ function openMinorModal() {
     select.value = state.selectedMinorId || "";
     handleMinorSelectChange(select.value);
   }
+  modal.classList.remove('has-preview');
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -4122,6 +4132,7 @@ function openDmModal() {
     select.value = state.selectedDmId || "";
     handleDmSelectChange(select.value);
   }
+  modal.classList.remove('has-preview');
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -4467,6 +4478,7 @@ function openTermPickerModal(courseId) {
     </div>
   `).join('');
 
+  modal.classList.remove('has-preview');
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
