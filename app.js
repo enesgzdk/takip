@@ -2778,6 +2778,49 @@ function handleTranscriptBackdropClick(event) {
   }
 }
 
+async function extractTextFromTranscriptPdf(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+  const pdfDoc = await loadingTask.promise;
+  let fullText = '';
+
+  for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+    const page = await pdfDoc.getPage(pageNum);
+    const textContent = await page.getTextContent();
+
+    // Satır gruplama toleransı: ±6px (e-Devlet PDF tablosundaki dikey kaymaları dengeler)
+    const lineBuckets = [];
+
+    textContent.items.forEach(item => {
+      const str = item.str;
+      if (!str || !str.trim()) return;
+      const x = item.transform[4];
+      const y = item.transform[5];
+
+      let bucket = lineBuckets.find(b => Math.abs(b.y - y) <= 6);
+      if (!bucket) {
+        bucket = { y: y, items: [] };
+        lineBuckets.push(bucket);
+      }
+      bucket.items.push({ x: x, str: str });
+    });
+
+    // Satırları dikeyde yukarıdan aşağıya (PDF'te Y alttan yukarıya artar, bu yüzden azalan sırada sıralanır)
+    lineBuckets.sort((a, b) => b.y - a.y);
+
+    const pageLines = lineBuckets.map(bucket => {
+      // Satır içi öğeleri X koordinatına göre soldan sağa sırala
+      bucket.items.sort((a, b) => a.x - b.x);
+      // Tek boşlukla birleştir ve fazla boşlukları temizle
+      return bucket.items.map(it => it.str.trim()).filter(s => s.length > 0).join(' ');
+    }).filter(line => line.length > 0);
+
+    fullText += pageLines.join('\n') + '\n\n';
+  }
+
+  return fullText;
+}
+
 async function handleTranscriptFileSelected(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
@@ -2801,31 +2844,7 @@ async function handleTranscriptFileSelected(event) {
   showToast(t('transcriptReadingPdf'));
 
   try {
-    const arrayBuffer = await file.arrayBuffer();
-    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
-    const pdfDoc = await loadingTask.promise;
-    let fullText = '';
-
-    for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-      const page = await pdfDoc.getPage(pageNum);
-      const textContent = await page.getTextContent();
-      
-      // Metin öğelerini satırlara göre sıralayıp düzenle
-      let lastY = null;
-      let pageText = '';
-
-      textContent.items.forEach(item => {
-        if (lastY !== null && Math.abs(item.transform[5] - lastY) > 5) {
-          pageText += '\n';
-        } else if (lastY !== null) {
-          pageText += ' ';
-        }
-        pageText += item.str;
-        lastY = item.transform[5];
-      });
-
-      fullText += pageText + '\n\n';
-    }
+    const fullText = await extractTextFromTranscriptPdf(file);
 
     if (!fullText.trim()) {
       throw new Error("Boş PDF");
@@ -2896,7 +2915,7 @@ function handleTranscriptInputChange() {
 function parseBounTranscript(rawText) {
   if (!rawText || typeof rawText !== 'string') return [];
 
-  // 1. Gürültü ve Açıklama Kısımlarını Kes: Açıklamalar veya Not Baremi başlığında dur
+  // 1. Gürültü ve Açıklama Kısımlarını Kes: Açıklamalar veya Not Baremi başlığında kesin olarak dur
   const stopIndex = rawText.search(/\b(?:AÇIKLAMALAR|Açıklamalar|EXPLANATIONS|Explanations|NOT BAREM[İI]|Not Barem[İi]|GRADE SCALE|Grade Scale)\b/i);
   const textToProcess = (stopIndex !== -1) ? rawText.substring(0, stopIndex) : rawText;
 
@@ -2904,21 +2923,27 @@ function parseBounTranscript(rawText) {
   const terms = [];
   let currentTerm = null;
 
-  // Dönem başlıkları (hem e-Devlet "2021-2022 Güz Dönemi" hem BUIS "2021/2022-1")
-  const termHeaderRegex = /(?:Academic Year\s*:\s*)?(\b20\d{2})\s*[\/\-]\s*(?:20\d{2})?\s*[\/\-]?\s*(?:Semester\s*:\s*)?([123]|Güz(?:\s+Dönemi)?|Bahar(?:\s+Dönemi)?|Yaz(?:\s+Okulu)?|Fall|Spring|Summer)\b/i;
-  const VALID_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'F', 'FF', 'P', 'S', 'U', 'W', 'EX', 'I', 'NP']);
+  // Dönem başlıkları (hem e-Devlet "2024-2025 Güz Dönemi" hem BUIS "2024/2025-1")
+  const termHeaderRegex = /(?:Academic Year\s*:\s*)?(\b20\d{2})(?:\s*[\/\-]\s*20\d{2})?\s*[\/\-]?\s*(?:Semester\s*:\s*)?([123]|Güz(?:\s+Dönemi)?|Bahar(?:\s+Dönemi)?|Yaz(?:\s+Okulu)?|Fall|Spring|Summer)\b/i;
 
-  // Ders kodu regex: opsiyonel '*', 2-5 harf, opsiyonel boşluk, 3-4 haneli sayı ve opsiyonel harf/şube (örn: *PHYS 121, CMPE150, MATH 101.01)
-  const courseCodeLineRegex = /^\*?\s*([A-Z]{2,5})\s*(\d{3}[A-Z]?)(?:\.\d{1,2})?\s*(.*)$/;
+  // Ders kodu regex: opsiyonel '*', 2-5 harf, opsiyonel boşluk, 3 haneli sayı ve opsiyonel harf (örn: *PHYS 121, CMPE150, MATH111, AE 111)
+  const courseCodeRegex = /\*?\b([A-Z]{2,5})\s*(\d{3}[A-Z]?)\b/;
 
   // e-Devlet istatistik satırı regex:
-  // Z/S (Zorunlu/Seçmeli) + Dil (İng., Tür., vb.) + Teori + Uygulama + UK (Ulusal Kredi) + AKTS + [Opsiyonel Harf Notu] + Not Puanı + Durum (G, K, HAZ, --)
-  const edevletStatRegex = /^(Z|S)\s+(?:[A-Za-zÇĞİÖŞÜçğıöşü\.]+)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:\s+([A-Z]{1,2}))?\s+([\d.]+)\s+(G|K|HAZ|--)$/i;
+  // [ZS] (Zorunlu/Seçmeli statü) + Dil (İng., Tür.) + Teori + Uygulama + UK (Ulusal Kredi) + AKTS + [Opsiyonel Harf Notu] + [Opsiyonel Not Puanı] + Durum (G, K, HAZ, --)
+  // Durum (-- veya harf) sonunda \b veya (?<=--) kullanarak hem harf hem tireyi güvenle yakalar
+  const edevletStatRegex = /\b[ZS]\s+(?:İng\.|Tür\.|[A-Za-zÇĞİÖŞÜçğıöşü\.]+)\s+\d+(?:\.\d+)?\s+\d+(?:\.\d+)?\s+(\d+(?:\.\d+)?)\s+\d+(?:\.\d+)?\s+(?:(AA|BA|BB|CB|CC|DC|DD|F|FF|P|S|U|W|EX|I|NP)\s+)?(?:[\d.]+\s+)?(G|K|HAZ|--)(?:\b|(?<=--))/i;
+
+  const EXCLUDED_PREFIXES = new Set(['SFL', 'YOKTR', 'YADYOK', 'PREP', 'HAZ']);
+  const VALID_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'F', 'FF', 'P', 'S', 'U', 'W', 'EX', 'I', 'NP']);
+  const PASSING_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'P', 'S', 'EX']);
+  const FAILING_GRADES = new Set(['F', 'FF', 'U', 'W']);
 
   for (let i = 0; i < lines.length; i++) {
     const trimmed = lines[i].trim();
     if (!trimmed) continue;
 
+    // Dönem Başlığı Tespiti
     const termMatch = trimmed.match(termHeaderRegex);
     if (termMatch) {
       const yearStart = parseInt(termMatch[1], 10);
@@ -2944,72 +2969,91 @@ function parseBounTranscript(rawText) {
       continue;
     }
 
-    const cMatch = trimmed.match(courseCodeLineRegex);
+    // Ders Kodu Tespiti (satırın başında veya içinde yer alabilir: örn. AE 111, CMPE150, MATH111, PHYS101)
+    const cMatch = trimmed.match(courseCodeRegex);
     if (cMatch) {
       const prefix = cMatch[1].toUpperCase();
       const codeNum = cMatch[2].toUpperCase();
-      const afterCode = (cMatch[3] || '').trim();
 
-      // Hazırlık kodlarını (SFL, YADYOK, PREP, HAZ) atla
-      if (prefix === 'SFL' || prefix === 'YADYOK' || prefix === 'PREP' || prefix === 'HAZ') {
+      // Hazırlık ve belge kodlarını (SFL, YOKTR, YADYOK, PREP, HAZ) atla
+      if (EXCLUDED_PREFIXES.has(prefix)) {
         continue;
       }
 
       const fullCode = `${prefix} ${codeNum}`;
 
-      // e-Devlet çok satırlı blok tespiti (sonraki 1-3 satır içinde Z/S istatistik satırı ara)
-      let matchedStat = null;
-      let nextLineOffset = 0;
+      // 1. Durum: Satır tek başına zaten e-Devlet istatistiği içeriyor mu? (Tek satırlı PDF çıktısı)
+      let blockText = trimmed;
+      let consumedLines = 0;
+      let statMatch = trimmed.match(edevletStatRegex);
 
-      for (let j = 1; j <= 3 && (i + j) < lines.length; j++) {
-        const nextTrimmed = lines[i + j].trim();
-        if (!nextTrimmed) continue;
-
-        // Başka bir dönem başlığı veya ders kodu satırına gelinmişse dur
-        if (nextTrimmed.match(termHeaderRegex) || (nextTrimmed.match(courseCodeLineRegex) && !nextTrimmed.match(edevletStatRegex))) {
-          break;
+      // 2. Durum: Tek satırda istatistik yoksa, sonraki 1-3 satırı tara (çok satırlı ders bloğu)
+      if (!statMatch) {
+        const blockLines = [trimmed];
+        for (let j = 1; j <= 3 && (i + j) < lines.length; j++) {
+          const nextLine = lines[i + j].trim();
+          if (!nextLine) continue;
+          if (nextLine.match(termHeaderRegex)) break;
+          const nextCMatch = nextLine.match(courseCodeRegex);
+          if (nextCMatch && !EXCLUDED_PREFIXES.has(nextCMatch[1].toUpperCase()) && !nextLine.match(edevletStatRegex)) {
+            break;
+          }
+          blockLines.push(nextLine);
+          consumedLines = j;
+          if (nextLine.match(edevletStatRegex)) {
+            break;
+          }
         }
-
-        const statM = nextTrimmed.match(edevletStatRegex);
-        if (statM) {
-          matchedStat = statM;
-          nextLineOffset = j;
-          break;
-        }
+        blockText = blockLines.join(' ');
+        statMatch = blockText.match(edevletStatRegex);
       }
 
-      if (matchedStat) {
-        // e-Devlet formatı:
-        // matchedStat[1]: Z/S (Statü - Harf notu DEĞİL!)
-        // matchedStat[4]: UK (Ulusal Kredi)
-        // matchedStat[6]: Opsiyonel Harf Notu (AA..DD, F, FF, P, EX vb.)
-        // matchedStat[8]: Durum (G, K, HAZ, --)
-        const ukCredit = parseFloat(matchedStat[4]);
-        const gradeCandidate = (matchedStat[6] || '').toUpperCase();
-        const durum = matchedStat[8];
+      if (statMatch) {
+        // e-Devlet Formatı:
+        // statMatch[1]: UK (Ulusal Kredi)
+        // statMatch[2]: Opsiyonel Harf Notu (AA..DD, F, FF, P, S, EX vb.)
+        // statMatch[3]: Durum (G = Geçti, K = Kaldı, HAZ = Hazırlık, -- = Devam ediyor)
+        const ukCredit = parseFloat(statMatch[1]);
+        const gradeCandidate = (statMatch[2] || '').toUpperCase();
+        const durum = (statMatch[3] || '').toUpperCase();
 
         let foundGrade = '';
         if (VALID_GRADES.has(gradeCandidate)) {
           foundGrade = gradeCandidate;
         }
 
-        // Eğer ders devam ediyorsa (durum '--' veya not sütunu boş) not yok
+        // Devam eden dersler (durum '--' veya not sütunu boş)
         if (durum === '--' || !foundGrade) {
           foundGrade = '';
         }
 
+        let isPassed = false;
+        if (FAILING_GRADES.has(foundGrade) || durum === '--' || durum === 'K' || !foundGrade) {
+          isPassed = false;
+        } else if (PASSING_GRADES.has(foundGrade) || durum === 'G') {
+          isPassed = true;
+        }
+
+        // Ders adını ders kodu ile istatistik sütunları arasından ayıkla
+        let title = '';
+        const codePos = blockText.indexOf(cMatch[0]);
+        if (codePos !== -1 && statMatch.index > codePos) {
+          title = blockText.substring(codePos + cMatch[0].length, statMatch.index).trim();
+        }
+
         currentTerm.courses.push({
           code: fullCode,
-          title: afterCode,
+          title: title,
           grade: foundGrade,
-          credit: !isNaN(ukCredit) ? ukCredit : 3
+          credit: !isNaN(ukCredit) ? ukCredit : 3,
+          passed: isPassed
         });
 
-        i += nextLineOffset;
+        i += consumedLines;
         continue;
       }
 
-      // Tek satırlı BUIS transkript formatı (örn: MATH 101.01 CALCULUS I 4.0 6.0 AA)
+      // 3. Durum: Tek Satırlı Standart BUIS Transkript Formatı (örn: MATH 101.01 CALCULUS I 4.0 6.0 AA)
       const tokens = trimmed.split(/[\s\t]+/);
       let foundGrade = '';
       let gradeIdx = -1;
@@ -3042,18 +3086,24 @@ function parseBounTranscript(rawText) {
       }
 
       let titleTokens = [];
-      const codeTokenCount = (tokens[0].includes(cMatch[2])) ? 1 : 2;
+      const codeTokenCount = (tokens[0].includes(codeNum)) ? 1 : 2;
       const endTitleIdx = (crdIdx !== -1) ? crdIdx : (gradeIdx !== -1 ? gradeIdx : tokens.length);
       if (endTitleIdx > codeTokenCount) {
         titleTokens = tokens.slice(codeTokenCount, endTitleIdx);
       }
-      const courseTitle = titleTokens.length > 0 ? titleTokens.join(' ').trim() : afterCode;
+      const courseTitle = titleTokens.length > 0 ? titleTokens.join(' ').trim() : '';
+
+      let isPassed = false;
+      if (PASSING_GRADES.has(foundGrade)) {
+        isPassed = true;
+      }
 
       currentTerm.courses.push({
         code: fullCode,
         title: courseTitle,
         grade: foundGrade,
-        credit: foundCredit !== null ? foundCredit : 3
+        credit: foundCredit !== null ? foundCredit : 3,
+        passed: isPassed
       });
     }
   }
@@ -3171,7 +3221,10 @@ function previewTranscript() {
       let isPassed = false;
       let effectiveGrade = '';
 
-      if (PASSING_GRADES.has(rawGrade)) {
+      if (c.passed !== undefined) {
+        isPassed = !!c.passed;
+        effectiveGrade = c.grade || '';
+      } else if (PASSING_GRADES.has(rawGrade)) {
         isPassed = true;
         effectiveGrade = rawGrade;
       } else if (rawGrade === 'F' || rawGrade === 'FF' || rawGrade === 'U') {
