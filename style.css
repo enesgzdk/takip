@@ -2067,37 +2067,61 @@ textarea.form-control {
   font-weight: 500;
 }
 
-/* --- BÜ Transkript Otomatik İçe Aktarıcı (#transcriptModal) --- */
+/* --- BÜ / e-Devlet Transkript Otomatik İçe Aktarıcı (#transcriptModal) --- */
 .transcript-modal-dialog {
-  max-width: 820px;
+  max-width: 960px;
   width: 95vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.transcript-modal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 16px 18px;
+  min-height: 0;
 }
 
 .transcript-guide-box {
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
   border-radius: 10px;
-  padding: 12px 14px;
-  font-size: 0.84rem;
+  padding: 10px 14px;
+  font-size: 0.82rem;
   color: #166534;
-  line-height: 1.5;
-  margin-bottom: 12px;
+  line-height: 1.45;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .transcript-textarea {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.8rem;
   resize: vertical;
-  min-height: 100px;
+  min-height: 90px;
+  max-height: 140px;
   border: 1.5px solid var(--border-color);
   line-height: 1.4;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.transcript-textarea.collapsed {
+  height: 75px !important;
+  min-height: 75px !important;
+  max-height: 75px !important;
+  resize: none;
 }
 
 .transcript-btn-row {
   display: flex;
   justify-content: flex-end;
-  margin-top: 8px;
-  margin-bottom: 12px;
+  margin-top: 6px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .transcript-preview-btn {
@@ -2114,7 +2138,8 @@ textarea.form-control {
 }
 
 .transcript-preview-area {
-  max-height: 380px;
+  flex: 1;
+  min-height: 340px;
   overflow-y: auto;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -2139,6 +2164,7 @@ textarea.form-control {
   justify-content: space-between;
   gap: 8px;
   flex-wrap: wrap;
+  flex-shrink: 0;
 }
 
 .transcript-toolbar {

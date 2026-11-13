@@ -200,13 +200,14 @@ const translations = {
     sandboxExitSuccess: "✓ Kendi kayıtlı planınıza dönüldü.",
     sandboxDeptDisabledTooltip: "Önizleme modunda bölüm değiştirilemez.",
     transcriptBtn: "📥 Transkript Aktar",
-    transcriptBtnTitle: "BUIS'ten kopyaladığınız transkripti otomatik aktarın",
-    transcriptModalTitle: "📥 BÜ Transkript Otomatik İçe Aktarıcı",
-    transcriptGuide: "📌 <strong>BUIS (Öğrenci Bilgi Sistemi)</strong> &rarr; <em>Transkript</em> sayfasını açıp <code>Ctrl+A</code> ve <code>Ctrl+C</code> ile tüm sayfayı kopyalayın ve aşağıdaki kutuya yapıştırın.",
+    transcriptBtnTitle: "e-Devlet veya BUIS'ten kopyaladığınız transkripti otomatik aktarın",
+    transcriptModalTitle: "📥 BÜ / e-Devlet Transkript Otomatik İçe Aktarıcı",
+    transcriptGuide: "📌 <strong>e-Devlet</strong> (YÖKSİS Transkript Belgesi) veya <strong>BUIS</strong> transkript sayfasından tüm metni <code>Ctrl+A</code> ve <code>Ctrl+C</code> ile kopyalayıp aşağıdaki kutuya yapıştırın.",
     transcriptInputLabel: "Transkript Metni:",
+    transcriptInputPlaceholder: "e-Devlet Not Döküm Belgesi veya BUIS transkript metnini buraya yapıştırın...\nÖrn:\n2021-2022 Güz Dönemi\n*PHYS 121 GENERAL PHYSICS I\nZ İng. 3 2 4 6 BB 12 G\nCMPE150 INTRODUCTION TO COMPUTING\nZ İng. 3 0 3 5 BA 10.5 G...",
     transcriptPreviewBtn: "🔍 Önizle ve Ayrıştır",
     transcriptApplyBtn: "✅ Seçilenleri Plana Aktar",
-    transcriptNoCoursesFound: "Transkript metninde ders bulunamadı. Lütfen BUIS transkript sayfasından kopyaladığınızdan emin olun.",
+    transcriptNoCoursesFound: "Transkript metninde ders bulunamadı. Lütfen e-Devlet veya BUIS transkript sayfasından kopyaladığınızdan emin olun.",
     transcriptSummary: (termsCount, coursesCount) => `🎯 ${termsCount} Dönem, ${coursesCount} Ders Başarıyla Ayrıştırıldı`,
     transcriptMatchedCurriculum: "Müfredat",
     transcriptMatchedElective: "Seçmeli Slotu",
@@ -414,13 +415,14 @@ const translations = {
     sandboxExitSuccess: "✓ Returned to your saved plan.",
     sandboxDeptDisabledTooltip: "Department cannot be changed in Preview mode.",
     transcriptBtn: "📥 Import Transcript",
-    transcriptBtnTitle: "Import your transcript copied from BUIS automatically",
-    transcriptModalTitle: "📥 BOUN Transcript Auto Importer",
-    transcriptGuide: "📌 Open <strong>BUIS (Student Info System)</strong> &rarr; <em>Transcript</em>, copy the whole page with <code>Ctrl+A</code> and <code>Ctrl+C</code>, then paste below.",
+    transcriptBtnTitle: "Import your transcript copied from e-Devlet or BUIS automatically",
+    transcriptModalTitle: "📥 BOUN / e-Devlet Transcript Auto Importer",
+    transcriptGuide: "📌 Copy the whole text from <strong>e-Devlet</strong> (YÖKSİS Transcript) or <strong>BUIS</strong> with <code>Ctrl+A</code> and <code>Ctrl+C</code>, then paste below.",
     transcriptInputLabel: "Transcript Text:",
+    transcriptInputPlaceholder: "Paste e-Devlet Transcript or BUIS transcript text here...\nEx:\n2021-2022 Güz Dönemi\n*PHYS 121 GENERAL PHYSICS I\nZ İng. 3 2 4 6 BB 12 G\nCMPE150 INTRODUCTION TO COMPUTING\nZ İng. 3 0 3 5 BA 10.5 G...",
     transcriptPreviewBtn: "🔍 Preview & Parse",
     transcriptApplyBtn: "✅ Apply Selected to Plan",
-    transcriptNoCoursesFound: "No courses detected in transcript text. Please make sure you copied from BUIS transcript page.",
+    transcriptNoCoursesFound: "No courses detected in transcript text. Please make sure you copied from e-Devlet or BUIS transcript page.",
     transcriptSummary: (termsCount, coursesCount) => `🎯 ${termsCount} Terms, ${coursesCount} Courses Successfully Parsed`,
     transcriptMatchedCurriculum: "Curriculum",
     transcriptMatchedElective: "Elective Slot",
@@ -2722,13 +2724,17 @@ function openTranscriptModal() {
   const previewArea = document.getElementById('transcriptPreviewArea');
   const applyBtn = document.getElementById('transcriptApplyBtn');
 
-  if (input) input.value = '';
+  if (input) {
+    input.value = '';
+    input.classList.remove('collapsed');
+  }
   if (previewArea) {
     previewArea.innerHTML = '';
     previewArea.style.display = 'none';
   }
   if (applyBtn) applyBtn.disabled = true;
   parsedTranscriptTerms = [];
+  transcriptPreviewRows = [];
 
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -2753,6 +2759,7 @@ function handleTranscriptInputChange() {
   const applyBtn = document.getElementById('transcriptApplyBtn');
   const previewArea = document.getElementById('transcriptPreviewArea');
   if (!input || !input.value.trim()) {
+    if (input) input.classList.remove('collapsed');
     if (applyBtn) applyBtn.disabled = true;
     if (previewArea) {
       previewArea.innerHTML = '';
@@ -2765,25 +2772,36 @@ function handleTranscriptInputChange() {
 function parseBounTranscript(rawText) {
   if (!rawText || typeof rawText !== 'string') return [];
 
-  const lines = rawText.split(/\r?\n/);
+  // 1. Gürültü ve Açıklama Kısımlarını Kes: Açıklamalar veya Not Baremi başlığında dur
+  const stopIndex = rawText.search(/\b(?:AÇIKLAMALAR|Açıklamalar|EXPLANATIONS|Explanations|NOT BAREM[İI]|Not Barem[İi]|GRADE SCALE|Grade Scale)\b/i);
+  const textToProcess = (stopIndex !== -1) ? rawText.substring(0, stopIndex) : rawText;
+
+  const lines = textToProcess.split(/\r?\n/);
   const terms = [];
   let currentTerm = null;
 
-  const termHeaderRegex = /(?:Academic Year\s*:\s*)?(\b20\d{2})\s*[\/\-]\s*(?:20\d{2})?\s*[\/\-]?\s*(?:Semester\s*:\s*)?([123]|Güz|Bahar|Yaz|Fall|Spring|Summer)\b/i;
+  // Dönem başlıkları (hem e-Devlet "2021-2022 Güz Dönemi" hem BUIS "2021/2022-1")
+  const termHeaderRegex = /(?:Academic Year\s*:\s*)?(\b20\d{2})\s*[\/\-]\s*(?:20\d{2})?\s*[\/\-]?\s*(?:Semester\s*:\s*)?([123]|Güz(?:\s+Dönemi)?|Bahar(?:\s+Dönemi)?|Yaz(?:\s+Okulu)?|Fall|Spring|Summer)\b/i;
   const VALID_GRADES = new Set(['AA', 'BA', 'BB', 'CB', 'CC', 'DC', 'DD', 'F', 'FF', 'P', 'S', 'U', 'W', 'EX', 'I', 'NP']);
-  const courseCodeRegex = /\b([A-Z]{2,5})\s*(\d{3}[A-Z]?)(?:\.\d{1,2})?\b/;
 
-  lines.forEach(line => {
-    const trimmed = line.trim();
-    if (!trimmed) return;
+  // Ders kodu regex: opsiyonel '*', 2-5 harf, opsiyonel boşluk, 3-4 haneli sayı ve opsiyonel harf/şube (örn: *PHYS 121, CMPE150, MATH 101.01)
+  const courseCodeLineRegex = /^\*?\s*([A-Z]{2,5})\s*(\d{3}[A-Z]?)(?:\.\d{1,2})?\s*(.*)$/;
+
+  // e-Devlet istatistik satırı regex:
+  // Z/S (Zorunlu/Seçmeli) + Dil (İng., Tür., vb.) + Teori + Uygulama + UK (Ulusal Kredi) + AKTS + [Opsiyonel Harf Notu] + Not Puanı + Durum (G, K, HAZ, --)
+  const edevletStatRegex = /^(Z|S)\s+(?:[A-Za-zÇĞİÖŞÜçğıöşü\.]+)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:\s+([A-Z]{1,2}))?\s+([\d.]+)\s+(G|K|HAZ|--)$/i;
+
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    if (!trimmed) continue;
 
     const termMatch = trimmed.match(termHeaderRegex);
     if (termMatch) {
       const yearStart = parseInt(termMatch[1], 10);
-      let semTypeStr = termMatch[2].toLowerCase();
+      const semStr = termMatch[2].toLowerCase();
       let semNum = 1;
-      if (semTypeStr === '2' || semTypeStr === 'bahar' || semTypeStr === 'spring') semNum = 2;
-      else if (semTypeStr === '3' || semTypeStr === 'yaz' || semTypeStr === 'summer') semNum = 3;
+      if (semStr.includes('bahar') || semStr.includes('spring') || semStr === '2') semNum = 2;
+      else if (semStr.includes('yaz') || semStr.includes('summer') || semStr === '3') semNum = 3;
 
       currentTerm = {
         raw: trimmed,
@@ -2792,69 +2810,131 @@ function parseBounTranscript(rawText) {
         courses: []
       };
       terms.push(currentTerm);
-      return;
+      continue;
     }
 
-    if (currentTerm) {
-      const cMatch = trimmed.match(courseCodeRegex);
-      if (cMatch) {
-        const prefix = cMatch[1].toUpperCase();
-        // Hazırlık / YADYOK / PREP dönemlerini ve derslerini atla
-        if (prefix === 'YADYOK' || prefix === 'PREP') return;
+    if (!currentTerm) continue;
 
-        const fullCode = `${cMatch[1]} ${cMatch[2]}`;
-        const tokens = trimmed.split(/[\s\t]+/);
+    // Hazırlık / boş dönem kontrolü ("Bu dönem ders almamıştır")
+    if (/bu\s+dönem\s+ders\s+almamıştır/i.test(trimmed)) {
+      continue;
+    }
+
+    const cMatch = trimmed.match(courseCodeLineRegex);
+    if (cMatch) {
+      const prefix = cMatch[1].toUpperCase();
+      const codeNum = cMatch[2].toUpperCase();
+      const afterCode = (cMatch[3] || '').trim();
+
+      // Hazırlık kodlarını (SFL, YADYOK, PREP, HAZ) atla
+      if (prefix === 'SFL' || prefix === 'YADYOK' || prefix === 'PREP' || prefix === 'HAZ') {
+        continue;
+      }
+
+      const fullCode = `${prefix} ${codeNum}`;
+
+      // e-Devlet çok satırlı blok tespiti (sonraki 1-3 satır içinde Z/S istatistik satırı ara)
+      let matchedStat = null;
+      let nextLineOffset = 0;
+
+      for (let j = 1; j <= 3 && (i + j) < lines.length; j++) {
+        const nextTrimmed = lines[i + j].trim();
+        if (!nextTrimmed) continue;
+
+        // Başka bir dönem başlığı veya ders kodu satırına gelinmişse dur
+        if (nextTrimmed.match(termHeaderRegex) || (nextTrimmed.match(courseCodeLineRegex) && !nextTrimmed.match(edevletStatRegex))) {
+          break;
+        }
+
+        const statM = nextTrimmed.match(edevletStatRegex);
+        if (statM) {
+          matchedStat = statM;
+          nextLineOffset = j;
+          break;
+        }
+      }
+
+      if (matchedStat) {
+        // e-Devlet formatı:
+        // matchedStat[1]: Z/S (Statü - Harf notu DEĞİL!)
+        // matchedStat[4]: UK (Ulusal Kredi)
+        // matchedStat[6]: Opsiyonel Harf Notu (AA..DD, F, FF, P, EX vb.)
+        // matchedStat[8]: Durum (G, K, HAZ, --)
+        const ukCredit = parseFloat(matchedStat[4]);
+        const gradeCandidate = (matchedStat[6] || '').toUpperCase();
+        const durum = matchedStat[8];
 
         let foundGrade = '';
-        let gradeIdx = -1;
-
-        // Harf Notlarını Tam Yakala (AA–DD, F, FF, P, S, U, W, EX, I, NP)
-        for (let i = tokens.length - 1; i >= 1; i--) {
-          const tok = tokens[i].toUpperCase();
-          if (tok === 'I' && i > 1 && !tokens[i - 1].match(/^\d(?:\.\d)?$/)) {
-            continue;
-          }
-          if (VALID_GRADES.has(tok)) {
-            foundGrade = tok;
-            gradeIdx = i;
-            break;
-          }
+        if (VALID_GRADES.has(gradeCandidate)) {
+          foundGrade = gradeCandidate;
         }
 
-        let foundCredit = null;
-        let crdIdx = -1;
-        for (let i = (gradeIdx !== -1 ? gradeIdx - 1 : tokens.length - 1); i >= 1; i--) {
-          const num = parseFloat(tokens[i]);
-          if (!isNaN(num) && num >= 0 && num <= 10 && tokens[i].match(/^\d(?:\.\d)?$/)) {
-            foundCredit = num;
-            crdIdx = i;
-            if (i > 1 && tokens[i - 1].match(/^\d(?:\.\d)?$/)) {
-              foundCredit = parseFloat(tokens[i - 1]);
-              crdIdx = i - 1;
-            }
-            break;
-          }
+        // Eğer ders devam ediyorsa (durum '--' veya not sütunu boş) not yok
+        if (durum === '--' || !foundGrade) {
+          foundGrade = '';
         }
-
-        let titleTokens = [];
-        const codeTokenCount = (tokens[0].includes(cMatch[2])) ? 1 : 2;
-        const endTitleIdx = (crdIdx !== -1) ? crdIdx : (gradeIdx !== -1 ? gradeIdx : tokens.length);
-        if (endTitleIdx > codeTokenCount) {
-          titleTokens = tokens.slice(codeTokenCount, endTitleIdx);
-        }
-        const courseTitle = titleTokens.join(' ').trim();
 
         currentTerm.courses.push({
           code: fullCode,
-          title: courseTitle,
-          grade: foundGrade, // Ham harf notu veya henüz yoksa boş string
-          credit: foundCredit !== null ? foundCredit : 3
+          title: afterCode,
+          grade: foundGrade,
+          credit: !isNaN(ukCredit) ? ukCredit : 3
         });
-      }
-    }
-  });
 
-  // Yalnızca geçerli lisans dersi barındıran dönemleri al (Hazırlık/boş dönemler elensin)
+        i += nextLineOffset;
+        continue;
+      }
+
+      // Tek satırlı BUIS transkript formatı (örn: MATH 101.01 CALCULUS I 4.0 6.0 AA)
+      const tokens = trimmed.split(/[\s\t]+/);
+      let foundGrade = '';
+      let gradeIdx = -1;
+
+      for (let k = tokens.length - 1; k >= 1; k--) {
+        const tok = tokens[k].toUpperCase();
+        if (tok === 'I' && k > 1 && !tokens[k - 1].match(/^\d(?:\.\d)?$/)) {
+          continue;
+        }
+        if (VALID_GRADES.has(tok)) {
+          foundGrade = tok;
+          gradeIdx = k;
+          break;
+        }
+      }
+
+      let foundCredit = null;
+      let crdIdx = -1;
+      for (let k = (gradeIdx !== -1 ? gradeIdx - 1 : tokens.length - 1); k >= 1; k--) {
+        const num = parseFloat(tokens[k]);
+        if (!isNaN(num) && num >= 0 && num <= 10 && tokens[k].match(/^\d(?:\.\d)?$/)) {
+          foundCredit = num;
+          crdIdx = k;
+          if (k > 1 && tokens[k - 1].match(/^\d(?:\.\d)?$/)) {
+            foundCredit = parseFloat(tokens[k - 1]);
+            crdIdx = k - 1;
+          }
+          break;
+        }
+      }
+
+      let titleTokens = [];
+      const codeTokenCount = (tokens[0].includes(cMatch[2])) ? 1 : 2;
+      const endTitleIdx = (crdIdx !== -1) ? crdIdx : (gradeIdx !== -1 ? gradeIdx : tokens.length);
+      if (endTitleIdx > codeTokenCount) {
+        titleTokens = tokens.slice(codeTokenCount, endTitleIdx);
+      }
+      const courseTitle = titleTokens.length > 0 ? titleTokens.join(' ').trim() : afterCode;
+
+      currentTerm.courses.push({
+        code: fullCode,
+        title: courseTitle,
+        grade: foundGrade,
+        credit: foundCredit !== null ? foundCredit : 3
+      });
+    }
+  }
+
+  // Yalnızca geçerli lisans dersi barındıran dönemleri al (Hazırlık ve boş dönemler elensin)
   const validTerms = terms.filter(t => t.courses.length > 0);
   if (validTerms.length === 0) return [];
 
@@ -2863,30 +2943,44 @@ function parseBounTranscript(rawText) {
     return a.semNum - b.semNum;
   });
 
-  // Lisans derslerinin başladığı ilk Güz/Bahar dönemini 1.1, ikincisini 1.2, varsa yaz okulunu 1.3 olarak eşleştir
-  const firstYear = validTerms[0].year;
+  // Lisans derslerinin başladığı dönemleri kronolojik eşleştir:
+  // Eğer ilk lisans dersi Yaz Okulu ise onu 0.3 (veya 1.3), hemen ardından gelen ilk Güz'ü 1.1, Bahar'ı 1.2 yap
+  const firstTerm = validTerms[0];
+  const baseYear = firstTerm.year;
 
-  validTerms.forEach(t => {
-    const yearIndex = (t.year - firstYear) + 1;
-    let semKey = `${yearIndex}.${t.semNum}`;
-    if (t.semNum === 3) {
-      semKey = `${yearIndex}.3 (Yaz)`;
-    }
-    t.targetSem = semKey;
-  });
+  if (firstTerm.semNum === 3) {
+    firstTerm.targetSem = '0.3';
+    validTerms.slice(1).forEach(t => {
+      const yearIndex = (t.year - baseYear) + 1;
+      let semKey = `${yearIndex}.${t.semNum}`;
+      if (t.semNum === 3) {
+        semKey = `${yearIndex}.3 (Yaz)`;
+      }
+      t.targetSem = semKey;
+    });
+  } else {
+    validTerms.forEach(t => {
+      const yearIndex = (t.year - baseYear) + 1;
+      let semKey = `${yearIndex}.${t.semNum}`;
+      if (t.semNum === 3) {
+        semKey = `${yearIndex}.3 (Yaz)`;
+      }
+      t.targetSem = semKey;
+    });
+  }
 
   return validTerms;
 }
 
 function getAllAvailableSemKeys() {
-  const allSems = [];
+  const allSems = ['0.3'];
   const activeYearStructure = getEffectiveYearStructure();
   activeYearStructure.forEach(y => {
     y.sems.forEach(s => {
       if (!allSems.includes(s)) allSems.push(s);
     });
   });
-  if (allSems.length === 0) {
+  if (allSems.length <= 1) {
     for (let yr = 1; yr <= 6; yr++) {
       allSems.push(`${yr}.1`, `${yr}.2`, `${yr}.3 (Yaz)`);
     }
@@ -2902,6 +2996,7 @@ function previewTranscript() {
 
   const rawText = input.value.trim();
   if (!rawText) {
+    if (input) input.classList.remove('collapsed');
     previewArea.style.display = 'block';
     previewArea.innerHTML = `<div class="transcript-guide-box" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;">⚠️ ${escapeHTML(t('transcriptNoCoursesFound'))}</div>`;
     if (applyBtn) applyBtn.disabled = true;
@@ -2912,12 +3007,15 @@ function previewTranscript() {
   parsedTranscriptTerms = parseBounTranscript(rawText);
 
   if (parsedTranscriptTerms.length === 0) {
+    if (input) input.classList.remove('collapsed');
     previewArea.style.display = 'block';
     previewArea.innerHTML = `<div class="transcript-guide-box" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;">⚠️ ${escapeHTML(t('transcriptNoCoursesFound'))}</div>`;
     if (applyBtn) applyBtn.disabled = true;
     transcriptPreviewRows = [];
     return;
   }
+
+  if (input) input.classList.add('collapsed');
 
   const activeDmCourses = getActiveDmCourseList();
   const majorCourses = departmentsData[currentDept]?.courses || [];
