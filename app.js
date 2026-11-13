@@ -240,7 +240,36 @@ const translations = {
     erasmusActive: "Erasmus",
     erasmusTag: "🇪🇺 Erasmus / Exchange",
     erasmusActiveTitle: "Erasmus/Exchange dönemini kaldır",
-    erasmusInactiveTitle: "Bu dönemi Erasmus/Exchange dönemi olarak işaretle (Notlar EX sayılır, GPA etkilenmez)"
+    erasmusInactiveTitle: "Bu dönemi Erasmus/Exchange dönemi olarak işaretle (Notlar EX sayılır, GPA etkilenmez)",
+    prereqTreeBtn: "🕸️ Önkoşul Ağacı",
+    prereqTreeBtnTitle: "Derslerin önkoşul ağacını ve kilit zincirlerini görüntüleyin",
+    prereqTreeModalTitle: "🕸️ İnteraktif Önkoşul Ağacı",
+    ptLegPassed: "Geçildi",
+    ptLegPlanned: "Planlandı",
+    ptLegPending: "Alınmadı",
+    ptLegPrereq: "Önkoşul",
+    ptLegUnlock: "Kilitlediği",
+    ptInfoDefault: "💡 Bir ders kutusunun üzerine gelin veya tıklayın; önkoşullarını ve kilitlediği tüm zincirleme dersleri görün.",
+    ptInfoLocked: (code, unlockCount, prereqCount) => unlockCount > 0
+      ? `🔒 ${code} geçilmezse doğrudan/dolaylı ${unlockCount} ders kilitlenir (Önkoşul: ${prereqCount} ders)`
+      : `✅ ${code} başka bir dersin önkoşulu değildir (Önkoşul: ${prereqCount} ders)`,
+    ptOtherCol: "Diğer / Seçmeli",
+    autoFillBtnEmpty: "⚡ Otomatik Doldur",
+    autoFillBtnRemaining: "⚡ Kalanı Doldur",
+    autoFillBtnTitle: "Kalan dersleri önkoşul sırasına göre dönemlere otomatik yerleştirin",
+    undoAutoFillBtn: "↩️ Doldurmayı Geri Al",
+    undoAutoFillBtnTitle: "Son otomatik doldurma işlemini geri al",
+    autoFillModalTitle: "⚡ Kalan Dersleri Otomatik Doldur",
+    autoFillDesc: "Mevcut geçtiğiniz ve dönemlere yerleştirdiğiniz dersler korunur; yalnızca sol havuzda kalan dersler önkoşul sırasına ve açılış dönemine göre gelecek dönemlere dağıtılır.",
+    autoFillSummerLabel: "☀️ Yaz okullarına (1.3, 2.3, 3.3...) ders yerleştirilsin (Öncelik: TK, AE ve seçmeli dersler)",
+    summerMaxCreditsLabel: "Yaz Maks. Kredi:",
+    summerMaxCoursesLabel: "Yaz Maks. Ders:",
+    summerMaxCoursesUnlimitedOpt: "Sınırsız (Krediye göre)",
+    autoFillMaxCreditsLabel: "Dönemlik Maksimum Kredi Hedefi:",
+    autoFillConfirmBtn: "⚡ Otomatik Doldur",
+    autoFillSuccess: (count) => `⚡ ${count} kalan ders önkoşul sırasına göre dönemlere yerleştirildi!`,
+    autoFillNoneLeft: "✓ Havuzda yerleştirilecek kalan ders bulunmuyor.",
+    autoFillUndone: "↩️ Otomatik doldurma geri alındı; önceki planınız yüklendi."
   },
   en: {
     appSubtitle: "| Course & GPA Tracker",
@@ -465,7 +494,36 @@ const translations = {
     erasmusActive: "Erasmus",
     erasmusTag: "🇪🇺 Erasmus / Exchange",
     erasmusActiveTitle: "Remove Erasmus/Exchange semester",
-    erasmusInactiveTitle: "Mark as Erasmus/Exchange semester (Grades count as EX, GPA unaffected)"
+    erasmusInactiveTitle: "Mark as Erasmus/Exchange semester (Grades count as EX, GPA unaffected)",
+    prereqTreeBtn: "🕸️ Prereq Tree",
+    prereqTreeBtnTitle: "View the prerequisite graph and unlock chains for all courses",
+    prereqTreeModalTitle: "🕸️ Interactive Prerequisite Tree",
+    ptLegPassed: "Passed",
+    ptLegPlanned: "Planned",
+    ptLegPending: "Pending",
+    ptLegPrereq: "Prerequisite",
+    ptLegUnlock: "Unlocks",
+    ptInfoDefault: "💡 Hover or click any course node to highlight its prerequisites and all chained courses it unlocks.",
+    ptInfoLocked: (code, unlockCount, prereqCount) => unlockCount > 0
+      ? `🔒 If ${code} is not passed, ${unlockCount} course(s) are directly/indirectly locked (Prerequisites: ${prereqCount})`
+      : `✅ ${code} is not a prerequisite for any other course (Prerequisites: ${prereqCount})`,
+    ptOtherCol: "Other / Electives",
+    autoFillBtnEmpty: "⚡ Auto-Fill Plan",
+    autoFillBtnRemaining: "⚡ Fill Remaining",
+    autoFillBtnTitle: "Automatically distribute remaining courses across future semesters",
+    undoAutoFillBtn: "↩️ Undo Fill",
+    undoAutoFillBtnTitle: "Undo the last auto-fill operation",
+    autoFillModalTitle: "⚡ Auto-Fill Remaining Courses",
+    autoFillDesc: "Your passed and already planned courses stay untouched; only remaining courses in the left pool are scheduled into future terms respecting prerequisites and term parity.",
+    autoFillSummerLabel: "☀️ Place courses in Summer terms (1.3, 2.3, 3.3...) (Priority: TK, AE & electives)",
+    summerMaxCreditsLabel: "Summer Max Credits:",
+    summerMaxCoursesLabel: "Summer Max Courses:",
+    summerMaxCoursesUnlimitedOpt: "Unlimited (By credits)",
+    autoFillMaxCreditsLabel: "Target Max Credits per Semester:",
+    autoFillConfirmBtn: "⚡ Auto-Fill",
+    autoFillSuccess: (count) => `⚡ ${count} remaining course(s) automatically placed into semesters!`,
+    autoFillNoneLeft: "✓ No remaining courses left in the pool to place.",
+    autoFillUndone: "↩️ Auto-fill undone; your previous plan has been restored."
   }
 };
 
@@ -589,6 +647,35 @@ function applyStaticTranslations() {
   setText('shareLinkBtn', t('shareLinkBtn'));
   setText('shareLinkDesc', t('shareLinkDesc'));
   setText('shareCancelBtn', t('shareCancelBtn'));
+
+  // Prereq Tree & Auto-Fill buttons + modals
+  setText('prereqTreeBtn', t('prereqTreeBtn'));
+  setAttr('prereqTreeBtn', 'title', t('prereqTreeBtnTitle'));
+  updateAutoFillButtonLabel();
+  setAttr('autoFillBtn', 'title', t('autoFillBtnTitle'));
+  setText('undoAutoFillBtn', t('undoAutoFillBtn'));
+  setAttr('undoAutoFillBtn', 'title', t('undoAutoFillBtnTitle'));
+  setText('prereqTreeModalTitle', t('prereqTreeModalTitle'));
+  setText('ptLegPassed', t('ptLegPassed'));
+  setText('ptLegPlanned', t('ptLegPlanned'));
+  setText('ptLegPending', t('ptLegPending'));
+  setText('ptLegPrereq', t('ptLegPrereq'));
+  setText('ptLegUnlock', t('ptLegUnlock'));
+  if (!prereqTreeSelectedNodeId) {
+    setText('prereqTreeInfoBar', t('ptInfoDefault'));
+  }
+  setText('autoFillModalTitle', t('autoFillModalTitle'));
+  setText('autoFillDesc', t('autoFillDesc'));
+  setText('autoFillSummerLabel', t('autoFillSummerLabel'));
+  setText('summerMaxCreditsLabel', t('summerMaxCreditsLabel'));
+  setText('summerMaxCoursesLabel', t('summerMaxCoursesLabel'));
+  setText('summerMaxCoursesUnlimitedOpt', t('summerMaxCoursesUnlimitedOpt'));
+  setText('autoFillMaxCreditsLabel', t('autoFillMaxCreditsLabel'));
+  setText('autoFillCancelBtn', t('cancel'));
+  const autoFillConfirmBtn = document.getElementById('autoFillConfirmBtn');
+  if (autoFillConfirmBtn) {
+    autoFillConfirmBtn.innerHTML = `<span>${escapeHTML(t('autoFillConfirmBtn'))}</span>`;
+  }
 
   // Transcript modal
   setText('transcriptModalTitle', t('transcriptModalTitle'));
@@ -886,6 +973,11 @@ let globalState = JSON.parse(localStorage.getItem('boun_multi_dept_gpa_state')) 
 let isSandboxMode = false;
 let realUserGlobalStateBackup = null;
 let realUserDeptBackup = null;
+
+// Önkoşul Ağacı ve Otomatik Doldurma Durum Değişkenleri
+let prereqTreeSelectedNodeId = null;
+let prereqTreeGraphData = { nodesById: {}, prereqsOf: {}, unlocksOf: {}, edges: [] };
+let lastAutoFillBackup = null;
 
 // Küresel ve Bölüm Bazlı Önkoşul Haritaları
 const GLOBAL_PREREQ_MAP = {};
@@ -1475,6 +1567,8 @@ function calculateAverages() {
   document.getElementById('selected-courses-count').innerText = `${selectedCourseIds.size} ${t('courseUnit')}`;
   document.getElementById('selected-credits').innerText = `${selectedCreditsTotal} Cr`;
   document.getElementById('completed-credits').innerText = `${completedCreditsTotal} Cr (${passedCourseIds.size} ${t('courseUnit')})`;
+  updateAutoFillButtonLabel();
+  updateUndoAutoFillButtonState();
 
   let totalRequiredCredits = 0;
   const dmKey = state.selectedDmId;
@@ -4567,7 +4661,901 @@ window.addEventListener('resize', () => {
     closeToolsDropdown();
   }
   initUI();
+  const ptModal = document.getElementById('prereqTreeModal');
+  if (ptModal && ptModal.classList.contains('open')) {
+    requestAnimationFrame(() => drawPrereqTreeArrows());
+  }
 });
+
+// ============================================================================
+// 1. İNTERAKTİF GÖRSEL ÖNKOŞUL AĞACI (#prereqTreeModal)
+// ============================================================================
+
+function normalizeCourseCodeStr(code) {
+  return String(code || '').replace(/\s+/g, '').toUpperCase();
+}
+
+function formatNormalizedCode(prefix, num) {
+  return `${prefix.toUpperCase()} ${num.toUpperCase()}`;
+}
+
+function extractAllPrereqCodes(prereqStr) {
+  if (!prereqStr || typeof prereqStr !== 'string') return [];
+  const matches = [];
+  const regex = /\b([A-Z]{2,5})\s*(\d{3}[A-Z]?)\b/g;
+  let m;
+  while ((m = regex.exec(prereqStr.toUpperCase())) !== null) {
+    const norm = `${m[1]}${m[2]}`;
+    if (!matches.includes(norm)) {
+      matches.push(norm);
+    }
+  }
+  return matches;
+}
+
+/**
+ * Önkoşul metnini AND/OR gruplarına ayırır:
+ * - Eş koşul: ... kısmı varsa ayrı değerlendirilir (aynı dönem >= yeterli)
+ * - "ve", "," ile ayrılanlar AND grubudur
+ * - "veya" ile ayrılanlar OR grubudur
+ */
+function parsePrereqAndOrGroups(prereqStr) {
+  if (!prereqStr || typeof prereqStr !== 'string') return [];
+  // "Önkoşul:" önekini temizle
+  let cleaned = prereqStr.replace(/Önkoşul\s*:/gi, '').replace(/Prerequisite\s*:/gi, '').trim();
+  // "Eş koşul:" kısmını ayır (strict önkoşul değil, aynı döneme konabilir)
+  const coreqIdx = cleaned.search(/Eş\s*koşul\s*:|Co-?requisite\s*:/i);
+  if (coreqIdx !== -1) {
+    cleaned = cleaned.substring(0, coreqIdx).trim();
+  }
+  if (!cleaned) return [];
+
+  const andParts = cleaned.split(/\s+ve\s+|\s+and\s+|,|;/i);
+  const groups = [];
+  andParts.forEach(part => {
+    const orParts = part.split(/\s+veya\s+|\s+or\s+/i);
+    const groupCodes = [];
+    orParts.forEach(op => {
+      const codes = extractAllPrereqCodes(op);
+      codes.forEach(c => {
+        if (!groupCodes.includes(c)) groupCodes.push(c);
+      });
+    });
+    if (groupCodes.length > 0) {
+      groups.push(groupCodes);
+    }
+  });
+  return groups;
+}
+
+function getActiveCurriculumCourses() {
+  const activeDmCourses = getActiveDmCourseList();
+  const majorCourses = departmentsData[currentDept]?.courses || [];
+  const baseProgramCourses = activeDmCourses.length > 0 ? activeDmCourses : majorCourses;
+  const minorCourses = getActiveMinorCourseList();
+  return [...baseProgramCourses, ...minorCourses];
+}
+
+function openPrereqTreeModal() {
+  const modal = document.getElementById('prereqTreeModal');
+  if (!modal) return;
+  prereqTreeSelectedNodeId = null;
+  renderPrereqTree();
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => {
+    drawPrereqTreeArrows();
+  });
+}
+
+function closePrereqTreeModal() {
+  const modal = document.getElementById('prereqTreeModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  prereqTreeSelectedNodeId = null;
+}
+
+function handlePrereqTreeBackdropClick(event) {
+  if (event.target && event.target.id === 'prereqTreeModal') {
+    closePrereqTreeModal();
+  }
+}
+
+function renderPrereqTree() {
+  const colsContainer = document.getElementById('prereqTreeColumns');
+  const infoBar = document.getElementById('prereqTreeInfoBar');
+  if (!colsContainer) return;
+
+  const state = getDeptState(currentDept);
+  const allCourses = getActiveCurriculumCourses();
+
+  // Durum ve kod haritaları
+  const codeToCourses = {};
+  const nodesById = {};
+  const prereqsOf = {};
+  const unlocksOf = {};
+
+  allCourses.forEach(c => {
+    nodesById[c.id] = c;
+    prereqsOf[c.id] = new Set();
+    unlocksOf[c.id] = new Set();
+
+    const norm = normalizeCourseCodeStr(c.code);
+    if (norm) {
+      if (!codeToCourses[norm]) codeToCourses[norm] = [];
+      codeToCourses[norm].push(c);
+    }
+    // Çift kodlu dersler (örn: "AE 111/AE 112")
+    String(c.code || '').split(/[\/,]/).forEach(part => {
+      const pNorm = normalizeCourseCodeStr(part);
+      if (pNorm && pNorm !== norm) {
+        if (!codeToCourses[pNorm]) codeToCourses[pNorm] = [];
+        codeToCourses[pNorm].push(c);
+      }
+    });
+  });
+
+  // Yönlü kenarları oluştur
+  const edges = [];
+  const edgeKeys = new Set();
+
+  allCourses.forEach(course => {
+    if (!course.prereq) return;
+    const reqNormCodes = extractAllPrereqCodes(course.prereq);
+    reqNormCodes.forEach(reqCode => {
+      const matchedParents = codeToCourses[reqCode] || [];
+      matchedParents.forEach(parent => {
+        if (parent.id === course.id) return;
+        const eKey = `${parent.id}=>${course.id}`;
+        if (!edgeKeys.has(eKey)) {
+          edgeKeys.add(eKey);
+          edges.push({ from: parent.id, to: course.id });
+          prereqsOf[course.id].add(parent.id);
+          unlocksOf[parent.id].add(course.id);
+        }
+      });
+    });
+  });
+
+  prereqTreeGraphData = { nodesById, prereqsOf, unlocksOf, edges };
+
+  // Dersleri dönem sütunlarına grupla
+  const semGroups = {};
+  const semKeysOrder = ['0.1', '0.2', '0.3 (Yaz)', '1.1', '1.2', '1.3 (Yaz)', '2.1', '2.2', '2.3 (Yaz)', '3.1', '3.2', '3.3 (Yaz)', '4.1', '4.2', '4.3 (Yaz)', 'other'];
+  semKeysOrder.forEach(k => { semGroups[k] = []; });
+
+  allCourses.forEach(c => {
+    const s = (c.sem && semGroups[c.sem]) ? c.sem : 'other';
+    semGroups[s].push(c);
+  });
+
+  colsContainer.innerHTML = '';
+
+  semKeysOrder.forEach(semKey => {
+    const list = semGroups[semKey];
+    if (!list || list.length === 0) return;
+
+    const colEl = document.createElement('div');
+    colEl.className = 'pt-col';
+
+    const colHeader = document.createElement('div');
+    colHeader.className = 'pt-col-header';
+    colHeader.innerText = semKey === 'other' ? t('ptOtherCol') : formatSemLabel(semKey);
+    colEl.appendChild(colHeader);
+
+    list.forEach(course => {
+      const normCode = normalizeCourseCodeStr(course.code);
+      const courseInstances = (state.instances || []).filter(inst => {
+        if (inst.courseId === course.id) return true;
+        const instCourse = getCourseForInstance(inst);
+        return instCourse && instCourse.code && normCode && normalizeCourseCodeStr(instCourse.code) === normCode;
+      });
+
+      const hasPassed = courseInstances.some(inst => inst.passed === true && inst.grade !== 'F');
+      const isPlaced = !hasPassed && courseInstances.length > 0;
+
+      const statusClass = hasPassed ? 'pt-node-passed' : (isPlaced ? 'pt-node-planned' : 'pt-node-pending');
+
+      const nodeEl = document.createElement('div');
+      nodeEl.className = `pt-node ${statusClass}`;
+      nodeEl.dataset.nodeId = course.id;
+
+      nodeEl.innerHTML = `
+        <div class="pt-node-top">
+          <span class="pt-node-code">${escapeHTML(course.code)}</span>
+          <span class="pt-node-crd">${course.crd} Cr</span>
+        </div>
+        <div class="pt-node-name" title="${escapeHTML(course.name)}">${escapeHTML(course.name)}</div>
+        ${(course.isMinor || course.isDoubleMajor) ? `
+          <div class="pt-node-badges">
+            ${course.isMinor ? `<span class="pt-badge minor">${escapeHTML(t('minorBadge'))}</span>` : ''}
+            ${course.isDoubleMajor ? `<span class="pt-badge dm">${escapeHTML(t('dmBadge'))}</span>` : ''}
+          </div>
+        ` : ''}
+      `;
+
+      nodeEl.addEventListener('mouseenter', () => {
+        if (!prereqTreeSelectedNodeId) {
+          highlightPrereqChain(course.id);
+        }
+      });
+
+      nodeEl.addEventListener('mouseleave', () => {
+        if (!prereqTreeSelectedNodeId) {
+          clearPrereqHighlight();
+        }
+      });
+
+      nodeEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (prereqTreeSelectedNodeId === course.id) {
+          prereqTreeSelectedNodeId = null;
+          clearPrereqHighlight();
+        } else {
+          prereqTreeSelectedNodeId = course.id;
+          highlightPrereqChain(course.id);
+        }
+      });
+
+      colEl.appendChild(nodeEl);
+    });
+
+    colsContainer.appendChild(colEl);
+  });
+
+  // Boş alana tıklayınca sabitlenen seçimi temizle
+  const stage = document.getElementById('prereqTreeStage');
+  if (stage) {
+    stage.onclick = () => {
+      if (prereqTreeSelectedNodeId) {
+        prereqTreeSelectedNodeId = null;
+        clearPrereqHighlight();
+      }
+    };
+  }
+
+  if (infoBar) {
+    infoBar.classList.remove('active-info');
+    infoBar.innerText = t('ptInfoDefault');
+  }
+}
+
+function drawPrereqTreeArrows() {
+  const svg = document.getElementById('prereqTreeSvg');
+  const stage = document.getElementById('prereqTreeStage');
+  if (!svg || !stage) return;
+
+  const stageRect = stage.getBoundingClientRect();
+  if (stageRect.width === 0 || stageRect.height === 0) return;
+
+  svg.setAttribute('width', stage.scrollWidth);
+  svg.setAttribute('height', stage.scrollHeight);
+
+  const nodeRects = {};
+  stage.querySelectorAll('.pt-node').forEach(el => {
+    const id = el.dataset.nodeId;
+    const r = el.getBoundingClientRect();
+    nodeRects[id] = {
+      left: r.left - stageRect.left,
+      right: r.right - stageRect.left,
+      top: r.top - stageRect.top,
+      bottom: r.bottom - stageRect.top,
+      midY: (r.top + r.bottom) / 2 - stageRect.top,
+      midX: (r.left + r.right) / 2 - stageRect.left
+    };
+  });
+
+  let pathsHtml = `
+    <defs>
+      <marker id="pt-arrow-default" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#94a3b8"></path>
+      </marker>
+      <marker id="pt-arrow-prereq" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#f97316"></path>
+      </marker>
+      <marker id="pt-arrow-unlock" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#8b5cf6"></path>
+      </marker>
+    </defs>
+  `;
+
+  prereqTreeGraphData.edges.forEach(edge => {
+    const fromR = nodeRects[edge.from];
+    const toR = nodeRects[edge.to];
+    if (!fromR || !toR) return;
+
+    let d = '';
+    if (toR.left >= fromR.right - 4) {
+      // İleri yönlü (soldan sağa) düzgün Cubic Bezier eğrisi
+      const x1 = fromR.right;
+      const y1 = fromR.midY;
+      const x2 = toR.left - 2;
+      const y2 = toR.midY;
+      const dx = Math.max(24, (x2 - x1) * 0.48);
+      d = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+    } else {
+      // Aynı sütun içi veya geriye dönük bağ: sağ taraftan kavisli yay
+      const x1 = fromR.right;
+      const y1 = fromR.midY;
+      const x2 = toR.right + 2;
+      const y2 = toR.midY;
+      const arcOffset = Math.max(28, Math.abs(y2 - y1) * 0.25);
+      d = `M ${x1} ${y1} C ${x1 + arcOffset} ${y1}, ${x2 + arcOffset} ${y2}, ${x2} ${y2}`;
+    }
+
+    pathsHtml += `<path class="pt-edge" data-from="${escapeHTML(edge.from)}" data-to="${escapeHTML(edge.to)}" d="${d}" marker-end="url(#pt-arrow-default)"></path>`;
+  });
+
+  svg.innerHTML = pathsHtml;
+
+  if (prereqTreeSelectedNodeId) {
+    highlightPrereqChain(prereqTreeSelectedNodeId);
+  }
+}
+
+function collectGraphReachable(startId, adjMap) {
+  const visited = new Set();
+  const queue = [startId];
+  while (queue.length > 0) {
+    const curr = queue.shift();
+    const neighbors = adjMap[curr];
+    if (!neighbors) continue;
+    neighbors.forEach(nextId => {
+      if (!visited.has(nextId) && nextId !== startId) {
+        visited.add(nextId);
+        queue.push(nextId);
+      }
+    });
+  }
+  return visited;
+}
+
+function highlightPrereqChain(nodeId) {
+  const stage = document.getElementById('prereqTreeStage');
+  const infoBar = document.getElementById('prereqTreeInfoBar');
+  if (!stage) return;
+
+  const { nodesById, prereqsOf, unlocksOf } = prereqTreeGraphData;
+  const ancestors = collectGraphReachable(nodeId, prereqsOf);
+  const descendants = collectGraphReachable(nodeId, unlocksOf);
+
+  stage.querySelectorAll('.pt-node').forEach(el => {
+    const id = el.dataset.nodeId;
+    el.classList.remove('pt-node-active', 'pt-node-prereq', 'pt-node-unlock', 'pt-node-dimmed');
+    if (id === nodeId) {
+      el.classList.add('pt-node-active');
+    } else if (ancestors.has(id)) {
+      el.classList.add('pt-node-prereq');
+    } else if (descendants.has(id)) {
+      el.classList.add('pt-node-unlock');
+    } else {
+      el.classList.add('pt-node-dimmed');
+    }
+  });
+
+  stage.querySelectorAll('.pt-edge').forEach(path => {
+    const fromId = path.dataset.from;
+    const toId = path.dataset.to;
+    path.classList.remove('pt-edge-prereq', 'pt-edge-unlock', 'pt-edge-dimmed');
+
+    const isPrereqEdge = (ancestors.has(fromId) || fromId === nodeId) && (ancestors.has(toId) || toId === nodeId) && toId !== fromId && !descendants.has(toId);
+    const isUnlockEdge = (fromId === nodeId || descendants.has(fromId)) && descendants.has(toId);
+
+    if (isPrereqEdge) {
+      path.classList.add('pt-edge-prereq');
+      path.setAttribute('marker-end', 'url(#pt-arrow-prereq)');
+    } else if (isUnlockEdge) {
+      path.classList.add('pt-edge-unlock');
+      path.setAttribute('marker-end', 'url(#pt-arrow-unlock)');
+    } else {
+      path.classList.add('pt-edge-dimmed');
+      path.setAttribute('marker-end', 'url(#pt-arrow-default)');
+    }
+  });
+
+  const course = nodesById[nodeId];
+  if (infoBar && course) {
+    infoBar.classList.add('active-info');
+    infoBar.innerText = t('ptInfoLocked')(course.code, descendants.size, ancestors.size);
+  }
+}
+
+function clearPrereqHighlight() {
+  const stage = document.getElementById('prereqTreeStage');
+  const infoBar = document.getElementById('prereqTreeInfoBar');
+  if (!stage) return;
+
+  stage.querySelectorAll('.pt-node').forEach(el => {
+    el.classList.remove('pt-node-active', 'pt-node-prereq', 'pt-node-unlock', 'pt-node-dimmed');
+  });
+
+  stage.querySelectorAll('.pt-edge').forEach(path => {
+    path.classList.remove('pt-edge-prereq', 'pt-edge-unlock', 'pt-edge-dimmed');
+    path.setAttribute('marker-end', 'url(#pt-arrow-default)');
+  });
+
+  if (infoBar) {
+    infoBar.classList.remove('active-info');
+    infoBar.innerText = t('ptInfoDefault');
+  }
+}
+
+// ============================================================================
+// 2. AKILLI "KALAN DERSLERİ OTOMATİK DOLDUR" + GERİ AL (autoFillRemainingCourses)
+// ============================================================================
+
+function toggleAutoFillSummerOptions() {
+  const summerCheck = document.getElementById('autoFillSummerCheck');
+  const optionsBox = document.getElementById('autoFillSummerOptions');
+  const maxCrdEl = document.getElementById('autoFillSummerMaxCredits');
+  const maxCourseEl = document.getElementById('autoFillSummerMaxCourses');
+  const isEnabled = summerCheck ? summerCheck.checked : true;
+
+  if (optionsBox) {
+    optionsBox.classList.toggle('hidden', !isEnabled);
+  }
+  if (maxCrdEl) maxCrdEl.disabled = !isEnabled;
+  if (maxCourseEl) maxCourseEl.disabled = !isEnabled;
+}
+
+function openAutoFillModal() {
+  const modal = document.getElementById('autoFillModal');
+  if (!modal) return;
+  toggleAutoFillSummerOptions();
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAutoFillModal() {
+  const modal = document.getElementById('autoFillModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleAutoFillBackdropClick(event) {
+  if (event.target && event.target.id === 'autoFillModal') {
+    closeAutoFillModal();
+  }
+}
+
+function isSummerPriorityCourse(course) {
+  if (!course) return false;
+  const norm = normalizeCourseCodeStr(course.code);
+  if (
+    norm.startsWith('TK221') ||
+    norm.startsWith('TK222') ||
+    norm.startsWith('HTR311') ||
+    norm.startsWith('HTR312') ||
+    norm.startsWith('AE') ||
+    norm.startsWith('HSS') ||
+    norm.startsWith('HUM')
+  ) {
+    return true;
+  }
+  const label = `${course.code || ''} ${course.name || ''}`.toLowerCase();
+  if (
+    label.includes('hss') ||
+    label.includes('unrestricted') ||
+    label.includes('complementary') ||
+    label.includes('area elective') ||
+    label.includes('alan seçmeli') ||
+    label.includes('serbest') ||
+    label.includes('tamamlayıcı') ||
+    label.includes('general elective') ||
+    label.includes('genel seçmeli')
+  ) {
+    return true;
+  }
+  return !!course.isElective;
+}
+
+function updateAutoFillButtonLabel() {
+  const btn = document.getElementById('autoFillBtn');
+  if (!btn) return;
+  const state = getDeptState(currentDept);
+  const hasAnyPlaced = Boolean(state && Array.isArray(state.instances) && state.instances.length > 0);
+  btn.innerText = hasAnyPlaced ? t('autoFillBtnRemaining') : t('autoFillBtnEmpty');
+}
+
+function updateUndoAutoFillButtonState() {
+  const btn = document.getElementById('undoAutoFillBtn');
+  if (btn) {
+    btn.disabled = !(lastAutoFillBackup && lastAutoFillBackup.dept === currentDept);
+  }
+}
+
+function executeAutoFillRemainingCourses() {
+  const summerCheck = document.getElementById('autoFillSummerCheck');
+  const maxCrdInput = document.getElementById('autoFillMaxCredits');
+  const summerMaxCrdInput = document.getElementById('autoFillSummerMaxCredits');
+  const summerMaxCoursesInput = document.getElementById('autoFillSummerMaxCourses');
+
+  const useSummer = summerCheck ? summerCheck.checked : true;
+  const parsedMax = maxCrdInput ? parseInt(maxCrdInput.value, 10) : 20;
+  const maxCredits = Math.max(12, Math.min(35, isNaN(parsedMax) ? 20 : parsedMax));
+
+  const parsedSummerMaxCrd = summerMaxCrdInput ? parseInt(summerMaxCrdInput.value, 10) : 8;
+  const summerMaxCredits = Math.max(3, Math.min(12, isNaN(parsedSummerMaxCrd) ? 8 : parsedSummerMaxCrd));
+
+  const parsedSummerMaxCourses = summerMaxCoursesInput ? parseInt(summerMaxCoursesInput.value, 10) : 2;
+  const summerMaxCourses = (isNaN(parsedSummerMaxCourses) || parsedSummerMaxCourses <= 0)
+    ? Number.POSITIVE_INFINITY
+    : Math.max(1, Math.min(4, parsedSummerMaxCourses));
+
+  const state = getDeptState(currentDept);
+  const allCourses = getActiveCurriculumCourses();
+
+  // Mevcut planı yedekle (yalnızca geri alma için)
+  const backupSnapshot = JSON.parse(JSON.stringify(state.instances || []));
+
+  const activeStructure = getEffectiveYearStructure();
+  const allTargetSems = [];
+  activeStructure.forEach(y => {
+    y.sems.forEach(s => {
+      if (!allTargetSems.includes(s)) allTargetSems.push(s);
+    });
+  });
+
+  // Mevcut dönem kredi toplamları, ders sayıları ve yerleştirilmiş dersler
+  const semCredits = {};
+  const semCourseCounts = {};
+  allTargetSems.forEach(s => {
+    semCredits[s] = 0;
+    semCourseCounts[s] = 0;
+  });
+
+  const placedSemIdxByCode = {};
+  const handledCourseIds = new Set();
+  const handledNormCodes = new Set();
+
+  let lastPassedIdx = -1;
+  let firstOngoingIdx = -1;
+
+  (state.instances || []).forEach(inst => {
+    const c = getCourseForInstance(inst);
+    const crd = c ? (Number(c.crd) || 0) : 0;
+    if (semCredits[inst.semId] === undefined) semCredits[inst.semId] = 0;
+    if (semCourseCounts[inst.semId] === undefined) semCourseCounts[inst.semId] = 0;
+    semCredits[inst.semId] += crd;
+    semCourseCounts[inst.semId] += 1;
+
+    const semIdx = getSemesterOrderIndex(inst.semId);
+    const isFailed = (inst.grade === 'F');
+
+    if (inst.passed && !isFailed) {
+      if (semIdx > lastPassedIdx) lastPassedIdx = semIdx;
+    } else if (!isFailed) {
+      if (firstOngoingIdx === -1 || semIdx < firstOngoingIdx) {
+        firstOngoingIdx = semIdx;
+      }
+    }
+
+    // Geçilen veya aktif olarak dönemlere konulan (F olmayan) dersler tekrar eklenmez
+    if (!isFailed) {
+      handledCourseIds.add(inst.courseId);
+      if (c && c.code) {
+        const norm = normalizeCourseCodeStr(c.code);
+        handledNormCodes.add(norm);
+        if (placedSemIdxByCode[norm] === undefined || semIdx > placedSemIdxByCode[norm]) {
+          placedSemIdxByCode[norm] = semIdx;
+        }
+      }
+    }
+  });
+
+  // Kalan dersleri topla
+  const remainingCourses = allCourses.filter(c => {
+    if (handledCourseIds.has(c.id)) return false;
+    const norm = normalizeCourseCodeStr(c.code);
+    if (norm && handledNormCodes.has(norm)) return false;
+    return true;
+  });
+
+  if (remainingCourses.length === 0) {
+    closeAutoFillModal();
+    showToast(t('autoFillNoneLeft'));
+    return;
+  }
+
+  lastAutoFillBackup = { dept: currentDept, instances: backupSnapshot };
+  updateUndoAutoFillButtonState();
+
+  const sem11Idx = getSemesterOrderIndex('1.1');
+  let minGlobalSemIdx = sem11Idx;
+  if (firstOngoingIdx !== -1) {
+    minGlobalSemIdx = Math.max(sem11Idx, firstOngoingIdx);
+  } else if (lastPassedIdx !== -1) {
+    minGlobalSemIdx = Math.max(sem11Idx, lastPassedIdx + 1);
+  }
+
+  const remainingCodesSet = new Set(remainingCourses.map(c => normalizeCourseCodeStr(c.code)));
+
+  // Önkoşul değerlendirici: Tüm gerekli önkoşullar yerleştirilmişse min dönem indeksini döndürür, bekleniyorsa null döner
+  const evaluatePrereqMinIdx = (course, ignoreUnplacedRemaining) => {
+    if (!course.prereq) return 0;
+    const andGroups = parsePrereqAndOrGroups(course.prereq);
+    let maxPrereqIdx = -1;
+
+    for (const orGroup of andGroups) {
+      let satisfiedIdx = null;
+      let hasUnplacedCandidate = false;
+
+      for (const reqCode of orGroup) {
+        if (placedSemIdxByCode[reqCode] !== undefined) {
+          const idx = placedSemIdxByCode[reqCode];
+          if (satisfiedIdx === null || idx < satisfiedIdx) {
+            satisfiedIdx = idx;
+          }
+        } else if (remainingCodesSet.has(reqCode)) {
+          hasUnplacedCandidate = true;
+        }
+      }
+
+      if (satisfiedIdx !== null) {
+        if (satisfiedIdx > maxPrereqIdx) maxPrereqIdx = satisfiedIdx;
+      } else if (hasUnplacedCandidate && !ignoreUnplacedRemaining) {
+        return null; // Önkoşul henüz yerleştirilmedi, sonraki turda tekrar dene
+      }
+    }
+
+    return maxPrereqIdx === -1 ? 0 : (maxPrereqIdx + 1);
+  };
+
+  const isSummerSem = (semId) => semId.includes('.3');
+  const getSemParity = (semId) => {
+    const m = semId.match(/^\d+\.(\d+)/);
+    return m ? parseInt(m[1], 10) : 0; // 1 = Güz, 2 = Bahar, 3 = Yaz
+  };
+
+  const getSummerPriorityTier = (course) => {
+    if (!course) return 0;
+    const norm = normalizeCourseCodeStr(course.code);
+    if (
+      norm.startsWith('TK221') ||
+      norm.startsWith('TK222') ||
+      norm.startsWith('HTR311') ||
+      norm.startsWith('HTR312') ||
+      norm.startsWith('AE')
+    ) {
+      return 1;
+    }
+    if (norm.startsWith('HSS') || norm.startsWith('HUM')) {
+      return 2;
+    }
+    const label = `${course.code || ''} ${course.name || ''}`.toLowerCase();
+    if (
+      label.includes('hss') ||
+      label.includes('unrestricted') ||
+      label.includes('complementary') ||
+      label.includes('area elective') ||
+      label.includes('alan seçmeli') ||
+      label.includes('serbest') ||
+      label.includes('tamamlayıcı') ||
+      label.includes('general elective') ||
+      label.includes('genel seçmeli')
+    ) {
+      return 2;
+    }
+    return course.isElective ? 2 : 0;
+  };
+
+  const unplaced = new Set(remainingCourses.map(c => c.id));
+  let placedCount = 0;
+
+  const placeCourseIntoSem = (course, chosenSem) => {
+    const crd = Number(course.crd) || 0;
+    state.instances.push({
+      instanceId: 'inst_af_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+      courseId: course.id,
+      semId: chosenSem,
+      passed: false,
+      grade: '',
+      customText: '',
+      isMinor: !!course.isMinor,
+      isDoubleMajor: !!course.isDoubleMajor
+    });
+
+    semCredits[chosenSem] = (semCredits[chosenSem] || 0) + crd;
+    semCourseCounts[chosenSem] = (semCourseCounts[chosenSem] || 0) + 1;
+    const norm = normalizeCourseCodeStr(course.code);
+    if (norm) {
+      const chosenIdx = getSemesterOrderIndex(chosenSem);
+      if (placedSemIdxByCode[norm] === undefined || chosenIdx > placedSemIdxByCode[norm]) {
+        placedSemIdxByCode[norm] = chosenIdx;
+      }
+      remainingCodesSet.delete(norm);
+    }
+    unplaced.delete(course.id);
+    placedCount++;
+  };
+
+  // ========================================================================
+  // AŞAMA 1: Yaz Okulu İşaretliyse Hafif / Ortak / Seçmeli Dersleri (1.3-4.3)
+  // ========================================================================
+  if (useSummer) {
+    const sem13Idx = getSemesterOrderIndex('1.3 (Yaz)');
+    const sem43Idx = getSemesterOrderIndex('4.3 (Yaz)');
+    const minSummerIdx = Math.max(sem13Idx, minGlobalSemIdx);
+
+    const summerSems = allTargetSems.filter(semId => {
+      if (!isSummerSem(semId)) return false;
+      const idx = getSemesterOrderIndex(semId);
+      return idx >= minSummerIdx && idx <= sem43Idx;
+    });
+
+    if (summerSems.length > 0) {
+      const summerCandidates = remainingCourses
+        .filter(c => getSummerPriorityTier(c) > 0)
+        .sort((a, b) => {
+          const tierA = getSummerPriorityTier(a);
+          const tierB = getSummerPriorityTier(b);
+          if (tierA !== tierB) return tierA - tierB;
+          const idxA = (a.sem && a.sem !== 'other') ? getSemesterOrderIndex(a.sem) : 999;
+          const idxB = (b.sem && b.sem !== 'other') ? getSemesterOrderIndex(b.sem) : 999;
+          if (idxA !== idxB) return idxA - idxB;
+          return normalizeCourseCodeStr(a.code).localeCompare(normalizeCourseCodeStr(b.code));
+        });
+
+      const summerCodeSet = new Set(summerCandidates.map(c => normalizeCourseCodeStr(c.code)));
+      const SEQ_PREDECESSORS = {
+        TK222: 'TK221',
+        HTR312: 'HTR311',
+        AE112: 'AE111',
+        AE102: 'AE101'
+      };
+
+      for (let pass = 0; pass < 3; pass++) {
+        let progress = false;
+        for (const course of summerCandidates) {
+          if (!unplaced.has(course.id)) continue;
+
+          const prereqMinIdx = evaluatePrereqMinIdx(course, false);
+          if (prereqMinIdx === null) continue; // Bölüm dersi önkoşulu varsa Aşama 2'ye bırak
+
+          const norm = normalizeCourseCodeStr(course.code);
+          let seqMinIdx = 0;
+          let waitForSeq = false;
+          for (const [succ, pred] of Object.entries(SEQ_PREDECESSORS)) {
+            if (norm.startsWith(succ)) {
+              if (placedSemIdxByCode[pred] !== undefined) {
+                seqMinIdx = Math.max(seqMinIdx, placedSemIdxByCode[pred] + 1);
+              } else if (remainingCodesSet.has(pred) && summerCodeSet.has(pred)) {
+                waitForSeq = true;
+              }
+            }
+          }
+          if (waitForSeq) continue;
+
+          const crd = Number(course.crd) || 0;
+          const minAllowedSummerIdx = Math.max(minSummerIdx, prereqMinIdx, seqMinIdx);
+
+          // Hem summerMaxCredits hem de summerMaxCourses sınırını birlikte uygula
+          const validSummerSems = summerSems.filter(semId => {
+            const sIdx = getSemesterOrderIndex(semId);
+            if (sIdx < minAllowedSummerIdx) return false;
+            const currentCount = semCourseCounts[semId] || 0;
+            const currentCredits = semCredits[semId] || 0;
+            return (currentCount + 1) <= summerMaxCourses && (currentCredits + crd) <= summerMaxCredits;
+          });
+
+          if (validSummerSems.length > 0) {
+            validSummerSems.sort((a, b) => {
+              const countDiff = (semCourseCounts[a] || 0) - (semCourseCounts[b] || 0);
+              if (countDiff !== 0) return countDiff;
+              const crdDiff = (semCredits[a] || 0) - (semCredits[b] || 0);
+              if (crdDiff !== 0) return crdDiff;
+              return getSemesterOrderIndex(a) - getSemesterOrderIndex(b);
+            });
+            placeCourseIntoSem(course, validSummerSems[0]);
+            progress = true;
+          }
+        }
+        if (!progress) break;
+      }
+    }
+  }
+
+  // ========================================================================
+  // AŞAMA 2: Kalan Tüm Dersleri Okulun Önerilen Dönemi + Önkoşul Sırasına Göre Dağıt
+  // ========================================================================
+  const queue = remainingCourses
+    .filter(c => unplaced.has(c.id))
+    .sort((a, b) => {
+      const idxA = (a.sem && a.sem !== 'other') ? getSemesterOrderIndex(a.sem) : 999;
+      const idxB = (b.sem && b.sem !== 'other') ? getSemesterOrderIndex(b.sem) : 999;
+      return idxA - idxB;
+    });
+
+  const maxPasses = queue.length + 3;
+  for (let pass = 0; pass < maxPasses && unplaced.size > 0; pass++) {
+    let progressInPass = false;
+    const ignoreWait = (pass >= maxPasses - 2);
+
+    for (const course of queue) {
+      if (!unplaced.has(course.id)) continue;
+
+      const prereqMinIdx = evaluatePrereqMinIdx(course, ignoreWait);
+      if (prereqMinIdx === null) continue;
+
+      const crd = Number(course.crd) || 0;
+      const hasOfficialSem = Boolean(course.sem && course.sem !== 'other' && allTargetSems.includes(course.sem) && !isSummerSem(course.sem));
+      const origSemIdx = (course.sem && course.sem !== 'other') ? getSemesterOrderIndex(course.sem) : sem11Idx;
+      const minAllowedIdx = Math.max(minGlobalSemIdx, prereqMinIdx, origSemIdx);
+      const prefParity = (course.sem && course.sem !== 'other') ? getSemParity(course.sem) : 0;
+
+      let chosenSem = null;
+
+      // A) Önce Okulun Resmi Önerilen Dönemini (course.sem) dene
+      if (
+        hasOfficialSem &&
+        origSemIdx >= minGlobalSemIdx &&
+        origSemIdx >= prereqMinIdx &&
+        (semCredits[course.sem] + crd) <= maxCredits
+      ) {
+        chosenSem = course.sem;
+      }
+
+      // B) Güz/Bahar açılma uyumunu (Güz -> *.1, Bahar -> *.2) koruyarak en yakın normal döneme yerleştir
+      if (!chosenSem && (prefParity === 1 || prefParity === 2)) {
+        chosenSem = allTargetSems.find(semId => {
+          if (isSummerSem(semId)) return false;
+          const sIdx = getSemesterOrderIndex(semId);
+          if (sIdx < minAllowedIdx) return false;
+          if (getSemParity(semId) !== prefParity) return false;
+          return (semCredits[semId] + crd) <= maxCredits;
+        });
+      }
+
+      // C) Kredi limiti dahilindeki en yakın normal Güz/Bahar dönemi
+      if (!chosenSem) {
+        chosenSem = allTargetSems.find(semId => {
+          if (isSummerSem(semId)) return false;
+          const sIdx = getSemesterOrderIndex(semId);
+          if (sIdx < minAllowedIdx) return false;
+          return (semCredits[semId] + crd) <= maxCredits;
+        });
+      }
+
+      // D) Son çare: minAllowedIdx sonrası en az yüklü normal dönem
+      if (!chosenSem) {
+        const candidates = allTargetSems.filter(semId => !isSummerSem(semId) && getSemesterOrderIndex(semId) >= minAllowedIdx);
+        if (candidates.length > 0) {
+          candidates.sort((a, b) => (semCredits[a] || 0) - (semCredits[b] || 0));
+          chosenSem = candidates[0];
+        } else {
+          chosenSem = allTargetSems[allTargetSems.length - 1] || '4.2';
+        }
+      }
+
+      placeCourseIntoSem(course, chosenSem);
+      progressInPass = true;
+    }
+
+    if (!progressInPass && !ignoreWait) {
+      continue;
+    }
+  }
+
+  saveGlobalState();
+  initUI();
+  closeAutoFillModal();
+  showToast(t('autoFillSuccess')(placedCount));
+}
+
+function undoAutoFillCourses() {
+  if (!lastAutoFillBackup || lastAutoFillBackup.dept !== currentDept) return;
+  const state = getDeptState(currentDept);
+  state.instances = JSON.parse(JSON.stringify(lastAutoFillBackup.instances));
+  lastAutoFillBackup = null;
+  updateUndoAutoFillButtonState();
+  saveGlobalState();
+  initUI();
+  showToast(t('autoFillUndone'));
+}
 
 updatePinButtonUI();
 applyDashCardPosition();

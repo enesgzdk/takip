@@ -110,6 +110,17 @@
           <span id="sidebarPoolTitle">Ders Havuzu</span>
           <span id="sidebarPoolSubtitle" style="font-size: 0.74rem; font-weight: normal; color: var(--text-muted);">Dönem Blokları</span>
         </div>
+        <div class="sidebar-tools-bar">
+          <button type="button" id="prereqTreeBtn" class="sidebar-tool-btn prereq-tree-btn" onclick="openPrereqTreeModal()" title="Derslerin önkoşul ağacını ve kilit zincirlerini görüntüleyin">
+            🕸️ Önkoşul Ağacı
+          </button>
+          <button type="button" id="autoFillBtn" class="sidebar-tool-btn autofill-btn" onclick="openAutoFillModal()" title="Kalan dersleri önkoşul sırasına göre dönemlere otomatik yerleştirin">
+            ⚡ Otomatik Doldur
+          </button>
+          <button type="button" id="undoAutoFillBtn" class="sidebar-tool-btn undo-fill-btn" onclick="undoAutoFillCourses()" disabled title="Son otomatik doldurma işlemini geri al">
+            ↩️ Doldurmayı Geri Al
+          </button>
+        </div>
       </div>
 
       <div id="course-pool" class="sidebar-scroll-pool">
@@ -327,6 +338,78 @@
         <button type="button" id="transcriptCancelBtn" class="btn-cancel-issue" onclick="closeTranscriptModal()">Kapat</button>
         <button type="button" id="transcriptApplyBtn" class="btn-submit-issue" onclick="applyParsedTranscript()" disabled>
           <span>✅ Seçilenleri Plana Aktar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="prereqTreeModal" class="modal-backdrop" onclick="handlePrereqTreeBackdropClick(event)">
+    <div class="modal-dialog prereq-tree-dialog" role="dialog" aria-modal="true" aria-labelledby="prereqTreeModalTitle">
+      <div class="modal-header">
+        <div class="prereq-tree-header-left">
+          <h3 id="prereqTreeModalTitle">🕸️ İnteraktif Önkoşul Ağacı</h3>
+          <div class="prereq-tree-legend" id="prereqTreeLegend">
+            <span class="pt-leg-item"><i class="pt-dot passed"></i> <span id="ptLegPassed">Geçildi</span></span>
+            <span class="pt-leg-item"><i class="pt-dot planned"></i> <span id="ptLegPlanned">Planlandı</span></span>
+            <span class="pt-leg-item"><i class="pt-dot pending"></i> <span id="ptLegPending">Alınmadı</span></span>
+            <span class="pt-leg-sep">|</span>
+            <span class="pt-leg-item"><i class="pt-dot prereq"></i> <span id="ptLegPrereq">Önkoşul</span></span>
+            <span class="pt-leg-item"><i class="pt-dot unlock"></i> <span id="ptLegUnlock">Kilitlediği</span></span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closePrereqTreeModal()" aria-label="Kapat">✕</button>
+      </div>
+      <div id="prereqTreeInfoBar" class="prereq-tree-info-bar">
+        💡 Bir ders kutusunun üzerine gelin veya tıklayın; önkoşullarını ve kilitlediği tüm zincirleme dersleri görün.
+      </div>
+      <div class="prereq-tree-canvas-wrap" id="prereqTreeCanvasWrap">
+        <div class="prereq-tree-stage" id="prereqTreeStage">
+          <svg id="prereqTreeSvg" class="prereq-tree-svg"></svg>
+          <div id="prereqTreeColumns" class="prereq-tree-columns"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="autoFillModal" class="modal-backdrop" onclick="handleAutoFillBackdropClick(event)">
+    <div class="modal-dialog autofill-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="autoFillModalTitle">
+      <div class="modal-header">
+        <h3 id="autoFillModalTitle">⚡ Kalan Dersleri Otomatik Doldur</h3>
+        <button type="button" class="modal-close-btn" onclick="closeAutoFillModal()" aria-label="Kapat">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="autoFillDesc" class="autofill-desc">
+          Mevcut geçtiğiniz ve dönemlere yerleştirdiğiniz dersler korunur; yalnızca sol havuzda kalan dersler önkoşul sırasına ve açılış dönemine göre gelecek dönemlere dağıtılır.
+        </p>
+        <label class="form-checkbox-label autofill-summer-label">
+          <input type="checkbox" id="autoFillSummerCheck" checked onchange="toggleAutoFillSummerOptions()">
+          <span id="autoFillSummerLabel">☀️ Yaz okullarına (1.3, 2.3, 3.3...) ders yerleştirilsin (Öncelik: TK, AE ve seçmeli dersler)</span>
+        </label>
+        <div id="autoFillSummerOptions" class="autofill-summer-options">
+          <div class="form-group">
+            <label id="summerMaxCreditsLabel" for="autoFillSummerMaxCredits">Yaz Maks. Kredi:</label>
+            <input type="number" id="autoFillSummerMaxCredits" class="form-control" value="8" min="3" max="12" step="1">
+          </div>
+          <div class="form-group">
+            <label id="summerMaxCoursesLabel" for="autoFillSummerMaxCourses">Yaz Maks. Ders:</label>
+            <select id="autoFillSummerMaxCourses" class="form-control">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="0" id="summerMaxCoursesUnlimitedOpt">Sınırsız (Krediye göre)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label id="autoFillMaxCreditsLabel" for="autoFillMaxCredits">Dönemlik Maksimum Kredi Hedefi:</label>
+          <input type="number" id="autoFillMaxCredits" class="form-control" value="20" min="12" max="35" step="1">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="autoFillCancelBtn" class="btn-cancel-issue" onclick="closeAutoFillModal()">İptal</button>
+        <button type="button" id="autoFillConfirmBtn" class="btn-submit-issue" onclick="executeAutoFillRemainingCourses()">
+          <span>⚡ Otomatik Doldur</span>
         </button>
       </div>
     </div>
