@@ -298,6 +298,20 @@
             📌 <strong>BUIS (Öğrenci Bilgi Sistemi)</strong> &rarr; <em>Transkript</em> sayfasını açıp <code>Ctrl+A</code> ve <code>Ctrl+C</code> ile tüm sayfayı kopyalayın ve aşağıdaki kutuya yapıştırın.
           </p>
         </div>
+        <div class="transcript-upload-box" id="transcriptUploadBox" onclick="document.getElementById('transcriptFileInput').click()">
+          <input type="file" id="transcriptFileInput" accept="application/pdf" style="display:none;" onchange="handleTranscriptFileSelected(event)">
+          <div class="transcript-upload-icon">📄</div>
+          <div class="transcript-upload-text">
+            <strong id="transcriptUploadTitle">PDF Transkript Dosyasını Yükleyin</strong>
+            <span id="transcriptUploadSubtitle">veya dosyayı buraya sürükleyip bırakın (e-Devlet / BUIS PDF)</span>
+          </div>
+          <button type="button" class="transcript-file-btn" onclick="event.stopPropagation(); document.getElementById('transcriptFileInput').click()">
+            <span id="transcriptUploadBtnText">Dosya Seç</span>
+          </button>
+        </div>
+        <div class="transcript-divider">
+          <span id="transcriptDividerText">VEYA METİN OLARAK YAPIŞTIRIN</span>
+        </div>
         <div class="form-group">
           <label id="transcriptInputLabel" for="transcriptInput">Transkript Metni:</label>
           <textarea id="transcriptInput" class="form-control transcript-textarea" rows="7" placeholder="Örn:&#10;2021/2022-1&#10;MATH 101.01 CALCULUS I 4.0 6.0 AA&#10;PHYS 121 GENERAL PHYSICS I 4.0 6.0 BA..." oninput="handleTranscriptInputChange()"></textarea>
@@ -334,6 +348,12 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
   <script src="./app.js?v=2"></script>
 </body>
 </html>

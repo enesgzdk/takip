@@ -202,7 +202,13 @@ const translations = {
     transcriptBtn: "📥 Transkript Aktar",
     transcriptBtnTitle: "e-Devlet veya BUIS'ten kopyaladığınız transkripti otomatik aktarın",
     transcriptModalTitle: "📥 BÜ / e-Devlet Transkript Otomatik İçe Aktarıcı",
-    transcriptGuide: "📌 <strong>e-Devlet</strong> (YÖKSİS Transkript Belgesi) veya <strong>BUIS</strong> transkript sayfasından tüm metni <code>Ctrl+A</code> ve <code>Ctrl+C</code> ile kopyalayıp aşağıdaki kutuya yapıştırın.",
+    transcriptGuide: "📌 <strong>e-Devlet</strong> (YÖKSİS Transkript Belgesi) veya <strong>BUIS</strong> transkript PDF dosyanızı yükleyin ya da sayfadaki tüm metni <code>Ctrl+A</code> ve <code>Ctrl+C</code> ile kopyalayıp aşağıdaki kutuya yapıştırın.",
+    transcriptUploadTitle: "PDF Transkript Dosyasını Yükleyin",
+    transcriptUploadSubtitle: "veya dosyayı buraya sürükleyip bırakın (e-Devlet / BUIS PDF)",
+    transcriptUploadBtnText: "Dosya Seç",
+    transcriptDividerText: "VEYA METİN OLARAK YAPIŞTIRIN",
+    transcriptReadingPdf: "📄 PDF dosyası okunuyor ve ayrıştırılıyor...",
+    transcriptPdfError: "PDF dosyası okunamadı. Lütfen geçerli bir transkript PDF dosyası yükleyin veya metni kopyalayıp yapıştırın.",
     transcriptInputLabel: "Transkript Metni:",
     transcriptInputPlaceholder: "e-Devlet Not Döküm Belgesi veya BUIS transkript metnini buraya yapıştırın...\nÖrn:\n2021-2022 Güz Dönemi\n*PHYS 121 GENERAL PHYSICS I\nZ İng. 3 2 4 6 BB 12 G\nCMPE150 INTRODUCTION TO COMPUTING\nZ İng. 3 0 3 5 BA 10.5 G...",
     transcriptPreviewBtn: "🔍 Önizle ve Ayrıştır",
@@ -421,7 +427,13 @@ const translations = {
     transcriptBtn: "📥 Import Transcript",
     transcriptBtnTitle: "Import your transcript copied from e-Devlet or BUIS automatically",
     transcriptModalTitle: "📥 BOUN / e-Devlet Transcript Auto Importer",
-    transcriptGuide: "📌 Copy the whole text from <strong>e-Devlet</strong> (YÖKSİS Transcript) or <strong>BUIS</strong> with <code>Ctrl+A</code> and <code>Ctrl+C</code>, then paste below.",
+    transcriptGuide: "📌 Upload your <strong>e-Devlet</strong> (YÖKSİS Transcript) or <strong>BUIS</strong> transcript PDF, or copy the whole page text with <code>Ctrl+A</code> and <code>Ctrl+C</code> and paste below.",
+    transcriptUploadTitle: "Upload PDF Transcript File",
+    transcriptUploadSubtitle: "or drag and drop file here (e-Devlet / BUIS PDF)",
+    transcriptUploadBtnText: "Choose File",
+    transcriptDividerText: "OR PASTE AS TEXT",
+    transcriptReadingPdf: "📄 Reading and parsing PDF file...",
+    transcriptPdfError: "Failed to read PDF file. Please upload a valid transcript PDF or copy-paste text.",
     transcriptInputLabel: "Transcript Text:",
     transcriptInputPlaceholder: "Paste e-Devlet Transcript or BUIS transcript text here...\nEx:\n2021-2022 Güz Dönemi\n*PHYS 121 GENERAL PHYSICS I\nZ İng. 3 2 4 6 BB 12 G\nCMPE150 INTRODUCTION TO COMPUTING\nZ İng. 3 0 3 5 BA 10.5 G...",
     transcriptPreviewBtn: "🔍 Preview & Parse",
@@ -582,6 +594,10 @@ function applyStaticTranslations() {
   setText('transcriptModalTitle', t('transcriptModalTitle'));
   const trGuideEl = document.getElementById('transcriptGuide');
   if (trGuideEl) trGuideEl.innerHTML = t('transcriptGuide');
+  setText('transcriptUploadTitle', t('transcriptUploadTitle'));
+  setText('transcriptUploadSubtitle', t('transcriptUploadSubtitle'));
+  setText('transcriptUploadBtnText', t('transcriptUploadBtnText'));
+  setText('transcriptDividerText', t('transcriptDividerText'));
   setText('transcriptInputLabel', t('transcriptInputLabel'));
   setAttr('transcriptInput', 'placeholder', t('transcriptInputPlaceholder'));
   setText('transcriptPreviewBtn', t('transcriptPreviewBtn'));
@@ -2761,6 +2777,106 @@ function handleTranscriptBackdropClick(event) {
     closeTranscriptModal();
   }
 }
+
+async function handleTranscriptFileSelected(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const uploadBox = document.getElementById('transcriptUploadBox');
+  const input = document.getElementById('transcriptInput');
+  const previewBtn = document.getElementById('transcriptPreviewBtn');
+  const fileInput = document.getElementById('transcriptFileInput');
+
+  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    alert(t('transcriptPdfError'));
+    if (fileInput) fileInput.value = '';
+    return;
+  }
+
+  if (typeof pdfjsLib === 'undefined') {
+    alert('PDF okuyucu kütüphanesi yüklenemedi. Lütfen internet bağlantınızı kontrol edin veya metin olarak yapıştırın.');
+    return;
+  }
+
+  showToast(t('transcriptReadingPdf'));
+
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+    const pdfDoc = await loadingTask.promise;
+    let fullText = '';
+
+    for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+      const page = await pdfDoc.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      
+      // Metin öğelerini satırlara göre sıralayıp düzenle
+      let lastY = null;
+      let pageText = '';
+
+      textContent.items.forEach(item => {
+        if (lastY !== null && Math.abs(item.transform[5] - lastY) > 5) {
+          pageText += '\n';
+        } else if (lastY !== null) {
+          pageText += ' ';
+        }
+        pageText += item.str;
+        lastY = item.transform[5];
+      });
+
+      fullText += pageText + '\n\n';
+    }
+
+    if (!fullText.trim()) {
+      throw new Error("Boş PDF");
+    }
+
+    if (input) {
+      input.value = fullText.trim();
+    }
+
+    // Otomatik önizlemeyi tetikle
+    previewTranscript();
+    showToast('✓ PDF başarıyla okundu!');
+  } catch (err) {
+    console.error("PDF okuma hatası:", err);
+    alert(t('transcriptPdfError'));
+  } finally {
+    if (fileInput) fileInput.value = '';
+  }
+}
+
+// Drag & drop dosya sürükleme desteği
+(function initTranscriptDragAndDrop() {
+  document.addEventListener('DOMContentLoaded', () => {
+    const uploadBox = document.getElementById('transcriptUploadBox');
+    if (!uploadBox) return;
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      uploadBox.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadBox.classList.add('drag-over');
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      uploadBox.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadBox.classList.remove('drag-over');
+      }, false);
+    });
+
+    uploadBox.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      if (files && files.length > 0) {
+        handleTranscriptFileSelected({ target: { files: files } });
+      }
+    }, false);
+  });
+})();
 
 function handleTranscriptInputChange() {
   const input = document.getElementById('transcriptInput');
